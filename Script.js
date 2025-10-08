@@ -44,54 +44,85 @@ function initMainInterface() {
   const scrollUpBtn = document.getElementById('scrollUpBtn');
   const scrollDownBtn = document.getElementById('scrollDownBtn');
 
-  // -------------------------------
-  // CHAT SYSTEM
-  // -------------------------------
-  function addMessage(text, sender = "user") {
-    const msgDiv = document.createElement('div');
-    msgDiv.className = sender === "user" ? "user-message" : "bot-message";
-    msgDiv.textContent = text;
-    chatBody.appendChild(msgDiv);
-    chatBody.scrollTop = chatBody.scrollHeight;
+// -------------------------------
+// CHAT SYSTEM (AI Connected)
+// -------------------------------
+function addMessage(text, sender = "user") {
+  const msgDiv = document.createElement("div");
+  msgDiv.className = sender === "user" ? "user-message" : "bot-message";
+  msgDiv.textContent = text;
+  chatBody.appendChild(msgDiv);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+// Open chat window
+chatButton.addEventListener("click", () => {
+  chatbox.classList.add("active");
+  chatInput.focus();
+  if (chatBody.children.length === 0) {
+    addMessage("Hello! 👋 How can I help you today?", "bot");
   }
+});
 
-  chatButton.addEventListener('click', () => {
-    chatbox.classList.add('active');
-    chatInput.focus();
-    if (chatBody.children.length === 0) {
-      addMessage("Hello! 👋 How can I help you today?", "bot");
-    }
-  });
+// Close chat window
+closeChat.addEventListener("click", () => {
+  chatbox.classList.remove("active");
+});
 
-  closeChat.addEventListener('click', () => {
-    chatbox.classList.remove('active');
-  });
-
-  sendBtn.addEventListener('click', sendLocalMessage);
-  chatInput.addEventListener('keydown', (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      sendLocalMessage();
-    }
-  });
-
-  function sendLocalMessage() {
-    const message = chatInput.value.trim();
-    if (!message) return;
-    addMessage(message, "user");
-    chatInput.value = "";
-    setTimeout(() => {
-      addMessage("🤖 Thanks for your message! (This is a local demo reply.)", "bot");
-    }, 700);
+// Send button + Enter key
+sendBtn.addEventListener("click", sendLocalMessage);
+chatInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    sendLocalMessage();
   }
+});
 
-  chatSuggestions.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const msg = btn.getAttribute('data-msg');
-      chatInput.value = msg;
-      sendLocalMessage();
+// Core message sender (now connected to Cloudflare Worker)
+function sendLocalMessage() {
+  const message = chatInput.value.trim();
+  if (!message) return;
+
+  addMessage(message, "user");
+  chatInput.value = "";
+
+  // Send to AI backend
+  sendMessageToAI(message);
+}
+
+// Quick suggestion buttons
+chatSuggestions.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const msg = btn.getAttribute("data-msg");
+    chatInput.value = msg;
+    sendLocalMessage();
+  });
+});
+
+/* ==========================
+   NETWORKRAD CHAT AI CONNECTOR
+   (Cloudflare Worker)
+   ========================== */
+const workerURL = "https://bold-field-e8ab.radmehrvf.workers.dev/"; // <-- your Cloudflare Worker URL
+
+function sendMessageToAI(userMessage) {
+  fetch(workerURL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      messages: [{ role: "user", content: userMessage }]
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      const aiReply = data.reply || "🤖 (No response from AI)";
+      addMessage(aiReply, "bot");
+    })
+    .catch((err) => {
+      console.error("AI connection error:", err);
+      addMessage("⚠️ AI connection failed. Please try again later.", "bot");
     });
-  });
+}
 
   // -------------------------------
   // DISCUSS BUTTONS (Mindspace)
@@ -566,3 +597,5 @@ document.querySelectorAll(".reveal-btn").forEach((btn) => {
     }
   });
 });
+
+
