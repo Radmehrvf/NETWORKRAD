@@ -599,3 +599,11 @@ document.querySelectorAll(".reveal-btn").forEach((btn) => {
 });
 
 
+fetch(workerURL, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    messages: [{ role: "user", content: userMessage }]
+  }),
+})
+
