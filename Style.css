@@ -63,6 +63,105 @@ header {
   line-height: 1.6;
   margin-bottom: 2rem;
 }
+#ai-form-section {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+#ai-form-section.visible {
+  display: block;
+  opacity: 1;
+}
+
+/* Initial hidden state */
+#ai-form-section {
+  display: none;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.8s ease-in-out;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.4); /* Initial soft shadow */
+}
+
+/* When visible, apply the glow and scale-up effect */
+#ai-form-section.visible {
+  display: block;
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.6), 0 0 60px rgba(0, 255, 255, 0.2); /* Glowing luxury shadow */
+}
+
+/* Optional luxury shimmer effect for button or section */
+#optimizeBtn {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: #fff;
+  padding: 1rem 3rem;
+  font-size: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  transition: all 0.4s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover shimmer on the button */
+#optimizeBtn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #010917, #1e3c72);
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.5);
+}
+
+#optimizeBtn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  height: 300%;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.3), transparent 60%);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+#optimizeBtn:hover::after {
+  opacity: 1;
+}
+
+/* Optional luxury glow for the section */
+#ai-optimizer-section {
+  background: linear-gradient(135deg, #1a1a3f, #0a1e4b);
+  color: #fff;
+  padding: 4rem 2rem;
+  text-align: center;
+  border-radius: 15px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  margin-top: 3rem;
+  border: 2px solid #00bcd4;
+  position: relative;
+  overflow: hidden;
+}
+
+#ai-optimizer-section:before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(0, 255, 255, 0.3), transparent);
+  opacity: 0;
+  transform: scale(0.7);
+  transition: opacity 0.6s ease, transform 0.8s ease;
+  z-index: -1;
+}
+
+#ai-optimizer-section:hover:before {
+  opacity: 1;
+  transform: scale(1);
+}
+
 
 /* Button */
 #optimizeBtn {

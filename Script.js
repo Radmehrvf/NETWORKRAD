@@ -21,6 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
 // ================================
 // MAIN INTERFACE LOGIC (Chat, Modals, Scroll, etc.)
 // ================================
+// ================================
+// MAIN INTERFACE LOGIC (Chat, Modals, Scroll, etc.)
+// ================================
 function initMainInterface() {
   const chatButton = document.getElementById('chatButton');
   const chatbox = document.getElementById('chatbox');
@@ -44,6 +47,24 @@ function initMainInterface() {
   const scrollUpBtn = document.getElementById('scrollUpBtn');
   const scrollDownBtn = document.getElementById('scrollDownBtn');
 
+  // -------------------------------
+  // Optimize Workflow Button (Toggle AI Form)
+  // -------------------------------
+  const optimizeBtn = document.getElementById('optimizeBtn');
+  const aiFormSection = document.getElementById('ai-form-section');
+
+  optimizeBtn.addEventListener('click', () => {
+    if (aiFormSection.style.display === 'none' || aiFormSection.style.display === '') {
+      aiFormSection.style.display = 'block'; // Show the form
+      aiFormSection.classList.add('visible'); // Optional: Add fade-in effect using CSS class
+    } else {
+      aiFormSection.style.display = 'none'; // Hide the form
+      aiFormSection.classList.remove('visible'); // Remove fade-in effect
+    }
+  });
+
+  // Other existing code...
+}
 
 
   
@@ -258,7 +279,7 @@ function sendMessageToAI(userMessage) {
   scrollDownBtn.addEventListener('click', () => {
     window.scrollBy({ top: 600, behavior: 'smooth' });
   });
-}
+
 
 // ================================
 // NETWORK BUILDER MINI-GAME
