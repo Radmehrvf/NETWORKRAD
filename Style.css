@@ -39,6 +39,145 @@ header {
   padding: 2rem;
   background: #1f1f1f;
 }
+/* AI Superpowers Section */
+#ai-optimizer-section {
+  background: linear-gradient(135deg, #1a1a3f, #0a1e4b);
+  color: #fff;
+  padding: 4rem 2rem;
+  text-align: center;
+  border-radius: 15px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  margin-top: 3rem;
+  border: 2px solid #00bcd4;
+}
+
+#ai-optimizer-section h2 {
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  color: #00ffcc;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.7);
+}
+
+#ai-optimizer-section p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* Button */
+#optimizeBtn {
+  background: linear-gradient(135deg, #2a5298, #1e3c72);
+  padding: 1rem 3rem;
+  font-size: 1.5rem;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  transition: all 0.4s ease;
+  text-transform: uppercase;
+}
+
+#optimizeBtn:hover {
+  transform: scale(1.08);
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.7);
+}
+
+/* Container for explanation and form */
+.optimizer-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.explanation-section,
+.form-section {
+  flex: 1 1 45%;  /* Makes both sections flexible and responsive */
+  min-width: 300px;
+  padding: 1.5rem;
+  background: #272727;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.explanation-section h3 {
+  font-size: 2rem;
+  color: #00bcd4;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.explanation-section p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  color: #b0b0b0;
+}
+
+.consent {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #b0b0b0;
+}
+
+#businessForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+#businessForm label {
+  font-size: 1.1rem;
+  color: #00bcd4;
+}
+
+#businessForm input,
+#businessForm textarea {
+  padding: 0.8rem;
+  border-radius: 8px;
+  background: #272727;
+  color: #fff;
+  border: 1px solid #444;
+  font-size: 1rem;
+}
+
+#businessForm button {
+  background: linear-gradient(135deg, #2a5298, #1e3c72);
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 1.2rem;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+#businessForm button:hover {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  transform: scale(1.05);
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.7);
+}
+
+/* Close Button Styling */
+.modal-close {
+  position: absolute;
+  right: 1rem;
+  top: 0.5rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  color: #00bcd4;
+}
+
 /* ======================================
    LUXURY NAVIGATION — PURE LINK VERSION
    ====================================== */

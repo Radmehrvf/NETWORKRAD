@@ -44,6 +44,9 @@ function initMainInterface() {
   const scrollUpBtn = document.getElementById('scrollUpBtn');
   const scrollDownBtn = document.getElementById('scrollDownBtn');
 
+
+
+  
 // -------------------------------
 // CHAT SYSTEM (AI Connected)
 // -------------------------------
@@ -97,6 +100,45 @@ chatSuggestions.forEach((btn) => {
     chatInput.value = msg;
     sendLocalMessage();
   });
+});
+
+/* ==========================
+  AI button for job creation
+   ========================== */
+// Show the AI workflow modal when the button is clicked
+const optimizeBtn = document.getElementById('optimizeBtn');
+const aiModal = document.getElementById('ai-modal');
+const closeModalBtn = document.querySelector('.modal-close');
+
+// Show the modal
+optimizeBtn.addEventListener('click', () => {
+  aiModal.style.display = 'flex'; // Show modal
+});
+
+// Close the modal when the close button is clicked
+closeModalBtn.addEventListener('click', () => {
+  aiModal.style.display = 'none'; // Hide modal
+});
+
+// Handle form submission
+const businessForm = document.getElementById('businessForm');
+
+businessForm.addEventListener('submit', (event) => {
+  event.preventDefault(); // Prevent form from submitting the traditional way
+
+  // Capture form data
+  const industry = document.getElementById('industry').value;
+  const teamSize = document.getElementById('teamSize').value;
+  const bottlenecks = document.getElementById('bottlenecks').value;
+  const goals = document.getElementById('goals').value;
+
+  // For now, you can just log the data (can be replaced with API call or further processing)
+  console.log('Business Details Submitted:', { industry, teamSize, bottlenecks, goals });
+
+  // Optionally, you can hide the modal after submission
+  aiModal.style.display = 'none';
+
+  // Here, you can send the data to your backend or process it further
 });
 
 /* ==========================
