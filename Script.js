@@ -104,20 +104,22 @@ chatSuggestions.forEach((btn) => {
 
 /* ==========================
   AI button for job creation
-   ========================== */
-// Show the AI workflow modal when the button is clicked
+ ========================== */
+
+// Get the button, form, and modal
 const optimizeBtn = document.getElementById('optimizeBtn');
-const aiModal = document.getElementById('ai-modal');
+const aiFormSection = document.getElementById('ai-form-section');  // Form section
 const closeModalBtn = document.querySelector('.modal-close');
 
-// Show the modal
+// Show the form section when the button is clicked
 optimizeBtn.addEventListener('click', () => {
-  aiModal.style.display = 'flex'; // Show modal
+  // Toggle visibility of the form by adding/removing the 'visible' class
+  aiFormSection.classList.toggle('visible');
 });
 
 // Close the modal when the close button is clicked
 closeModalBtn.addEventListener('click', () => {
-  aiModal.style.display = 'none'; // Hide modal
+  aiFormSection.classList.remove('visible'); // Hide form when modal is closed
 });
 
 // Handle form submission
@@ -135,11 +137,10 @@ businessForm.addEventListener('submit', (event) => {
   // For now, you can just log the data (can be replaced with API call or further processing)
   console.log('Business Details Submitted:', { industry, teamSize, bottlenecks, goals });
 
-  // Optionally, you can hide the modal after submission
-  aiModal.style.display = 'none';
-
-  // Here, you can send the data to your backend or process it further
+  // Optionally, you can hide the form after submission
+  aiFormSection.classList.remove('visible');
 });
+
 
 /* ==========================
    NETWORKRAD CHAT AI CONNECTOR

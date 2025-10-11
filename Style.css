@@ -63,35 +63,25 @@ header {
   line-height: 1.6;
   margin-bottom: 2rem;
 }
+
+/* AI Form Section Styles */
 #ai-form-section {
-  display: none;
+  display: none; /* Hidden by default */
   opacity: 0;
-  transition: opacity 0.5s ease-in-out;
+  transform: scale(0.9); /* Start with a smaller scale */
+  transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out; /* Adjusted to make the transition smoother */
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0.3); /* Initial soft shadow */
 }
 
+/* When visible, apply the glow, scale-up effect and show the form */
 #ai-form-section.visible {
   display: block;
   opacity: 1;
-}
-
-/* Initial hidden state */
-#ai-form-section {
-  display: none;
-  opacity: 0;
-  transform: scale(0.95);
-  transition: all 0.8s ease-in-out;
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0.4); /* Initial soft shadow */
-}
-
-/* When visible, apply the glow and scale-up effect */
-#ai-form-section.visible {
-  display: block;
-  opacity: 1;
-  transform: scale(1);
+  transform: scale(1); /* Normal size when visible */
   box-shadow: 0 0 30px rgba(0, 255, 255, 0.6), 0 0 60px rgba(0, 255, 255, 0.2); /* Glowing luxury shadow */
 }
 
-/* Optional luxury shimmer effect for button or section */
+/* Optional luxury shimmer effect for button */
 #optimizeBtn {
   background: linear-gradient(135deg, #1e3c72, #2a5298);
   color: #fff;
@@ -103,6 +93,7 @@ header {
   transition: all 0.4s ease-in-out;
   position: relative;
   overflow: hidden;
+  margin-bottom: 1.5rem; /* Space for the button */
 }
 
 /* Hover shimmer on the button */
@@ -130,19 +121,6 @@ header {
 }
 
 /* Optional luxury glow for the section */
-#ai-optimizer-section {
-  background: linear-gradient(135deg, #1a1a3f, #0a1e4b);
-  color: #fff;
-  padding: 4rem 2rem;
-  text-align: center;
-  border-radius: 15px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-  margin-top: 3rem;
-  border: 2px solid #00bcd4;
-  position: relative;
-  overflow: hidden;
-}
-
 #ai-optimizer-section:before {
   content: '';
   position: absolute;
@@ -160,6 +138,58 @@ header {
 #ai-optimizer-section:hover:before {
   opacity: 1;
   transform: scale(1);
+}
+
+/* Responsive Styles for Mobile and Small Screens */
+@media (max-width: 768px) {
+  #ai-optimizer-section {
+    padding: 2rem 1rem;
+  }
+
+  #ai-optimizer-section h2 {
+    font-size: 2.2rem; /* Smaller font for mobile */
+  }
+
+  #ai-optimizer-section p {
+    font-size: 1.1rem; /* Adjust paragraph font size */
+  }
+
+  #optimizeBtn {
+    padding: 1rem 2rem; /* Smaller button padding */
+    font-size: 1.2rem; /* Smaller button font size */
+  }
+
+  #ai-form-section {
+    padding: 2rem; /* Add some padding to the form */
+  }
+
+  /* Form input fields for mobile */
+  .optimizer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content on mobile */
+  }
+
+  .optimizer-container .explanation-section, 
+  .optimizer-container .form-section {
+    width: 100%;
+    margin-bottom: 2rem; /* Space between sections */
+  }
+
+  .form-section input, .form-section textarea {
+    width: 100%; /* Make inputs full-width */
+    margin-bottom: 1rem; /* Add margin between form fields */
+  }
+
+  .form-section button {
+    width: 100%; /* Make the submit button full width */
+  }
+}
+
+@media (max-width: 480px) {
+  #ai-optimizer-section h2 {
+    font-size: 1.8rem; /* Smaller font for very small screens */
+  }
 }
 
 
