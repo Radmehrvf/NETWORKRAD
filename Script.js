@@ -30,12 +30,6 @@ function initMainInterface() {
   const chatBody = document.getElementById('chatBody');
 
   const exploreBtn = document.getElementById('exploreBtn');
-  const supportQuickBtn = document.getElementById('supportQuickBtn');
-  const supportBtn = document.getElementById('supportBtn');
-  const hireBtn = document.getElementById('hireBtn');
-  const supportModal = document.getElementById('supportModal');
-  const hireModal = document.getElementById('hireModal');
-  const modalCloseBtns = document.querySelectorAll('.modal-close');
   const projectFilters = document.querySelectorAll('.project-filter');
   const projectCards = document.querySelectorAll('.project-card');
   const discussBtns = document.querySelectorAll('.discuss-btn');
@@ -102,45 +96,65 @@ chatSuggestions.forEach((btn) => {
   });
 });
 
+
 /* ==========================
-  AI button for job creation
+   AI WORKFLOW OPTIMIZER - IMPROVED INTERACTION
  ========================== */
 
-// Get the button, form, and modal
 const optimizeBtn = document.getElementById('optimizeBtn');
-const aiFormSection = document.getElementById('ai-form-section');  // Form section
-const closeModalBtn = document.querySelector('.modal-close');
+const aiFormSection = document.getElementById('ai-form-section');
+const businessForm = document.getElementById('businessForm');
+const cancelFormBtn = document.getElementById('cancelForm');
 
-// Show the form section when the button is clicked
-optimizeBtn.addEventListener('click', () => {
-  // Toggle visibility of the form by adding/removing the 'visible' class
-  aiFormSection.classList.toggle('visible');
-});
+// Show form when button is clicked
+if (optimizeBtn) {
+  optimizeBtn.addEventListener('click', () => {
+    aiFormSection.classList.add('visible');
+    
+    // Smooth scroll to form
+    setTimeout(() => {
+      aiFormSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+  });
+}
 
-// Close the modal when the close button is clicked
-closeModalBtn.addEventListener('click', () => {
-  aiFormSection.classList.remove('visible'); // Hide form when modal is closed
-});
+// Cancel/Close form
+if (cancelFormBtn) {
+  cancelFormBtn.addEventListener('click', () => {
+    aiFormSection.classList.remove('visible');
+    
+    // Scroll back to top of section
+    document.getElementById('ai-optimizer-section').scrollIntoView({ behavior: 'smooth' });
+  });
+}
 
 // Handle form submission
-const businessForm = document.getElementById('businessForm');
-
-businessForm.addEventListener('submit', (event) => {
-  event.preventDefault(); // Prevent form from submitting the traditional way
-
-  // Capture form data
-  const industry = document.getElementById('industry').value;
-  const teamSize = document.getElementById('teamSize').value;
-  const bottlenecks = document.getElementById('bottlenecks').value;
-  const goals = document.getElementById('goals').value;
-
-  // For now, you can just log the data (can be replaced with API call or further processing)
-  console.log('Business Details Submitted:', { industry, teamSize, bottlenecks, goals });
-
-  // Optionally, you can hide the form after submission
-  aiFormSection.classList.remove('visible');
-});
-
+if (businessForm) {
+  businessForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    
+    // Capture form data
+    const formData = {
+      industry: document.getElementById('industry').value,
+      teamSize: document.getElementById('teamSize').value,
+      bottlenecks: document.getElementById('bottlenecks').value,
+      goals: document.getElementById('goals').value,
+      consent: document.getElementById('consentCheckbox').checked
+    };
+    
+    console.log('Business Analysis Request:', formData);
+    
+    // Show success message (you can replace with actual API call)
+    alert('✅ Thank you! We\'ll analyze your workflow and get back to you within 24 hours.');
+    
+    // Reset form and hide
+    businessForm.reset();
+    aiFormSection.classList.remove('visible');
+    
+    // Scroll back up
+    document.getElementById('ai-optimizer-section').scrollIntoView({ behavior: 'smooth' });
+  });
+}
 
 /* ==========================
    NETWORKRAD CHAT AI CONNECTOR
@@ -184,36 +198,102 @@ function sendMessageToAI(userMessage) {
   // -------------------------------
   // NAVIGATION
   // -------------------------------
-  exploreBtn.addEventListener('click', () => {
-    document.getElementById('universe').scrollIntoView({ behavior: 'smooth' });
-  });
-
-  // -------------------------------
-  // MODALS (Support / Hire)
-  // -------------------------------
-  function openModal(modal) {
-    modal.style.display = 'flex';
-  }
-  function closeModal(modal) {
-    modal.style.display = 'none';
+ // Navigate to projects section
+  if (exploreBtn) {
+    exploreBtn.addEventListener('click', () => {
+      document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+    });
   }
 
-  supportBtn.addEventListener('click', () => openModal(supportModal));
-  supportQuickBtn.addEventListener('click', () => openModal(supportModal));
-  hireBtn.addEventListener('click', () => openModal(hireModal));
+// -------------------------------
+  // SUPPORT & HIRE SECTION (NEW)
+  // -------------------------------
+  const supportBtn = document.getElementById('supportBtn');
+  const hireBtn = document.getElementById('hireBtn');
+  const supportSection = document.getElementById('supportSection');
+  const hireSection = document.getElementById('hireSection');
+  const hireForm = document.getElementById('hireForm');
 
-  modalCloseBtns.forEach(btn => {
+  // Show support options
+  if (supportBtn) {
+    supportBtn.addEventListener('click', () => {
+      supportSection.classList.add('visible');
+      hireSection.classList.remove('visible');
+      
+      // Smooth scroll to section
+      setTimeout(() => {
+        supportSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    });
+  }
+
+  // Show hire form
+  if (hireBtn) {
+    hireBtn.addEventListener('click', () => {
+      hireSection.classList.add('visible');
+      supportSection.classList.remove('visible');
+      
+      // Smooth scroll to section
+      setTimeout(() => {
+        hireSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 100);
+    });
+  }
+
+  // Close section buttons
+  document.querySelectorAll('.close-section').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      const target = e.target.getAttribute('data-target');
-      if (target === 'supportModal') closeModal(supportModal);
-      if (target === 'hireModal') closeModal(hireModal);
+      const target = e.target.closest('button').getAttribute('data-target');
+      const section = document.getElementById(target);
+      if (section) {
+        section.classList.remove('visible');
+        
+        // Scroll back to top of support section
+        document.getElementById('support-hire').scrollIntoView({ behavior: 'smooth' });
+      }
     });
   });
 
-  window.addEventListener('click', (e) => {
-    if (e.target === supportModal) closeModal(supportModal);
-    if (e.target === hireModal) closeModal(hireModal);
+  // Cancel buttons in forms
+  document.querySelectorAll('[data-close]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const target = e.target.getAttribute('data-close');
+      const section = document.getElementById(target);
+      if (section) {
+        section.classList.remove('visible');
+        document.getElementById('support-hire').scrollIntoView({ behavior: 'smooth' });
+      }
+    });
   });
+
+  // Handle hire form submission
+  if (hireForm) {
+    hireForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Collect form data
+      const formData = {
+        name: document.getElementById('clientName').value,
+        email: document.getElementById('clientEmail').value,
+        projectType: document.getElementById('projectType').value,
+        budget: document.getElementById('budget').value,
+        description: document.getElementById('projectDescription').value,
+        timeline: document.getElementById('timeline').value
+      };
+      
+      console.log('Project Inquiry:', formData);
+      
+      // Show success message
+      alert('✅ Thank you for your inquiry! I\'ll review your project details and get back to you within 24 hours.');
+      
+      // Reset form and hide section
+      hireForm.reset();
+      hireSection.classList.remove('visible');
+      
+      // Scroll back up
+      document.getElementById('support-hire').scrollIntoView({ behavior: 'smooth' });
+    });
+  }
 
   // -------------------------------
   // PROJECT FILTERING
@@ -233,12 +313,6 @@ function sendMessageToAI(userMessage) {
   // -------------------------------
   // SUPPORT BUTTON ACTIONS
   // -------------------------------
-  supportButtons.forEach(button => {
-    button.addEventListener('click', (e) => {
-      const supportText = e.target.textContent;
-      alert(`You clicked on ${supportText}. Redirecting to payment platform... (Demo)`);
-    });
-  });
 
   // -------------------------------
   // CUSTOM SCROLL BUTTONS
