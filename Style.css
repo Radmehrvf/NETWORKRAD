@@ -41,14 +41,9 @@ header {
 }
 /* AI Superpowers Section */
 #ai-optimizer-section {
-  background: linear-gradient(135deg, #1a1a3f, #0a1e4b);
+  /* Removed - now using .section-card + .featured classes */
   color: #fff;
-  padding: 4rem 2rem;
   text-align: center;
-  border-radius: 15px;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
-  margin-top: 3rem;
-  border: 2px solid #00bcd4;
 }
 
 #ai-optimizer-section h2 {
@@ -469,116 +464,595 @@ nav a:hover {
 }
 
 /* ==========================
-   PROJECTS SECTION
+   PROJECT SECTION- UNIVERSAL SECTION CARD SYSTEM- 
    ========================== */
+/* ==========================
+   MODERN PROJECTS SHOWCASE
+   ========================== */
+
 #projects {
   text-align: center;
-  margin-top: 3rem;
 }
 
-.project-filters {
-  margin-bottom: 1rem;
+#projects .section-subtitle {
+  color: #94a3b8;
+  font-size: 1.05rem;
+  margin-bottom: 3rem;
+  font-weight: 400;
+}
+
+/* Projects Grid */
+.projects-showcase {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 10;
+}
+
+/* Individual Project Card */
+.showcase-card {
+  background: linear-gradient(145deg, #0f1729, #1a2332);
+  border-radius: 20px;
+  padding: 2rem;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.8rem;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
 }
 
-.project-filter {
-  background: #1f1f1f;
-  color: #00bcd4;
-  border: 1px solid #00bcd4;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s;
+.showcase-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+  background-size: 200% 100%;
+  opacity: 0;
+  transition: opacity 0.4s ease;
 }
 
-.project-filter:hover, .project-filter.active {
-  background: #00bcd4;
+.showcase-card:hover::before {
+  opacity: 1;
+  animation: shimmer 2s linear infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.showcase-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 12px 40px rgba(59, 130, 246, 0.3),
+              0 0 60px rgba(59, 130, 246, 0.1);
+}
+
+/* Project Header (Icon + Badge) */
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.project-icon {
+  font-size: 3rem;
+  filter: drop-shadow(0 4px 8px rgba(59, 130, 246, 0.3));
+  transition: transform 0.3s ease;
+}
+
+.showcase-card:hover .project-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+/* Category Badges */
+.project-badge {
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.project-badge.web {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
   color: #fff;
 }
 
-.project-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 1.5rem;
+.project-badge.ai {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: #fff;
 }
 
-.project-card {
-  background-color: #1f1f1f;
-  border-radius: 8px;
-  padding: 1.5rem;
-  width: 300px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+.project-badge.tools {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #fff;
+}
+
+/* Project Title */
+.showcase-card h3 {
+  color: #e0f2fe;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
   text-align: left;
-  transition: 0.3s;
 }
 
-.project-card:hover {
-  transform: translateY(-5px);
-}
-
-.project-card h3 {
-  color: #00bcd4;
-  margin-top: 0;
-}
-
-.project-card p {
-  color: #ccc;
+/* Project Description */
+.project-description {
+  color: #94a3b8;
   font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  text-align: left;
+  flex-grow: 1;
 }
 
-.project-actions {
+/* Tech Stack Tags */
+.tech-stack {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  margin-top: 1rem;
+  margin-bottom: 1.5rem;
 }
 
-.project-btn {
+.tech-tag {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  transition: all 0.3s ease;
+}
+
+.tech-tag:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Project Footer (Buttons) */
+.project-footer {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: auto;
+}
+
+/* GitHub Button */
+.github-btn {
   flex: 1;
-  text-align: center;
-  background: linear-gradient(145deg, #001f3f, #004e92, #007bff);
-  color: #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  background: linear-gradient(145deg, #1f2937, #111827);
+  color: #e0f2fe;
   text-decoration: none;
-  padding: 0.75rem 1rem;
-  border-radius: 12px;
-  font-size: 1rem;
+  border-radius: 10px;
   font-weight: 600;
-  letter-spacing: 0.5px;
-  border: 1px solid rgba(0, 195, 255, 0.3);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4),
-              inset 0 0 10px rgba(0, 195, 255, 0.15);
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.github-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.github-btn:hover::before {
+  left: 100%;
+}
+
+.github-btn:hover {
+  background: linear-gradient(145deg, #374151, #1f2937);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.github-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.github-btn:hover svg {
+  transform: scale(1.1);
+}
+
+/* Live Demo Button */
+.live-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.2rem;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.live-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+}
+
+.live-btn.disabled {
+  background: linear-gradient(135deg, #374151, #1f2937);
+  color: #6b7280;
+  cursor: not-allowed;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.live-btn.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Live Indicator Dot */
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  animation: pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
+}
+
+.live-btn.disabled .live-dot {
+  background: #6b7280;
+  animation: none;
+  box-shadow: none;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.2);
+  }
+}
+
+/* View All Projects CTA */
+.projects-cta {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #1e3a8a, #1e40af);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  border: 2px solid rgba(59, 130, 246, 0.3);
+  transition: all 0.4s ease;
+  box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.view-all-btn::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.view-all-btn:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.view-all-btn:hover {
+  background: linear-gradient(135deg, #1e40af, #2563eb);
+  border-color: rgba(59, 130, 246, 0.6);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.5);
+}
+
+.view-all-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.view-all-btn:hover svg {
+  transform: translateX(5px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .projects-showcase {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .showcase-card {
+    padding: 1.5rem;
+  }
+
+  .project-footer {
+    flex-direction: column;
+  }
+
+  .github-btn,
+  .live-btn {
+    width: 100%;
+  }
+
+  .view-all-btn {
+    padding: 0.9rem 2rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-icon {
+    font-size: 2.5rem;
+  }
+
+  .showcase-card h3 {
+    font-size: 1.3rem;
+  }
+
+  .tech-stack {
+    gap: 0.4rem;
+  }
+
+  .tech-tag {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
+/* Base container for all major sections */
+.section-card {
+  background: linear-gradient(145deg, #0d1b2a, #1b263b);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  margin: 2rem auto;
+  max-width: 1200px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4),
+              inset 0 0 20px rgba(0, 195, 255, 0.05);
+  border: 1px solid rgba(0, 195, 255, 0.2);
   transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
 }
 
-.project-btn::before {
+/* Hover effect for cards */
+.section-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0, 195, 255, 0.3),
+              inset 0 0 25px rgba(0, 195, 255, 0.08);
+  border-color: rgba(0, 195, 255, 0.4);
+}
+
+/* Subtle animated background gradient */
+.section-card::before {
   content: "";
   position: absolute;
-  top: -100%;
-  left: -100%;
-  width: 300%;
-  height: 300%;
-  background: radial-gradient(circle at 30% 30%, rgba(0,195,255,0.3), transparent 40%);
-  opacity: 0;
-  transition: opacity 0.6s ease;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 195, 255, 0.03) 0%,
+    transparent 70%
+  );
+  animation: cardPulse 8s ease-in-out infinite;
+  pointer-events: none;
 }
 
-.project-btn:hover::before {
-  opacity: 1;
+@keyframes cardPulse {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.5; }
+  50% { transform: translate(10%, 10%) scale(1.1); opacity: 0.8; }
 }
 
-.project-btn:hover {
-  background: linear-gradient(145deg, #007bff, #00bcd4, #004e92);
-  color: #ffffff;
-  transform: translateY(-3px) scale(1.07);
-  box-shadow: 0 0 20px rgba(0, 195, 255, 0.6),
-              0 0 40px rgba(0, 123, 255, 0.3);
-  border-color: rgba(0, 195, 255, 0.7);
+/* Section headers inside cards */
+.section-card h2 {
+  color: #00d4ff;
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  text-shadow: 0 0 15px rgba(0, 195, 255, 0.4);
+  position: relative;
+  z-index: 1;
+}
+
+/* Section subtitle/description */
+.section-card > p {
+  color: #b0c9e6;
+  font-size: 1.1rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Decorative corner accent */
+.section-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(
+    circle at top right,
+    rgba(0, 195, 255, 0.15),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+/* ==========================
+   SPECIFIC SECTION ADJUSTMENTS
+   ========================== */
+
+/* Projects Section */
+
+/* My Universe Section */
+/*#universe {
+  /* Remove old background/padding, now using .section-card */
+
+
+#universe .universe-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+
+
+
+/* Timeline Section */
+/*#timeline {
+  /* Remove old styles, now using .section-card */
+
+
+#timeline .timeline-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Business Growth Section */
+/*#business-growth {
+  /* Keep existing gradient but add card wrapper inside */
+
+
+/* Contact Section */
+/*#contact {
+  /* Remove old background, now using .section-card */
+
+
+.contact-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 100%;
+}
+/* Support & Hire Section */
+/*#support-hire {
+  /* Remove old styles, now using .section-card */
+
+
+#support-hire .support-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+
+/* AI Optimizer Section */
+/*#ai-optimizer-section {
+  /* Already has good styling, add card wrapper for consistency */
+
+
+/* ==========================
+   RESPONSIVE CARD ADJUSTMENTS
+   ========================== */
+@media (max-width: 768px) {
+  .section-card {
+    padding: 2rem 1.5rem;
+    margin: 1.5rem 1rem;
+    border-radius: 15px;
+  }
+
+  .section-card h2 {
+    font-size: 1.8rem;
+  }
+
+  .section-card > p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-card {
+    padding: 1.5rem 1rem;
+    margin: 1rem 0.5rem;
+    border-radius: 12px;
+  }
+
+  .section-card h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* ==========================
+   ALTERNATE CARD STYLES (Optional Variants)
+   ========================== */
+
+/* Darker variant for contrast */
+.section-card.dark-variant {
+  background: linear-gradient(145deg, #0a0f1f, #111a30);
+}
+
+/* Highlighted/Featured section */
+.section-card.featured {
+  border: 2px solid rgba(0, 255, 200, 0.4);
+  box-shadow: 0 10px 40px rgba(0, 255, 200, 0.2),
+              inset 0 0 20px rgba(0, 255, 200, 0.05);
+}
+
+/* Compact card for smaller sections */
+.section-card.compact {
+  padding: 2rem 1.5rem;
+  max-width: 900px;
 }
 
 /* ==========================
@@ -619,36 +1093,94 @@ nav a:hover {
 .universe-item a:hover {
   text-decoration: underline;
 }
+/* Mindspace Section */
+/*#mindspace {
+  /* Remove old styles, now using .section-card */
 
-/* ==========================
-   MINDSPACE / BLOG
-   ========================== */
-#mindspace {
-  margin-top: 3rem;
-  padding: 2rem;
-  background: #1f1f1f;
-  border-radius: 10px;
-}
 
-.mindspace-list {
+/* Mindspace Section */
+#mindspace .mindspace-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 1.5rem;
   justify-content: center;
+  position: relative;
+  z-index: 1;
 }
 
-.mind-card {
-  background: #272727;
-  border-radius: 10px;
-  padding: 1.5rem;
-  width: 280px;
-  text-align: left;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+/* ==========================
+   MINDSPACE - PURPLE VARIANT (CONSISTENT STYLE)
+   ========================== */
+
+.cosmic-mindspace {
+  background: linear-gradient(145deg, #023438, #030d1a) !important;
+  border: 1px solid rgba(0, 73, 230, 0.3) !important;
+  box-shadow: 0 10px 40px rgba(43, 137, 226, 0.25),
+              inset 0 0 20px rgba(4, 0, 255, 0.08) !important;
+  border-left: 4px solid #ff009d !important;
 }
 
-.mind-card h4 {
-  color: #00bcd4;
+.cosmic-mindspace:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(168, 85, 247, 0.35),
+              inset 0 0 25px rgba(138, 43, 226, 0.12) !important;
+  border-color: rgba(168, 85, 247, 0.5) !important;
 }
+
+/* Subtle purple glow effect (matches other cards) */
+.cosmic-mindspace::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(168, 85, 247, 0.04) 0%,
+    transparent 70%
+  );
+  animation: cardPulse 8s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Purple corner accent (matches other cards) */
+.cosmic-mindspace::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(
+    circle at top right,
+    rgba(168, 85, 247, 0.18),
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Heading color adjustment */
+.cosmic-mindspace h2 {
+  color: #d8b4fe !important;
+  text-shadow: 0 0 15px rgba(168, 85, 247, 0.4) !important;
+  position: relative;
+  z-index: 10;
+}
+
+.cosmic-mindspace > p {
+  color: #c4b5fd !important;
+  position: relative;
+  z-index: 10;
+}
+
+.cosmic-mindspace .mindspace-list {
+  position: relative;
+  z-index: 10;
+}
+
 /* ==========================
    LUXURY MINDSPACE CARDS + BUTTON ALIGNMENT
    ========================== */
@@ -665,7 +1197,102 @@ nav a:hover {
   justify-content: space-between;
   transition: all 0.4s ease;
 }
+/* ==========================
+   MINDSPACE EXPLORER (INTERACTIVE GALAXY)
+   ========================== */
+#mindspace-explorer-section {
+  margin-top: 3rem;
+  background: radial-gradient(circle at center, #0a0f1f, #000814);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 0 25px rgba(0, 195, 255, 0.15);
+  position: relative;
+  overflow: hidden;
+}
 
+#mindspace-explorer-section h2 {
+  color: #00bcd4;
+  text-shadow: 0 0 10px rgba(0, 195, 255, 0.3);
+  margin-bottom: 0.5rem;
+}
+
+#mindspace-explorer-section p {
+  color: #ccc;
+  margin-bottom: 1.5rem;
+}
+
+#mindspace-explorer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+#mindspaceCanvas {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  border-radius: 12px;
+  background: radial-gradient(circle at center, #001428, #000a14);
+  box-shadow: 0 0 25px rgba(0, 195, 255, 0.2), inset 0 0 15px rgba(0, 195, 255, 0.05);
+  cursor: crosshair;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#mindspaceCanvas:hover {
+  transform: scale(1.01);
+  box-shadow: 0 0 35px rgba(0, 195, 255, 0.3), inset 0 0 25px rgba(0, 195, 255, 0.1);
+}
+
+/* Glowing Star/Planet effect (for JS-drawn elements) */
+.glow-star {
+  filter: drop-shadow(0 0 8px rgba(0, 195, 255, 0.6))
+          drop-shadow(0 0 15px rgba(0, 195, 255, 0.4));
+}
+
+.glow-star:hover {
+  filter: drop-shadow(0 0 12px rgba(0, 195, 255, 0.9))
+          drop-shadow(0 0 25px rgba(0, 195, 255, 0.6));
+  transform: scale(1.1);
+}
+
+/* ==========================
+   MINDSPACE DETAILS PANEL
+   ========================== */
+#mindspace-details {
+  margin-top: 1.5rem;
+  background: rgba(10, 20, 40, 0.7);
+  color: #e0f7ff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 195, 255, 0.3);
+  box-shadow: 0 0 20px rgba(0, 195, 255, 0.15);
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  width: 90%;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  transition: all 0.4s ease;
+  display: none; /* Hidden until triggered by JS */
+}
+
+#mindspace-details.active {
+  display: block;
+  animation: fadeInDetail 1s ease forwards;
+}
+
+/* Fade in animation for details */
+@keyframes fadeInDetail {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 .mind-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(100,120,255,0.4),
@@ -1059,20 +1686,14 @@ nav a:hover {
 /* ==========================
    CONTACT / FOOTER
    ========================== */
-#contact {
-  background-color: #1f1f1f;
-  padding: 3rem 2rem;
+
+.contact-item {
+  flex: 1 1 250px;
+  background-color: #272727;
+  padding: 1rem 1.5rem;
   border-radius: 8px;
-  margin: 2rem 0;
+  text-align: center;
 }
-
-.contact-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-}
-
 .contact-item {
   flex: 1 1 250px;
   background-color: #272727;
@@ -1129,9 +1750,8 @@ footer {
    LUXURY CONTACT SECTION (BLACK + GOLD THEME)
    ========================== */
 #contact {
-  background: linear-gradient(145deg, #0a0a0a, #1a1a1a);
-  border: 1px solid rgba(255, 215, 0, 0.15);
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.05);
+  /* Removed - now using .section-card.action-card */
+  text-align: center;
 }
 
 .contact-container {
@@ -1355,121 +1975,26 @@ footer {
 #networkCanvas.active {
   animation: nodeGlowPulse 2s infinite ease-in-out;
 }
-/* ==========================
-   MINDSPACE EXPLORER (INTERACTIVE GALAXY)
-   ========================== */
-#mindspace-explorer-section {
-  margin-top: 3rem;
-  background: radial-gradient(circle at center, #0a0f1f, #000814);
-  border-radius: 12px;
-  padding: 3rem 2rem;
-  text-align: center;
-  box-shadow: 0 0 25px rgba(0, 195, 255, 0.15);
-  position: relative;
-  overflow: hidden;
-}
 
-#mindspace-explorer-section h2 {
-  color: #00bcd4;
-  text-shadow: 0 0 10px rgba(0, 195, 255, 0.3);
-  margin-bottom: 0.5rem;
-}
-
-#mindspace-explorer-section p {
-  color: #ccc;
-  margin-bottom: 1.5rem;
-}
-
-#mindspace-explorer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-#mindspaceCanvas {
-  width: 100%;
-  max-width: 900px;
-  height: auto;
-  border-radius: 12px;
-  background: radial-gradient(circle at center, #001428, #000a14);
-  box-shadow: 0 0 25px rgba(0, 195, 255, 0.2), inset 0 0 15px rgba(0, 195, 255, 0.05);
-  cursor: crosshair;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-#mindspaceCanvas:hover {
-  transform: scale(1.01);
-  box-shadow: 0 0 35px rgba(0, 195, 255, 0.3), inset 0 0 25px rgba(0, 195, 255, 0.1);
-}
-
-/* Glowing Star/Planet effect (for JS-drawn elements) */
-.glow-star {
-  filter: drop-shadow(0 0 8px rgba(0, 195, 255, 0.6))
-          drop-shadow(0 0 15px rgba(0, 195, 255, 0.4));
-}
-
-.glow-star:hover {
-  filter: drop-shadow(0 0 12px rgba(0, 195, 255, 0.9))
-          drop-shadow(0 0 25px rgba(0, 195, 255, 0.6));
-  transform: scale(1.1);
-}
-
-/* ==========================
-   MINDSPACE DETAILS PANEL
-   ========================== */
-#mindspace-details {
-  margin-top: 1.5rem;
-  background: rgba(10, 20, 40, 0.7);
-  color: #e0f7ff;
-  padding: 1.5rem;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 195, 255, 0.3);
-  box-shadow: 0 0 20px rgba(0, 195, 255, 0.15);
-  font-family: 'Roboto', sans-serif;
-  font-size: 1rem;
-  line-height: 1.6;
-  width: 90%;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  transition: all 0.4s ease;
-  display: none; /* Hidden until triggered by JS */
-}
-
-#mindspace-details.active {
-  display: block;
-  animation: fadeInDetail 1s ease forwards;
-}
-
-/* Fade in animation for details */
-@keyframes fadeInDetail {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
 /* ==========================
    RADBOT QUIZ GAME
    ========================== */
 
 /* Main section */
+
 #radbot-section {
-  margin-top: 4rem;
-  background: #1b1b2f;
-  padding: 3rem 2rem;
-  border-radius: 12px;
+  /* Removed - now using .section-card.creative-card */
   text-align: center;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 #radbot-section h2 {
-  color: #00c3ff;
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  text-shadow: 0 0 8px rgba(0, 195, 255, 0.7);
+  color: #00d4ff;
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  text-shadow: 0 0 15px rgba(0, 195, 255, 0.4);
+  position: relative;
+  z-index: 1;
 }
 
 #radbot-section p {
@@ -1874,4 +2399,27 @@ footer {
   border: 1px solid rgba(0, 200, 255, 0.3);
   border-radius: 12px;
   box-shadow: 0 0 20px rgba(0, 195, 255, 0.15);
+}
+/* ==========================
+   CARD CATEGORY ENHANCEMENTS
+   ========================== */
+
+/* Service/Offering Cards (AI Optimizer, Business Growth) */
+.section-card.service-card {
+  border-left: 4px solid #00ff9f;
+}
+
+/* Portfolio/Showcase Cards (Projects, Universe) */
+.section-card.portfolio-card {
+  border-left: 4px solid #00c3ff;
+}
+
+/* Personal/Creative Cards (Mindspace, Games) */
+.section-card.creative-card {
+  border-left: 4px solid #ff00ff;
+}
+
+/* Contact/Action Cards */
+.section-card.action-card {
+  border-left: 4px solid #ffd700;
 }

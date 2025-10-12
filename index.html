@@ -99,51 +99,120 @@
 
   <main>
     <!-- ===== PROJECTS ===== -->
-    <section id="projects">
-      <h2>Projects</h2>
-      <div class="project-filters" aria-label="Project filters">
-        <button class="project-filter" data-category="all">All</button>
-        <button class="project-filter" data-category="ai">AI</button>
-        <button class="project-filter" data-category="web">Web</button>
-        <button class="project-filter" data-category="tools">Tools</button>
+<section id="projects" class="section-card portfolio-card">
+  <h2>Featured Projects</h2>
+  <p class="section-subtitle">Explore my latest work in AI, web development, and automation</p>
+
+  <div class="projects-showcase">
+    
+    <!-- Project 1: Portfolio Website -->
+    <article class="showcase-card">
+      <div class="project-header">
+        <div class="project-icon">🌐</div>
+        <div class="project-badge web">WEB</div>
       </div>
-
-      <div class="project-grid">
-        <article class="project-card" data-category="web">
-          <h3>Portfolio Website</h3>
-          <p>A clean portfolio and hub (this site).</p>
-          <div class="project-actions">
-            <a href="#" class="project-btn view-demo" data-demo="#demo1">View Demo</a>
-            <a href="#" class="project-btn view-code" target="_blank" rel="noopener">GitHub</a>
-            <a href="#" class="project-btn watch-video" target="_blank" rel="noopener">Watch Video</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="ai">
-          <h3>AI Chat Prototype</h3>
-          <p>Local AI chat integration (demo-ready, running locally).</p>
-          <div class="project-actions">
-            <a href="#" class="project-btn view-demo" data-demo="#demo2">View Demo</a>
-            <a href="#" class="project-btn view-code" target="_blank" rel="noopener">GitHub</a>
-            <a href="#" class="project-btn watch-video" target="_blank" rel="noopener">Watch Video</a>
-          </div>
-        </article>
-
-        <article class="project-card" data-category="tools">
-          <h3>Toolbox</h3>
-          <p>Utilities, scripts and helpers I use.</p>
-          <div class="project-actions">
-            <a href="#" class="project-btn view-demo" data-demo="#demo3">View Demo</a>
-            <a href="#" class="project-btn view-code" target="_blank" rel="noopener">GitHub</a>
-            <a href="#" class="project-btn watch-video" target="_blank" rel="noopener">Watch Video</a>
-          </div>
-        </article>
+      
+      <h3>NetworkRad Portfolio</h3>
+      <p class="project-description">A modern, interactive portfolio website featuring AI chat integration, mini-games, and dynamic content sections.</p>
+      
+      <div class="tech-stack">
+        <span class="tech-tag">HTML5</span>
+        <span class="tech-tag">CSS3</span>
+        <span class="tech-tag">JavaScript</span>
+        <span class="tech-tag">AI Integration</span>
       </div>
-    </section>
+      
+      <div class="project-footer">
+        <a href="https://github.com/Radmehrvf" class="github-btn" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          View on GitHub
+        </a>
+        <a href="https://github.com/Radmehrvf/NETWORKRAD" class="live-btn">
+          <span class="live-dot"></span>
+          Live Demo
+        </a>
+      </div>
+    </article>
 
+    <!-- Project 2: AI Chat System -->
+    <article class="showcase-card">
+      <div class="project-header">
+        <div class="project-icon">🤖</div>
+        <div class="project-badge ai">AI</div>
+      </div>
+      
+      <h3>AI Chat Assistant</h3>
+      <p class="project-description">Intelligent chatbot powered by Claude AI, featuring contextual responses, multi-turn conversations, and Cloudflare Workers backend.</p>
+      
+      <div class="tech-stack">
+        <span class="tech-tag">Claude AI</span>
+        <span class="tech-tag">Cloudflare</span>
+        <span class="tech-tag">REST API</span>
+        <span class="tech-tag">WebSockets</span>
+      </div>
+      
+      <div class="project-footer">
+        <a href="https://github.com/Radmehrvf/NETWORKRAD" class="github-btn" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          View on GitHub
+        </a>
+        <a href="#" class="live-btn">
+          <span class="live-dot"></span>
+          Live Demo
+        </a>
+      </div>
+    </article>
+
+    <!-- Project 3: Automation Toolbox -->
+    <article class="showcase-card">
+      <div class="project-header">
+        <div class="project-icon">🛠️</div>
+        <div class="project-badge tools">TOOLS</div>
+      </div>
+      
+      <h3>Workflow Automation Suite</h3>
+      <p class="project-description">Collection of Python scripts and utilities for business automation, data processing, and productivity enhancement.</p>
+      
+      <div class="tech-stack">
+        <span class="tech-tag">Python</span>
+        <span class="tech-tag">Automation</span>
+        <span class="tech-tag">APIs</span>
+        <span class="tech-tag">Data Processing</span>
+      </div>
+      
+      <div class="project-footer">
+        <a href="https://github.com/Radmehrvf" class="github-btn" target="_blank" rel="noopener">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          View on GitHub
+        </a>
+        <a href="#" class="live-btn disabled">
+          <span class="live-dot"></span>
+          Coming Soon
+        </a>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- View All Projects Button -->
+  <div class="projects-cta">
+    <a href="https://github.com/Radmehrvf" class="view-all-btn" target="_blank" rel="noopener">
+      <span>View All Projects on GitHub</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+    </a>
+  </div>
+</section>
     <!-- ===== MY UNIVERSE ===== -->
-    <section id="universe">
-      <h2>My Universe</h2>
+    <section id="universe" class="section-card">
+  <h2>My Universe</h2>
       <p>Shortcuts to everything I'm building and sharing.</p>
 
       <div class="universe-grid">
@@ -179,8 +248,8 @@
 
 
     
-    <section id="mindspace">
-      <h2>Mindspace</h2>
+    <section id="mindspace" class="section-card creative-card cosmic-mindspace">
+  <h2><span style="font-size: 0.8em;">✨</span> Mindspace <span style="font-size: 0.8em;">✨</span></h2>
       <p>Short notes, ideas, and thoughts. Discuss them with the chat.</p>
 
       <div class="mindspace-list">
@@ -220,8 +289,8 @@
 
 
     <!-- ===== TIMELINE ===== -->
-    <section id="timeline">
-      <h2>Timeline & Goals</h2>
+    <section id="timeline" class="section-card">
+  <h2>Timeline & Goals</h2>
       <p>Where I'm heading — short roadmap and milestones.</p>
 
       <ol class="timeline-list">
@@ -232,7 +301,7 @@
     </section>
 
 <!-- ===== GROW YOUR BUSINESS WITH NETWORKRAD ===== -->
-<section id="business-growth">
+<section id="business-growth" class="section-card">
   <h2>Grow Your Business with NetworkRad</h2>
   <p class="subtitle">
     Smarter systems. Seamless communication. AI-driven efficiency.
@@ -293,7 +362,7 @@
 
 
 <!-- ===== SUPPORT & HIRE ===== -->
-<section id="support-hire">
+<section id="support-hire" class="section-card">
   <h2>Support & Work With Me</h2>
   <div class="support-actions">
     <button id="supportBtn" class="btn-primary">Support My Work</button>
@@ -358,9 +427,9 @@
 
 
     <!-- ===== CONTACT ===== -->
-    <section id="contact">
-      <h2>Contact Me</h2>
-      <p>Get in touch or visit my platforms.</p>
+ <section id="contact" class="section-card action-card">
+  <h2>Contact Me</h2>
+  <p>Get in touch or visit my platforms.</p>
 
       <div class="contact-container">
         <div class="contact-item">
@@ -398,8 +467,8 @@
   </main>
 
     <!-- ===== RADBOT QUIZ GAME (NEW SECTION) ===== -->
-    <section id="radbot-section">
-      <h2>RadBot Quiz Game</h2>
+<section id="radbot-section" class="section-card creative-card">
+  <h2>RadBot Quiz Game</h2>
       <p>Test your knowledge with the interactive AI quiz!</p>
 
       <!-- Button to start quiz -->
