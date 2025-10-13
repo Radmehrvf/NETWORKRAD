@@ -10,14 +10,202 @@ console.log("Welcome to NetworkRad Portfolio (All That Mathers)!");
 document.addEventListener("DOMContentLoaded", () => {
   console.log("✅ NetworkRad Site Loaded Successfully");
 
-  // Initialize each feature
+  // Only load essential features
   initMainInterface();
-  initNetworkBuilder();
-  initMindspaceExplorer();
-  initRadBotQuiz();
   initSupportUnlockEasterEgg();
+  
+  // Lazy load games
+  setupLazyGameLoading();
 });
+// ================================
+// OPTIMIZED LAZY LOADING SYSTEM
+// ================================
 
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("✅ NetworkRad Site Loaded Successfully");
+
+  // Initialize only essential features immediately
+  initMainInterface();
+  initSupportUnlockEasterEgg();
+  
+  // Lazy load mini-games only when needed
+  setupLazyGameLoading();
+});
+// ================================
+// INTERSECTION OBSERVER - LAZY LOAD SECTIONS
+// ================================
+
+function setupIntersectionObserver() {
+  // Only run if browser supports Intersection Observer
+  if (!('IntersectionObserver' in window)) {
+    console.warn('⚠️ Intersection Observer not supported');
+    return;
+  }
+
+  // Lazy load heavy sections when they come into viewport
+  const observerOptions = {
+    root: null, // viewport
+    rootMargin: '100px', // Load 100px before section is visible
+    threshold: 0.01 // Trigger when 1% is visible
+  };
+
+  const sectionObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const section = entry.target;
+        
+        // Add lazy-loaded class for fade-in animation
+        section.classList.add('lazy-loaded');
+        
+        // Load section-specific content
+        const sectionId = section.id;
+        console.log(`👁️ Loading section: ${sectionId}`);
+        
+        // Stop observing once loaded
+        sectionObserver.unobserve(section);
+        
+        // Trigger specific initializations if needed
+        if (sectionId === 'business-growth') {
+          initBusinessCounters();
+        }
+      }
+    });
+  }, observerOptions);
+
+  // Observe all heavy sections
+  const sectionsToObserve = [
+    '#projects',
+    '#universe',
+    '#mindspace',
+    '#business-growth',
+    '#support-hire',
+    '#contact'
+  ];
+
+  sectionsToObserve.forEach(selector => {
+    const section = document.querySelector(selector);
+    if (section) {
+      sectionObserver.observe(section);
+    }
+  });
+}
+
+// ================================
+// LAZY LOAD BUSINESS COUNTERS
+// ================================
+let countersInitialized = false;
+
+function initBusinessCounters() {
+  if (countersInitialized) return;
+  
+  const counters = document.querySelectorAll('.counter');
+  if (counters.length === 0) return;
+
+  countersInitialized = true;
+  console.log('📊 Animating business counters');
+
+  counters.forEach(counter => {
+    const target = +counter.getAttribute('data-target');
+    let count = 0;
+    const speed = target / 80;
+
+    const updateCount = () => {
+      if (count < target) {
+        count += speed;
+        counter.textContent = Math.floor(count);
+        requestAnimationFrame(updateCount);
+      } else {
+        counter.textContent = target;
+      }
+    };
+    updateCount();
+  });
+}
+
+// Initialize observers when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  setupIntersectionObserver();
+});
+// ================================
+// LAZY GAME LOADING SYSTEM
+// ================================
+function setupLazyGameLoading() {
+  let networkBuilderLoaded = false;
+  let mindspaceLoaded = false;
+  let radbotLoaded = false;
+
+  // Network Builder - Load on button click
+  const networkRevealBtn = document.querySelector('[data-target="network-builder-section"]');
+  if (networkRevealBtn) {
+    networkRevealBtn.addEventListener('click', () => {
+      if (!networkBuilderLoaded) {
+        console.log("🎮 Loading Network Builder...");
+        initNetworkBuilder();
+        networkBuilderLoaded = true;
+      }
+    }, { once: false }); // Allow toggle behavior
+  }
+
+  // Mindspace Explorer - Load on button click
+  const mindspaceRevealBtn = document.querySelector('[data-target="mindspace-explorer-section"]');
+  if (mindspaceRevealBtn) {
+    mindspaceRevealBtn.addEventListener('click', () => {
+      if (!mindspaceLoaded) {
+        console.log("🌌 Loading Mindspace Explorer...");
+        initMindspaceExplorer();
+        mindspaceLoaded = true;
+      }
+    }, { once: false });
+  }
+
+  // RadBot Quiz - Load on button click
+  const radbotBtn = document.getElementById('radbot-btn');
+  if (radbotBtn) {
+    radbotBtn.addEventListener('click', () => {
+      if (!radbotLoaded) {
+        console.log("🤖 Loading RadBot Quiz...");
+        initRadBotQuiz();
+        radbotLoaded = true;
+      }
+    }, { once: true }); // Only need to load once
+  }
+
+  // Optional: Intersection Observer for scroll-based loading
+  // Uncomment if you want games to load when user scrolls near them
+  
+  const gameObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const targetId = entry.target.id;
+        
+        if (targetId === 'network-builder-section' && !networkBuilderLoaded) {
+          initNetworkBuilder();
+          networkBuilderLoaded = true;
+        }
+        
+        if (targetId === 'mindspace-explorer-section' && !mindspaceLoaded) {
+          initMindspaceExplorer();
+          mindspaceLoaded = true;
+        }
+        
+        if (targetId === 'radbot-section' && !radbotLoaded) {
+          initRadBotQuiz();
+          radbotLoaded = true;
+        }
+      }
+    });
+  }, { rootMargin: '200px' }); // Load 200px before section is visible
+
+  // Observe game sections
+  const networkSection = document.getElementById('network-builder-section');
+  const mindspaceSection = document.getElementById('mindspace-explorer-section');
+  const radbotSection = document.getElementById('radbot-section');
+  
+  if (networkSection) gameObserver.observe(networkSection);
+  if (mindspaceSection) gameObserver.observe(mindspaceSection);
+  if (radbotSection) gameObserver.observe(radbotSection);
+  
+}
 // ================================
 // MAIN INTERFACE LOGIC (Chat, Modals, Scroll, etc.)
 // ================================
@@ -38,7 +226,93 @@ function initMainInterface() {
   const scrollUpBtn = document.getElementById('scrollUpBtn');
   const scrollDownBtn = document.getElementById('scrollDownBtn');
 
+// ================================
+// MODERN HEADER INTERACTIVITY
+// ================================
 
+// Scroll effect for header
+const mainHeader = document.getElementById('mainHeader');
+let lastScroll = 0;
+
+window.addEventListener('scroll', () => {
+  const currentScroll = window.pageYOffset;
+  
+  // Add scrolled class for styling
+  if (currentScroll > 50) {
+    mainHeader.classList.add('scrolled');
+  } else {
+    mainHeader.classList.remove('scrolled');
+  }
+  
+  lastScroll = currentScroll;
+});
+
+// Mobile menu toggle
+const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+const mainNav = document.getElementById('mainNav');
+
+if (mobileMenuToggle && mainNav) {
+  mobileMenuToggle.addEventListener('click', () => {
+    mobileMenuToggle.classList.toggle('active');
+    mainNav.classList.toggle('active');
+    
+    // Prevent body scroll when menu is open
+    document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+  });
+  
+  // Close menu when clicking a link
+  const navLinks = document.querySelectorAll('.nav-link');
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenuToggle.classList.remove('active');
+      mainNav.classList.remove('active');
+      document.body.style.overflow = '';
+    });
+  });
+}
+
+// Active nav link on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinksForActive = document.querySelectorAll('.nav-link');
+
+window.addEventListener('scroll', () => {
+  let current = '';
+  
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.clientHeight;
+    
+    if (window.pageYOffset >= sectionTop - 200) {
+      current = section.getAttribute('id');
+    }
+  });
+  
+  navLinksForActive.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === `#${current}`) {
+      link.classList.add('active');
+    }
+  });
+});
+
+// Smooth scroll for nav links (ensure smooth behavior)
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href');
+    const targetSection = document.querySelector(targetId);
+    
+    if (targetSection) {
+      const headerHeight = mainHeader.offsetHeight;
+      const targetPosition = targetSection.offsetTop - headerHeight - 20;
+      
+      window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+      });
+    }
+  });
+});
 
   
 // -------------------------------
