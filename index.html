@@ -4,68 +4,52 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>NetworkRad — All That Mathers</title>
-<!-- Critical inline CSS for instant rendering -->
-<style>
-  body { 
-    margin: 0; 
-    background: #121212; 
-    color: #f0f0f0; 
-    font-family: system-ui, -apple-system, sans-serif; 
-  }
-  .site-header { 
-    position: fixed; 
-    top: 0; 
-    width: 100%; 
-    z-index: 9999; 
-    background: rgba(10, 22, 40, 0.9); 
-  }
-  .hero-section { 
-    min-height: 100vh; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
-  }
-</style>
-<!-- Optimized Google Fonts with display=swap for instant text rendering -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
-
-<!-- Fallback for no-JS -->
-<noscript>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
-</noscript>
-
-<!-- Font loading optimization script -->
-<script>
-  // Ensure fonts load asynchronously
-  if ('fonts' in document) {
-    document.fonts.ready.then(() => {
-      console.log('✅ Fonts loaded');
-    });
-  }
-</script>
-
-  <!-- MAIN STYLESHEET -->
-  <link rel="stylesheet" href="Style.css">
-
-  <meta name="description" content="Radmehr — portfolio, projects, AI chat and personal hub." />
+  
+  <!-- Critical inline CSS for instant rendering -->
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#121212;color:#f0f0f0;font-family:system-ui,-apple-system,sans-serif;overflow-x:hidden}
+    .site-header{position:fixed;top:0;width:100%;z-index:9999;background:rgba(10,22,40,.9);padding:1rem 2rem;backdrop-filter:blur(10px)}
+    .hero-section{min-height:100vh;display:flex;align-items:center;justify-content:center;padding-top:80px}
+    .loading-screen{position:fixed;inset:0;background:#0a1628;display:flex;align-items:center;justify-content:center;z-index:10000;transition:opacity .3s}
+    .loading-screen.hidden{opacity:0;pointer-events:none}
+    .loader{border:3px solid rgba(0,188,212,.2);border-top:3px solid #00bcd4;border-radius:50%;width:50px;height:50px;animation:spin 1s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+  
+  <!-- Preload critical assets -->
+  <link rel="preload" href="logo.PNG" as="image" fetchpriority="high">
+  <link rel="preload" href="Style.css" as="style">
+  
+  <!-- Defer main CSS -->
+  <link rel="stylesheet" href="Style.css" media="print" onload="this.media='all';this.onload=null;">
+  <noscript><link rel="stylesheet" href="Style.css"></noscript>
+  
+  <!-- Optimized Font Loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;">
+  
+  <meta name="description" content="Radmehr — AI Integration Specialist & Full-Stack Developer" />
 </head>
 <body id="home">
 
-<!-- ===== MODERN PREMIUM HEADER ===== -->
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="loader"></div>
+</div>
+
+<!-- HEADER -->
 <header class="site-header" id="mainHeader">
   <div class="header-content">
-    
-    <!-- Logo & Brand -->
     <div class="logo-section">
-<img src="logo.PNG" alt="NetworkRad Logo" class="logo" loading="eager" fetchpriority="high" />      <div class="brand-text">
+      <img src="logo.PNG" alt="NetworkRad Logo" class="logo" width="55" height="55" loading="eager" fetchpriority="high" />
+      <div class="brand-text">
         <span class="brand-name">NetworkRad</span>
         <span class="brand-tagline">AI & Development</span>
       </div>
     </div>
 
-    <!-- Navigation -->
     <nav class="main-nav" id="mainNav">
       <ul class="nav-links">
         <li><a href="#home" class="nav-link active">Home</a></li>
@@ -75,7 +59,6 @@
         <li><a href="#contact" class="nav-link">Contact</a></li>
       </ul>
       
-      <!-- Chat CTA Button -->
       <button id="chatButton" class="nav-cta">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
@@ -84,17 +67,15 @@
       </button>
     </nav>
 
-    <!-- Mobile Menu Toggle -->
     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
       <span class="menu-bar"></span>
       <span class="menu-bar"></span>
       <span class="menu-bar"></span>
     </button>
-
   </div>
 </header>
-  <!-- ===== BANNER / INTRO ===== -->
-<!-- ===== HERO SECTION ===== -->
+
+<!-- HERO SECTION -->
 <section class="hero-section" id="intro">
   <div class="hero-background">
     <div class="gradient-orb orb-1"></div>
@@ -139,7 +120,7 @@
     </div>
 
     <div class="hero-actions">
-      <button id="chatButton" class="hero-btn primary">
+      <button class="hero-btn primary" onclick="document.getElementById('chatButton').click()">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
@@ -190,15 +171,18 @@
     <div class="scroll-text">Scroll to explore</div>
   </div>
 </section>
-<!-- AI Workflow Optimizer Section -->
-<section id="ai-optimizer-section" class="section-card service-card featured">
+
+<!-- MAIN CONTENT (Lazy Loaded Sections) -->
+<main>
+
+<!-- AI OPTIMIZER SECTION -->
+<section id="ai-optimizer-section" class="section-card service-card featured lazy-section">
   <div class="optimizer-hero">
     <div class="optimizer-icon">🤖</div>
     <h2>AI-Powered Business Optimization</h2>
     <p class="optimizer-tagline">Transform your operations with intelligent automation and save 20-50% in costs</p>
   </div>
 
-  <!-- Benefits Grid -->
   <div class="benefits-grid">
     <div class="benefit-item">
       <div class="benefit-icon">⚡</div>
@@ -222,7 +206,6 @@
     </div>
   </div>
 
-  <!-- CTA Button -->
   <div class="optimizer-cta">
     <button id="optimizeBtn" class="optimizer-btn">
       <span class="btn-text">Get Your Free Analysis</span>
@@ -233,7 +216,6 @@
     <p class="cta-subtext">No credit card required • 5-minute setup</p>
   </div>
 
-  <!-- Optimization Form (Hidden by default) -->
   <div id="ai-form-section" class="optimizer-form-wrapper">
     <div class="form-container">
       <div class="form-header">
@@ -271,7 +253,7 @@
             <span class="label-icon">🚧</span>
             Current Challenges
           </label>
-          <textarea id="bottlenecks" name="bottlenecks" rows="4" placeholder="What are your biggest bottlenecks? (e.g., manual data entry, slow customer response times)" required></textarea>
+          <textarea id="bottlenecks" name="bottlenecks" rows="4" placeholder="What are your biggest bottlenecks?" required></textarea>
         </div>
 
         <div class="form-group">
@@ -279,14 +261,14 @@
             <span class="label-icon">🎯</span>
             Goals & Objectives
           </label>
-          <textarea id="goals" name="goals" rows="4" placeholder="What would you like to achieve? (e.g., reduce processing time, improve customer satisfaction)" required></textarea>
+          <textarea id="goals" name="goals" rows="4" placeholder="What would you like to achieve?" required></textarea>
         </div>
 
         <div class="form-consent">
           <label class="checkbox-label">
             <input type="checkbox" id="consentCheckbox" required>
             <span class="checkbox-custom"></span>
-            <span class="consent-text">I agree to receive AI-powered recommendations and allow the team to contact me for further assistance</span>
+            <span class="consent-text">I agree to receive AI-powered recommendations</span>
           </label>
         </div>
 
@@ -294,64 +276,32 @@
           <button type="button" id="cancelForm" class="btn-secondary">Cancel</button>
           <button type="submit" class="btn-submit">
             <span>Analyze My Workflow</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-              <polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
           </button>
         </div>
       </form>
-
-      <div class="trust-indicators">
-        <div class="trust-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-          </svg>
-          <span>100% Confidential</span>
-        </div>
-        <div class="trust-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
-          </svg>
-          <span>Free Analysis</span>
-        </div>
-        <div class="trust-item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-          </svg>
-          <span>No Commitment</span>
-        </div>
-      </div>
     </div>
   </div>
 </section>
-<setion>
 
-  <main>
-    <!-- ===== PROJECTS ===== -->
-<section id="projects" class="section-card portfolio-card">
+<!-- PROJECTS SECTION -->
+<section id="projects" class="section-card portfolio-card lazy-section">
   <h2>Featured Projects</h2>
   <p class="section-subtitle">Explore my latest work in AI, web development, and automation</p>
 
   <div class="projects-showcase">
-    
-    <!-- Project 1: Portfolio Website -->
     <article class="showcase-card">
       <div class="project-header">
         <div class="project-icon">🌐</div>
         <div class="project-badge web">WEB</div>
       </div>
-      
       <h3>NetworkRad Portfolio</h3>
       <p class="project-description">A modern, interactive portfolio website featuring AI chat integration, mini-games, and dynamic content sections.</p>
-      
       <div class="tech-stack">
         <span class="tech-tag">HTML5</span>
         <span class="tech-tag">CSS3</span>
         <span class="tech-tag">JavaScript</span>
         <span class="tech-tag">AI Integration</span>
       </div>
-      
       <div class="project-footer">
         <a href="https://github.com/Radmehrvf" class="github-btn" target="_blank" rel="noopener">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -366,23 +316,19 @@
       </div>
     </article>
 
-    <!-- Project 2: AI Chat System -->
     <article class="showcase-card">
       <div class="project-header">
         <div class="project-icon">🤖</div>
         <div class="project-badge ai">AI</div>
       </div>
-      
       <h3>AI Chat Assistant</h3>
-      <p class="project-description">Intelligent chatbot powered by Claude AI, featuring contextual responses, multi-turn conversations, and Cloudflare Workers backend.</p>
-      
+      <p class="project-description">Intelligent chatbot powered by Claude AI, featuring contextual responses and Cloudflare Workers backend.</p>
       <div class="tech-stack">
         <span class="tech-tag">Claude AI</span>
         <span class="tech-tag">Cloudflare</span>
         <span class="tech-tag">REST API</span>
         <span class="tech-tag">WebSockets</span>
       </div>
-      
       <div class="project-footer">
         <a href="https://github.com/Radmehrvf/NETWORKRAD" class="github-btn" target="_blank" rel="noopener">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -397,23 +343,19 @@
       </div>
     </article>
 
-    <!-- Project 3: Automation Toolbox -->
     <article class="showcase-card">
       <div class="project-header">
         <div class="project-icon">🛠️</div>
         <div class="project-badge tools">TOOLS</div>
       </div>
-      
       <h3>Workflow Automation Suite</h3>
-      <p class="project-description">Collection of Python scripts and utilities for business automation, data processing, and productivity enhancement.</p>
-      
+      <p class="project-description">Collection of Python scripts and utilities for business automation and data processing.</p>
       <div class="tech-stack">
         <span class="tech-tag">Python</span>
         <span class="tech-tag">Automation</span>
         <span class="tech-tag">APIs</span>
         <span class="tech-tag">Data Processing</span>
       </div>
-      
       <div class="project-footer">
         <a href="https://github.com/Radmehrvf" class="github-btn" target="_blank" rel="noopener">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -427,10 +369,8 @@
         </a>
       </div>
     </article>
-
   </div>
 
-  <!-- View All Projects Button -->
   <div class="projects-cta">
     <a href="https://github.com/Radmehrvf" class="view-all-btn" target="_blank" rel="noopener">
       <span>View All Projects on GitHub</span>
@@ -440,136 +380,106 @@
     </a>
   </div>
 </section>
-    <!-- ===== MY UNIVERSE ===== -->
-    <section id="universe" class="section-card">
+
+<!-- UNIVERSE SECTION -->
+<section id="universe" class="section-card lazy-section">
   <h2>My Universe</h2>
-      <p>Shortcuts to everything I'm building and sharing.</p>
-
-      <div class="universe-grid">
-        <div class="universe-item">
-          <h3>Instagram</h3>
-          <p><a href="https://www.instagram.com/radmehrvf/" target="_blank" rel="noopener">Visit my Instagram</a></p>
-        </div>
-        <div class="universe-item">
-          <h3>Telegram</h3>
-          <p><a href="https://t.me/RaadVisa" target="_blank" rel="noopener">Join my Telegram</a></p>
-        </div>
-        <div class="universe-item">
-          <h3>LinkedIn</h3>
-          <p><a href="https://www.linkedin.com/in/radmehr-rezaabadi-a7396728b/" target="_blank" rel="noopener">Connect on LinkedIn</a></p>
-        </div>
-        <div class="universe-item">
-          <h3>YouTube</h3>
-          <p><a href="https://www.youtube.com/@NetworkRad" target="_blank" rel="noopener">Watch on YouTube</a></p>
-        </div>
-        <div class="universe-item">
-          <h3>GitHub</h3>
-          <p><a href="https://github.com/Radmehrvf" target="_blank" rel="noopener">View repos</a></p>
-        </div>
-        <div class="universe-item stats">
-          <h3>Stats (placeholders)</h3>
-          <p>Followers: <span id="statFollowers">—</span></p>
-          <p>Projects: <span id="statProjects">—</span></p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== MINDSPACE ===== -->
-
-
-    
-    <section id="mindspace" class="section-card creative-card cosmic-mindspace">
-  <h2><span style="font-size: 0.8em;">✨</span> Mindspace <span style="font-size: 0.8em;">✨</span></h2>
-      <p>Short notes, ideas, and thoughts. Discuss them with the chat.</p>
-
-      <div class="mindspace-list">
-        <article class="mind-card">
-          <h4>Idea: Personal AI Resume Coach</h4>
-          <p>Short description of this idea…</p>
-          <button class="discuss-btn" data-discuss="Tell me about this 'Personal AI Resume Coach' idea.">Discuss this idea</button>
-        </article>
-
-        <article class="mind-card">
-          <h4>Note: My workflow</h4>
-          <p>Notes about tools I use and how I work.</p>
-          <button class="discuss-btn" data-discuss="Explain Radmehr's workflow notes.">Discuss this note</button>
-        </article>
-      </div>
-    </section>
-<!-- ===== MINDSPACE EXPLORER (COLLAPSIBLE VERSION) ===== -->
-<section id="mindspace-explorer-wrapper">
-  <div class="collapsible-header">
-<button class="reveal-btn" data-target="mindspace-explorer-section" id="mindspaceToggle">
-  <span class="arrow">▶</span>
-  <span class="title">Play Mindspace Explorer</span>
-  <span class="loading-indicator" style="display: none;">⏳ Loading...</span>
-</button>
-  </div>
-
-  <section id="mindspace-explorer-section" class="collapsible-content collapsed">
-    <h2>Mindspace Explorer</h2>
-    <p>Explore the interactive galaxy of ideas — hover or click on stars to reveal thoughts and inspiration.</p>
-
-    <div id="mindspace-explorer">
-      <canvas id="mindspaceCanvas" width="600" height="400"></canvas>
+  <p>Shortcuts to everything I'm building and sharing.</p>
+  <div class="universe-grid">
+    <div class="universe-item">
+      <h3>Instagram</h3>
+      <p><a href="https://www.instagram.com/radmehrvf/" target="_blank" rel="noopener">Visit my Instagram</a></p>
     </div>
+    <div class="universe-item">
+      <h3>Telegram</h3>
+      <p><a href="https://t.me/RaadVisa" target="_blank" rel="noopener">Join my Telegram</a></p>
+    </div>
+    <div class="universe-item">
+      <h3>LinkedIn</h3>
+      <p><a href="https://www.linkedin.com/in/radmehr-rezaabadi-a7396728b/" target="_blank" rel="noopener">Connect on LinkedIn</a></p>
+    </div>
+    <div class="universe-item">
+      <h3>YouTube</h3>
+      <p><a href="https://www.youtube.com/@NetworkRad" target="_blank" rel="noopener">Watch on YouTube</a></p>
+    </div>
+    <div class="universe-item">
+      <h3>GitHub</h3>
+      <p><a href="https://github.com/Radmehrvf" target="_blank" rel="noopener">View repos</a></p>
+    </div>
+  </div>
+</section>
 
+<!-- MINDSPACE SECTION -->
+<section id="mindspace" class="section-card creative-card cosmic-mindspace lazy-section">
+  <h2>✨ Mindspace ✨</h2>
+  <p>Short notes, ideas, and thoughts. Discuss them with the chat.</p>
+  <div class="mindspace-list">
+    <article class="mind-card">
+      <h4>Idea: Personal AI Resume Coach</h4>
+      <p>Short description of this idea…</p>
+      <button class="discuss-btn" data-discuss="Tell me about this 'Personal AI Resume Coach' idea.">Discuss this idea</button>
+    </article>
+    <article class="mind-card">
+      <h4>Note: My workflow</h4>
+      <p>Notes about tools I use and how I work.</p>
+      <button class="discuss-btn" data-discuss="Explain Radmehr's workflow notes.">Discuss this note</button>
+    </article>
+  </div>
+</section>
+
+<!-- MINDSPACE EXPLORER (Lazy Loaded Game) -->
+<section id="mindspace-explorer-wrapper" class="lazy-section">
+  <div class="collapsible-header">
+    <button class="reveal-btn" data-target="mindspace-explorer-section">
+      <span class="arrow">▶</span>
+      <span class="title">Play Mindspace Explorer</span>
+      <span class="loading-indicator" style="display: none;">⏳</span>
+    </button>
+  </div>
+  <section id="mindspace-explorer-section" class="collapsible-content">
+    <h2>Mindspace Explorer</h2>
+    <p>Explore the interactive galaxy of ideas — click on stars to reveal thoughts.</p>
+    <div id="mindspace-explorer">
+      <canvas id="mindspaceCanvas" width="600" height="400" style="display:none;"></canvas>
+    </div>
     <div id="mindspace-details"></div>
   </section>
 </section>
 
-
-    <!-- ===== TIMELINE ===== -->
-    <section id="timeline" class="section-card">
+<!-- TIMELINE SECTION -->
+<section id="timeline" class="section-card lazy-section">
   <h2>Timeline & Goals</h2>
-      <p>Where I'm heading — short roadmap and milestones.</p>
+  <p>Where I'm heading — short roadmap and milestones.</p>
+  <ol class="timeline-list">
+    <li><strong>Q4 2025:</strong> Polish AI chat UX and monetization.</li>
+    <li><strong>Q1 2026:</strong> Launch premium mentorship & templates.</li>
+    <li><strong>Ongoing:</strong> Build tools, videos, and content.</li>
+  </ol>
+</section>
 
-      <ol class="timeline-list">
-        <li><strong>Q4 2025:</strong> Polish AI chat UX and monetization.</li>
-        <li><strong>Q1 2026:</strong> Launch premium mentorship & templates.</li>
-        <li><strong>Ongoing:</strong> Build tools, videos, and content.</li>
-      </ol>
-    </section>
-
-<!-- ===== GROW YOUR BUSINESS WITH NETWORKRAD ===== -->
-<section id="business-growth" class="section-card">
+<!-- BUSINESS GROWTH SECTION -->
+<section id="business-growth" class="section-card lazy-section">
   <h2>Grow Your Business with NetworkRad</h2>
-  <p class="subtitle">
-    Smarter systems. Seamless communication. AI-driven efficiency.
-  </p>
-
+  <p class="subtitle">Smarter systems. Seamless communication. AI-driven efficiency.</p>
   <div class="business-grid">
     <div class="business-card">
       <h3>Optimize Operations</h3>
-      <p>
-        Reduce repetitive tasks and streamline your workflows. Automate scheduling, reporting, and internal communication with AI tools that just work.
-      </p>
+      <p>Reduce repetitive tasks and streamline your workflows.</p>
     </div>
-
     <div class="business-card">
       <h3>Boost Customer Support</h3>
-      <p>
-        Deliver faster, more reliable responses using AI-powered assistants that enhance your coordination, sales, and support teams.
-      </p>
+      <p>Deliver faster, more reliable responses using AI-powered assistants.</p>
     </div>
-
     <div class="business-card">
       <h3>Empower Your Team</h3>
-      <p>
-        Equip your staff with smarter systems — from network monitoring dashboards to task automation tools that save time every day.
-      </p>
+      <p>Equip your staff with smarter systems and automation tools.</p>
     </div>
-
     <div class="business-card">
       <h3>Lower Costs, Scale Faster</h3>
-      <p>
-        Cut unnecessary expenses while improving efficiency and service quality with scalable AI and IT solutions built for your business.
-      </p>
+      <p>Cut unnecessary expenses while improving efficiency.</p>
     </div>
   </div>
-
-  <button id="growBizBtn" class="btn-primary">Let’s Improve Your Business</button>
-
+  <button id="growBizBtn" class="btn-primary">Let's Improve Your Business</button>
   <div id="business-stats">
     <div class="stat">
       <span class="counter" data-target="30">0</span><span class="percent">%</span>
@@ -586,407 +496,193 @@
   </div>
 </section>
 
-
-
-
-
-
-
-<!-- ===== SUPPORT & HIRE ===== -->
-<!-- ===== SUPPORT & WORK WITH ME ===== -->
-<section id="support-hire" class="section-card action-card">
+<!-- SUPPORT & HIRE SECTION -->
+<section id="support-hire" class="section-card action-card lazy-section">
   <div class="support-hero">
     <h2>Let's Work Together</h2>
     <p class="section-subtitle">Support my work or collaborate on your next project</p>
   </div>
 
-  <!-- Action Cards Grid -->
   <div class="support-grid">
-    
-    <!-- Support Card -->
     <div class="action-card-item support-card">
       <div class="card-icon">💝</div>
       <h3>Support My Work</h3>
-      <p>Help me create more free content, tools, and resources for the community</p>
-      <ul class="feature-list">
-        <li>☕ Buy me a coffee</li>
-        <li>🎨 Access exclusive content</li>
-        <li>🌟 Get early access to projects</li>
-      </ul>
+      <p>Help me create more free content, tools, and resources</p>
       <button id="supportBtn" class="action-btn support-btn">
         <span>Choose Support Option</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
       </button>
     </div>
 
-    <!-- Hire/Collaborate Card -->
     <div class="action-card-item hire-card">
       <div class="card-icon">🚀</div>
       <h3>Hire Me / Collaborate</h3>
-      <p>Let's build something amazing together - custom projects, consulting, or partnerships</p>
-      <ul class="feature-list">
-        <li>💼 Custom development</li>
-        <li>🤝 Technical consulting</li>
-        <li>⚡ AI integration services</li>
-      </ul>
+      <p>Let's build something amazing together</p>
       <button id="hireBtn" class="action-btn hire-btn">
         <span>Start a Project</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M5 12h14M12 5l7 7-7 7"/>
-        </svg>
       </button>
     </div>
-
   </div>
 
-  <!-- Support Options Section (Hidden) -->
   <div id="supportSection" class="expandable-section">
     <div class="section-content">
-      <button class="close-section" data-target="supportSection">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12"/>
-        </svg>
-      </button>
-
+      <button class="close-section" data-target="supportSection">×</button>
       <h3 class="section-title">Choose Your Support Method</h3>
-      <p class="section-description">Every contribution helps me create better content and tools</p>
-
       <div class="support-options">
-        
-        <a href="https://ko-fi.com/networkrad" target="_blank" rel="noopener" class="support-option kofi">
+        <a href="https://ko-fi.com/networkrad" target="_blank" rel="noopener" class="support-option">
           <div class="option-icon">☕</div>
           <div class="option-content">
             <h4>Ko-fi</h4>
             <p>One-time support</p>
           </div>
-          <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
         </a>
-
-        <a href="https://patreon.com/networkrad" target="_blank" rel="noopener" class="support-option patreon">
+        <a href="https://patreon.com/networkrad" target="_blank" rel="noopener" class="support-option">
           <div class="option-icon">🎨</div>
           <div class="option-content">
             <h4>Patreon</h4>
             <p>Monthly membership</p>
           </div>
-          <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
         </a>
-
-        <a href="https://paypal.me/networkrad" target="_blank" rel="noopener" class="support-option paypal">
-          <div class="option-icon">💳</div>
-          <div class="option-content">
-            <h4>PayPal</h4>
-            <p>Direct donation</p>
-          </div>
-          <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-
-        <a href="https://github.com/sponsors/Radmehrvf" target="_blank" rel="noopener" class="support-option github">
-          <div class="option-icon">⭐</div>
-          <div class="option-content">
-            <h4>GitHub Sponsors</h4>
-            <p>Support via GitHub</p>
-          </div>
-          <svg class="arrow-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M5 12h14M12 5l7 7-7 7"/>
-          </svg>
-        </a>
-
-      </div>
-
-      <div class="support-message">
-        <p>🙏 Thank you for supporting my work! Your contribution helps me dedicate more time to creating free resources.</p>
       </div>
     </div>
   </div>
 
-  <!-- Hire/Collaborate Form Section (Hidden) -->
   <div id="hireSection" class="expandable-section">
     <div class="section-content">
-      <button class="close-section" data-target="hireSection">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 6L6 18M6 6l12 12"/>
-        </svg>
-      </button>
-
+      <button class="close-section" data-target="hireSection">×</button>
       <h3 class="section-title">Let's Discuss Your Project</h3>
-      <p class="section-description">Fill out the form below and I'll get back to you within 24 hours</p>
-
       <form id="hireForm" class="collaborate-form">
         <div class="form-row">
           <div class="form-group">
-            <label for="clientName">
-              <span class="label-icon">👤</span>
-              Your Name
-            </label>
-            <input type="text" id="clientName" name="clientName" placeholder="John Doe" required>
+            <label for="clientName">Your Name</label>
+            <input type="text" id="clientName" placeholder="John Doe" required>
           </div>
-
           <div class="form-group">
-            <label for="clientEmail">
-              <span class="label-icon">📧</span>
-              Email Address
-            </label>
-            <input type="email" id="clientEmail" name="clientEmail" placeholder="john@example.com" required>
+            <label for="clientEmail">Email Address</label>
+            <input type="email" id="clientEmail" placeholder="john@example.com" required>
           </div>
         </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="projectType">
-              <span class="label-icon">🎯</span>
-              Project Type
-            </label>
-            <select id="projectType" name="projectType" required>
-              <option value="">Select project type</option>
-              <option value="web-development">Web Development</option>
-              <option value="ai-integration">AI Integration</option>
-              <option value="automation">Automation & Tools</option>
-              <option value="consulting">Technical Consulting</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="budget">
-              <span class="label-icon">💰</span>
-              Budget Range
-            </label>
-            <select id="budget" name="budget" required>
-              <option value="">Select budget</option>
-              <option value="1-5k">$1,000 - $5,000</option>
-              <option value="5-10k">$5,000 - $10,000</option>
-              <option value="10-25k">$10,000 - $25,000</option>
-              <option value="25k+">$25,000+</option>
-            </select>
-          </div>
-        </div>
-
         <div class="form-group">
-          <label for="projectDescription">
-            <span class="label-icon">📝</span>
-            Project Description
-          </label>
-          <textarea id="projectDescription" name="projectDescription" rows="5" placeholder="Tell me about your project, goals, timeline, and any specific requirements..." required></textarea>
+          <label for="projectDescription">Project Description</label>
+          <textarea id="projectDescription" rows="5" placeholder="Tell me about your project..." required></textarea>
         </div>
-
-        <div class="form-group">
-          <label for="timeline">
-            <span class="label-icon">📅</span>
-            Expected Timeline
-          </label>
-          <select id="timeline" name="timeline" required>
-            <option value="">Select timeline</option>
-            <option value="urgent">Urgent (< 2 weeks)</option>
-            <option value="short">Short-term (2-4 weeks)</option>
-            <option value="medium">Medium-term (1-3 months)</option>
-            <option value="long">Long-term (3+ months)</option>
-            <option value="flexible">Flexible</option>
-          </select>
-        </div>
-
         <div class="form-actions">
           <button type="button" class="btn-secondary" data-close="hireSection">Cancel</button>
-          <button type="submit" class="btn-submit">
-            <span>Send Inquiry</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-            </svg>
-          </button>
+          <button type="submit" class="btn-submit">Send Inquiry</button>
         </div>
       </form>
-
-      <div class="contact-alternatives">
-        <p>Prefer another method?</p>
-        <div class="alternative-contacts">
-          <a href="mailto:Radmehrvf@gmail.com" class="alt-contact">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-            </svg>
-            Email Me
-          </a>
-          <a href="https://t.me/RaadVisa" target="_blank" rel="noopener" class="alt-contact">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.91 1.21-5.4 3.56-.51.35-.97.52-1.38.51-.45-.01-1.32-.26-1.97-.47-.8-.26-1.44-.4-1.38-.85.03-.23.33-.47.89-.71 3.48-1.52 5.81-2.52 6.99-3.01 3.33-1.39 4.02-1.63 4.47-1.64.1 0 .32.02.46.14.12.1.15.24.17.34-.01.1.01.23-.01.35z"/>
-            </svg>
-            Telegram
-          </a>
-          <a href="https://www.linkedin.com/in/radmehr-rezaabadi-a7396728b/" target="_blank" rel="noopener" class="alt-contact">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
-            </svg>
-            LinkedIn
-          </a>
-        </div>
-      </div>
     </div>
   </div>
-
 </section>
-<!-- ===== NETWORK BUILDER (COLLAPSIBLE VERSION) ===== -->
-<section id="network-builder-wrapper">
-  <div class="collapsible-header">
-<button class="reveal-btn" data-target="network-builder-section" id="networkBuilderToggle">
-  <span class="arrow">▶</span>
-  <span class="title">Play Network Builder</span>
-  <span class="loading-indicator" style="display: none;">⏳ Loading...</span>
-</button>
-  </div>
 
-  <section id="network-builder-section" class="collapsible-content collapsed">
+<!-- NETWORK BUILDER (Lazy Loaded Game) -->
+<section id="network-builder-wrapper" class="lazy-section">
+  <div class="collapsible-header">
+    <button class="reveal-btn" data-target="network-builder-section">
+      <span class="arrow">▶</span>
+      <span class="title">Play Network Builder</span>
+      <span class="loading-indicator" style="display: none;">⏳</span>
+    </button>
+  </div>
+  <section id="network-builder-section" class="collapsible-content">
     <h2>Network Builder</h2>
     <p>Connect the glowing nodes to build your own network.</p>
     <div id="network-builder">
-      <canvas id="networkCanvas" width="600" height="400"></canvas>
+      <canvas id="networkCanvas" width="600" height="400" style="display:none;"></canvas>
     </div>
     <div id="network-message"></div>
   </section>
 </section>
 
+<!-- RADBOT QUIZ (Lazy Loaded Game) -->
+<section id="radbot-section" class="section-card creative-card lazy-section">
+  <h2>RadBot Quiz Game</h2>
+  <p>Test your knowledge with the interactive AI quiz!</p>
+  <div class="button-wrapper">
+    <button id="radbot-btn" class="btn-primary">Play RadBot Quiz</button>
+  </div>
+  <div id="radbot-quiz" style="display: none;">
+    <div id="radbot-question" class="quiz-question"></div>
+    <div id="radbot-options" class="quiz-options"></div>
+    <div id="radbot-feedback" class="quiz-feedback"></div>
+  </div>
+</section>
 
-    <!-- ===== CONTACT ===== -->
- <section id="contact" class="section-card action-card">
+<!-- CONTACT SECTION -->
+<section id="contact" class="section-card action-card lazy-section">
   <h2>Contact Me</h2>
   <p>Get in touch or visit my platforms.</p>
-
-      <div class="contact-container">
-        <div class="contact-item">
-          <h3>Full Name</h3>
-          <p>Radmehr Reza Abadi</p>
-        </div>
-
-        <div class="contact-item">
-          <h3>Email</h3>
-          <p><a href="mailto:Radmehrvf@gmail.com">Radmehrvf@gmail.com</a></p>
-        </div>
-
-        <div class="contact-item">
-          <h3>Phone</h3>
-          <p>+98 912 774 1773</p>
-          <p>+98 902 523 8777</p>
-        </div>
-
-        <div class="contact-item">
-          <h3>Social Media</h3>
-          <ul class="social-links">
-            <li><a href="https://www.instagram.com/radmehrvf/" target="_blank">Instagram</a></li>
-            <li><a href="https://www.linkedin.com/in/radmehr-rezaabadi-a7396728b/" target="_blank">LinkedIn</a></li>
-            <li><a href="https://t.me/RaadVisa" target="_blank">Telegram</a></li>
-            <li><a href="https://www.youtube.com/@NetworkRad" target="_blank">YouTube</a></li>
-          </ul>
-        </div>
-
-        <div class="contact-item">
-          <h3>CV / Resume</h3>
-          <p><a href="cv.pdf" target="_blank">Download CV</a></p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-    <!-- ===== RADBOT QUIZ GAME (NEW SECTION) ===== -->
-<section id="radbot-section" class="section-card creative-card">
-  <h2>RadBot Quiz Game</h2>
-      <p>Test your knowledge with the interactive AI quiz!</p>
-
-      <!-- Button to start quiz -->
-      <div class="button-wrapper">
-        <button id="radbot-btn" class="btn-primary">Play RadBot Quiz</button>
-      </div>
-
-      <!-- Hidden quiz container -->
-      <div id="radbot-quiz" style="display: none;">
-        <div id="radbot-question" class="quiz-question"></div>
-        <div id="radbot-options" class="quiz-options"></div>
-        <div id="radbot-feedback" class="quiz-feedback"></div>
-      </div>
-    </section>
-
-
-
-
-  <!-- ===== CHATBOX ===== -->
-  <div id="chatbox" class="chatbox" role="dialog" aria-label="Chat with NetworkRad">
-    <div class="chat-header">
-      <h4>💬 Chat with NetworkRad</h4>
-      <span id="closeChat" aria-label="Close chat">&times;</span>
+  <div class="contact-container">
+    <div class="contact-item">
+      <h3>Full Name</h3>
+      <p>Radmehr Reza Abadi</p>
     </div>
-    <div class="chat-body" id="chatBody"></div>
-    <div class="chat-suggestions" aria-hidden="false">
-      <button class="chat-suggestion" data-msg="Tell me about your projects.">Ask about my work</button>
-      <button class="chat-suggestion" data-msg="Can you give me career advice?">Get career advice</button>
-      <button class="chat-suggestion" data-msg="How can we collaborate?">Request collab</button>
-      <button class="chat-suggestion" data-msg="Show me a project walkthrough.">Project walkthrough</button>
+    <div class="contact-item">
+      <h3>Email</h3>
+      <p><a href="mailto:Radmehrvf@gmail.com">Radmehrvf@gmail.com</a></p>
     </div>
-    <div class="chat-footer">
-      <input type="text" id="chatInput" placeholder="Type your message..." aria-label="Chat input"/>
-      <button id="sendBtn">Send</button>
+    <div class="contact-item">
+      <h3>Phone</h3>
+      <p>+98 912 774 1773</p>
+    </div>
+    <div class="contact-item">
+      <h3>CV / Resume</h3>
+      <p><a href="cv.pdf" target="_blank">Download CV</a></p>
     </div>
   </div>
+</section>
 
-  <!-- ===== FOOTER ===== -->
-  <footer>
-    <p>© 2025 NetworkRad | Built with 💻 and coffee ☕</p>
-  </footer>
+</main>
 
-  <!-- MAIN SCRIPT -->
-<!-- ===== OPTIMIZED SCRIPT LOADING ===== -->
+<!-- CHATBOX -->
+<div id="chatbox" class="chatbox">
+  <div class="chat-header">
+    <h4>💬 Chat with NetworkRad</h4>
+    <span id="closeChat">&times;</span>
+  </div>
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-suggestions">
+    <button class="chat-suggestion" data-msg="Tell me about your projects.">Projects</button>
+    <button class="chat-suggestion" data-msg="Can you give me career advice?">Career advice</button>
+    <button class="chat-suggestion" data-msg="How can we collaborate?">Collaborate</button>
+  </div>
+  <div class="chat-footer">
+    <input type="text" id="chatInput" placeholder="Type your message..." />
+    <button id="sendBtn">Send</button>
+  </div>
+</div>
 
-<!-- Critical CSS inline (for instant rendering) -->
-<style>
-  /* Critical above-the-fold styles */
-  body { margin: 0; background: #121212; color: #f0f0f0; font-family: system-ui, -apple-system, sans-serif; }
-  .site-header { position: fixed; top: 0; width: 100%; z-index: 9999; background: rgba(10, 22, 40, 0.9); }
-  .hero-section { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-</style>
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 NetworkRad | Built with 💻 and coffee ☕</p>
+</footer>
 
-<!-- Preload critical assets -->
-<link rel="preload" href="Style.css" as="style">
-<link rel="preload" href="logo.PNG" as="image">
+<!-- SCROLL BUTTONS -->
+<button id="scrollUpBtn" class="scroll-btn">↑</button>
+<button id="scrollDownBtn" class="scroll-btn">↓</button>
 
-<!-- Defer non-critical CSS -->
-<link rel="stylesheet" href="Style.css" media="print" onload="this.media='all'">
-<noscript><link rel="stylesheet" href="Style.css"></noscript>
-
-<!-- Core JavaScript - Deferred -->
+<!-- OPTIMIZED SCRIPT LOADING -->
 <script src="Script.js" defer></script>
 
-<!-- Optional: Split files approach (uncomment when files are separated) -->
-<!--
-<script src="js/core.js" defer></script>
-<script src="js/chat.js" defer></script>
-<script src="js/games.js" defer></script>
--->
-
-<!-- Performance monitoring (optional) -->
+<!-- Performance Monitoring -->
 <script>
-  // Log page load performance
-  window.addEventListener('load', () => {
-    const perfData = performance.timing;
-    const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-    console.log(`⚡ Page loaded in ${pageLoadTime}ms`);
-  });
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    const loading = document.getElementById('loadingScreen');
+    if (loading) loading.classList.add('hidden');
+  }, 500);
+  
+  if ('PerformanceObserver' in window) {
+    const observer = new PerformanceObserver((list) => {
+      for (const entry of list.getEntries()) {
+        if (entry.entryType === 'navigation') {
+          console.log(`⚡ Page loaded in ${Math.round(entry.loadEventEnd - entry.fetchStart)}ms`);
+        }
+      }
+    });
+    observer.observe({ entryTypes: ['navigation'] });
+  }
+});
 </script>
-
-<!-- Performance monitoring -->
-<script>
-  window.addEventListener('load', () => {
-    const perfData = performance.timing;
-    const pageLoadTime = perfData.loadEventEnd - perfData.navigationStart;
-    console.log(`⚡ Page loaded in ${pageLoadTime}ms`);
-  });
-</script>
-
-  <!-- Scroll Buttons -->
-  <button id="scrollUpBtn" class="scroll-btn" aria-label="Scroll Up">↑</button>
-  <button id="scrollDownBtn" class="scroll-btn" aria-label="Scroll Down">↓</button>
 
 </body>
 </html>
