@@ -272,10 +272,9 @@ function initMainInterface() {
   const chatInput = document.getElementById('chatInput');
   const chatBody = document.getElementById('chatBody');
   const exploreBtn = document.getElementById('exploreBtn');
-  const scrollUpBtn = document.getElementById('scrollUpBtn');
-  const scrollDownBtn = document.getElementById('scrollDownBtn');
 
-  // Chat system
+
+// Add message with animations
   function addMessage(text, sender = "user") {
     const msgDiv = document.createElement("div");
     msgDiv.className = sender === "user" ? "user-message" : "bot-message";
@@ -283,13 +282,42 @@ function initMainInterface() {
     chatBody.appendChild(msgDiv);
     chatBody.scrollTop = chatBody.scrollHeight;
   }
-
-  chatButton?.addEventListener("click", () => {
-    chatbox.classList.add("active");
-    chatInput.focus();
-    if (chatBody.children.length === 0) {
-      addMessage("Hello! 👋 How can I help you today?", "bot");
+  
+  // Show thinking indicator
+  function showThinking() {
+    const thinkingDiv = document.createElement("div");
+    thinkingDiv.className = "thinking-indicator";
+    thinkingDiv.id = "thinkingIndicator";
+    thinkingDiv.innerHTML = `
+      <div class="thinking-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    `;
+    chatBody.appendChild(thinkingDiv);
+    chatBody.scrollTop = chatBody.scrollHeight;
+  }
+  
+  // Remove thinking indicator
+  function removeThinking() {
+    const thinking = document.getElementById("thinkingIndicator");
+    if (thinking) {
+      thinking.remove();
     }
+  }
+  
+  // Hide welcome message
+  function hideWelcome() {
+    const welcome = document.querySelector(".chat-welcome");
+    if (welcome) {
+      welcome.style.display = "none";
+    }
+  }
+// Floating chat button (same functionality)
+floatingChatBtn?.addEventListener("click", () => {
+    chatbox.classList.add("active");
+    setTimeout(() => chatInput.focus(), 300);
   });
 
   closeChat?.addEventListener("click", () => {
@@ -325,7 +353,17 @@ function initMainInterface() {
   // AI Chat Connection
   const workerURL = "https://bold-field-e8ab.radmehrvf.workers.dev/";
 
-  function sendMessageToAI(userMessage) {
+function sendMessageToAI(userMessage) {
+    // Hide welcome and suggestions on first message
+    hideWelcome();
+    const suggestions = document.getElementById("chatSuggestions");
+    if (suggestions && chatBody.children.length > 2) {
+      suggestions.style.display = "none";
+    }
+    
+    // Show thinking indicator
+    showThinking();
+    
     fetch(workerURL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -335,10 +373,12 @@ function initMainInterface() {
     })
       .then((res) => res.json())
       .then((data) => {
+        removeThinking();
         const aiReply = data.reply || "🤖 (No response from AI)";
         addMessage(aiReply, "bot");
       })
       .catch((err) => {
+        removeThinking();
         console.error("AI connection error:", err);
         addMessage("⚠️ AI connection failed. Please try again later.", "bot");
       });
@@ -462,50 +502,52 @@ function initMainInterface() {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   });
 
-  // Scroll Buttons
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
-      scrollUpBtn?.classList.add('show-scroll-btn');
-      scrollDownBtn?.classList.add('show-scroll-btn');
-    } else {
-      scrollUpBtn?.classList.remove('show-scroll-btn');
-      scrollDownBtn?.classList.remove('show-scroll-btn');
-    }
-  }, { passive: true });
-
-  scrollUpBtn?.addEventListener('click', () => {
-    window.scrollBy({ top: -600, behavior: 'smooth' });
-  });
-
-  scrollDownBtn?.addEventListener('click', () => {
-    window.scrollBy({ top: 600, behavior: 'smooth' });
-  });
-
-  // Collapsible sections
+  // Collapsible sections - IMPROVED
   document.querySelectorAll(".reveal-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       const targetId = btn.getAttribute("data-target");
       const target = document.getElementById(targetId);
       const isExpanded = target?.classList.contains("expanded");
 
+      // Close all other collapsible sections
       document.querySelectorAll(".collapsible-content").forEach((el) => {
-        el.classList.remove("expanded");
+        if (el.id !== targetId) {
+          el.classList.remove("expanded");
+        }
       });
+      
       document.querySelectorAll(".reveal-btn").forEach((el) => {
-        el.classList.remove("active");
-        const arrow = el.querySelector(".arrow");
-        if (arrow) arrow.textContent = "▶";
+        if (el !== btn) {
+          el.classList.remove("active");
+          const arrow = el.querySelector(".arrow");
+          if (arrow) arrow.textContent = "▶";
+        }
       });
 
+      // Toggle current section
       if (!isExpanded && target) {
         target.classList.add("expanded");
         btn.classList.add("active");
         const arrow = btn.querySelector(".arrow");
         if (arrow) arrow.textContent = "▼";
+        
+        // Scroll to the section after expansion
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 100);
+      } else if (target) {
+        target.classList.remove("expanded");
+        btn.classList.remove("active");
+        const arrow = btn.querySelector(".arrow");
+        if (arrow) arrow.textContent = "▶";
       }
     });
   });
 }
+        btn.classList.add("active");
+        const arrow = btn.querySelector(".arrow");
+        if (arrow) arrow.textContent = "▼";
+        
 
 // ================================
 // NETWORK BUILDER GAME
@@ -802,3 +844,157 @@ function initSupportUnlockEasterEgg() {
     }
   });
 }
+// ================================
+// FIX GAME SECTION NAVIGATION
+// Auto-expand games when clicked from nav
+// ================================
+function initGameNavigationFix() {
+  // Map of wrapper IDs to their reveal buttons
+  const gameWrappers = {
+    'mindspace-explorer-wrapper': 'mindspace-explorer-section',
+    'network-builder-wrapper': 'network-builder-section'
+  };
+  
+  // Handle all nav links
+  document.querySelectorAll('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const targetId = link.getAttribute('href').substring(1);
+      
+      // Check if this is a game wrapper
+      if (gameWrappers[targetId]) {
+        e.preventDefault();
+        
+        const wrapper = document.getElementById(targetId);
+        const revealBtn = wrapper?.querySelector('.reveal-btn');
+        const targetSection = document.getElementById(gameWrappers[targetId]);
+        
+        if (wrapper && revealBtn && targetSection) {
+          // Scroll to wrapper first
+          wrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          
+          // Wait a bit then click the reveal button if not already expanded
+          setTimeout(() => {
+            if (!targetSection.classList.contains('expanded')) {
+              revealBtn.click();
+            }
+            
+            // Scroll again to show the expanded content
+            setTimeout(() => {
+              targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 400);
+          }, 500);
+        }
+      }
+    });
+  });
+  
+  // Also handle RadBot - make sure it shows the quiz when clicked
+  const radbotLinks = document.querySelectorAll('a[href="#radbot-section"]');
+  radbotLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const section = document.getElementById('radbot-section');
+      const btn = document.getElementById('radbot-btn');
+      
+      if (section && btn) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Auto-click the button to start the quiz
+        setTimeout(() => {
+          const quiz = document.getElementById('radbot-quiz');
+          if (quiz && quiz.style.display === 'none') {
+            btn.click();
+          }
+        }, 600);
+      }
+    });
+  });
+}
+
+// ================================
+// IMPROVED NAVIGATION WITH DROPDOWN
+// ================================
+function initImprovedNavigation() {
+  const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+  const mainNav = document.getElementById('mainNav');
+  
+  // Dropdown functionality
+  dropdownToggles.forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const dropdown = toggle.closest('.nav-dropdown');
+      const isActive = dropdown.classList.contains('active');
+      
+      // Close all other dropdowns
+      document.querySelectorAll('.nav-dropdown').forEach(dd => {
+        dd.classList.remove('active');
+      });
+      
+      // Toggle current dropdown
+      if (!isActive) {
+        dropdown.classList.add('active');
+      }
+    });
+  });
+  
+  // Close dropdown when clicking submenu link
+  document.querySelectorAll('.nav-sublink').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelectorAll('.nav-dropdown').forEach(dd => {
+        dd.classList.remove('active');
+      });
+      
+      // Close mobile menu if open
+      if (mainNav && mainNav.classList.contains('active')) {
+        mainNav.classList.remove('active');
+        if (mobileMenuToggle) {
+          mobileMenuToggle.classList.remove('active');
+        }
+        document.body.style.overflow = '';
+      }
+    });
+  });
+  
+  // Close dropdown when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-dropdown')) {
+      document.querySelectorAll('.nav-dropdown').forEach(dd => {
+        dd.classList.remove('active');
+      });
+    }
+  });
+  
+  // Enhanced mobile menu closing
+  if (mobileMenuToggle && mainNav) {
+    // Close menu when clicking any nav link (except dropdown toggle)
+    document.querySelectorAll('.nav-link:not(.dropdown-toggle)').forEach(link => {
+      link.addEventListener('click', () => {
+        if (mainNav.classList.contains('active')) {
+          mainNav.classList.remove('active');
+          mobileMenuToggle.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+  }
+}
+
+// Add to initialization
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("✅ NetworkRad Site Loaded");
+  
+  // Initialize core features
+  initHeader();
+  initImprovedNavigation(); // NEW: Initialize improved navigation
+  initMainInterface();
+  initSupportUnlockEasterEgg();
+  initGameNavigationFix(); // NEW: Fix game section navigation
+  
+  // Setup lazy loading for sections and games
+  setupIntersectionObserver();
+  setupLazyGameLoading();
+});
+
