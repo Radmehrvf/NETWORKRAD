@@ -271,19 +271,24 @@ function initMainInterface() {
   const chatButton = document.getElementById('chatButton');
   const floatingChatBtn = document.getElementById('floatingChatBtn');
   const closeChat = document.getElementById('closeChat');
-  const heroChatBtn = document.querySelector('.hero-btn.primary');
+  const heroChatBtn = document.querySelector('.hero-section .hero-btn.primary'); // More specific selector
   const sendBtn = document.getElementById('sendBtn');
   const chatInput = document.getElementById('chatInput');
   const chatBody = document.getElementById('chatBody');
   const exploreBtn = document.getElementById('exploreBtn');
   const chatSuggestions = document.getElementById('chatSuggestions');
   
+  // Debug logging
+  console.log('Chatbox:', chatbox);
+  console.log('Hero Chat Button:', heroChatBtn);
+  
   // Function to toggle chatbox
   function toggleChat(e) {
     if (e) e.preventDefault();
+    console.log('Toggle chat called, current state:', chatbox.classList.contains('active'));
     chatbox.classList.toggle('active');
     if (chatbox.classList.contains('active')) {
-      setTimeout(() => chatInput.focus(), 300);
+      setTimeout(() => chatInput?.focus(), 300);
     }
   }
   
@@ -299,7 +304,13 @@ function initMainInterface() {
   
   // Hero section chat button
   if (heroChatBtn) {
-    heroChatBtn.addEventListener('click', toggleChat);
+    console.log('Adding click listener to hero button');
+    heroChatBtn.addEventListener('click', (e) => {
+      console.log('Hero button clicked!');
+      toggleChat(e);
+    });
+  } else {
+    console.error('Hero chat button NOT found!');
   }
   
   // Close chat button
