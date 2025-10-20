@@ -105,6 +105,7 @@ function initHeader() {
   });
 }
 
+
 // ================================
 // INTERSECTION OBSERVER FOR LAZY SECTIONS
 // ================================
@@ -262,19 +263,61 @@ function setupLazyGameLoading() {
 }
 
 // ================================
-// MAIN INTERFACE (CHAT, FORMS, ETC)
+// CHAT FUNCTIONALITY (MERGED & COMPLETE)
 // ================================
 function initMainInterface() {
-  const chatButton = document.getElementById('chatButton');
+  // Get all elements
   const chatbox = document.getElementById('chatbox');
+  const chatButton = document.getElementById('chatButton');
+  const floatingChatBtn = document.getElementById('floatingChatBtn');
   const closeChat = document.getElementById('closeChat');
+  const heroChatBtn = document.querySelector('.hero-btn.primary');
   const sendBtn = document.getElementById('sendBtn');
   const chatInput = document.getElementById('chatInput');
   const chatBody = document.getElementById('chatBody');
   const exploreBtn = document.getElementById('exploreBtn');
-
-
-// Add message with animations
+  const chatSuggestions = document.getElementById('chatSuggestions');
+  
+  // Function to toggle chatbox
+  function toggleChat(e) {
+    if (e) e.preventDefault();
+    chatbox.classList.toggle('active');
+    if (chatbox.classList.contains('active')) {
+      setTimeout(() => chatInput.focus(), 300);
+    }
+  }
+  
+  // Header chat button
+  if (chatButton) {
+    chatButton.addEventListener('click', toggleChat);
+  }
+  
+  // Floating chat button
+  if (floatingChatBtn) {
+    floatingChatBtn.addEventListener('click', toggleChat);
+  }
+  
+  // Hero section chat button
+  if (heroChatBtn) {
+    heroChatBtn.addEventListener('click', toggleChat);
+  }
+  
+  // Close chat button
+  if (closeChat) {
+    closeChat.addEventListener('click', toggleChat);
+  }
+  
+  // Explore button (scroll to projects)
+  if (exploreBtn) {
+    exploreBtn.addEventListener('click', () => {
+      const projectsSection = document.getElementById('projects');
+      if (projectsSection) {
+        projectsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  }
+  
+  // Add message with animations
   function addMessage(text, sender = "user") {
     const msgDiv = document.createElement("div");
     msgDiv.className = sender === "user" ? "user-message" : "bot-message";
@@ -314,16 +357,8 @@ function initMainInterface() {
       welcome.style.display = "none";
     }
   }
-// Floating chat button (same functionality)
-floatingChatBtn?.addEventListener("click", () => {
-    chatbox.classList.add("active");
-    setTimeout(() => chatInput.focus(), 300);
-  });
-
-  closeChat?.addEventListener("click", () => {
-    chatbox.classList.remove("active");
-  });
-
+  
+  // Send message function
   function sendLocalMessage() {
     const message = chatInput.value.trim();
     if (!message) return;
@@ -333,32 +368,38 @@ floatingChatBtn?.addEventListener("click", () => {
     sendMessageToAI(message);
   }
 
-  sendBtn?.addEventListener("click", sendLocalMessage);
-  chatInput?.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      sendLocalMessage();
-    }
-  });
-
+  // Send button click
+  if (sendBtn) {
+    sendBtn.addEventListener('click', sendLocalMessage);
+  }
+  
+  // Enter key to send
+  if (chatInput) {
+    chatInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendLocalMessage();
+      }
+    });
+  }
+  
   // Chat suggestions
-  document.querySelectorAll('.chat-suggestion').forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const msg = btn.getAttribute("data-msg");
-      chatInput.value = msg;
+  document.querySelectorAll('.chat-suggestion').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const message = btn.getAttribute('data-msg');
+      chatInput.value = message;
       sendLocalMessage();
     });
   });
-
+  
   // AI Chat Connection
   const workerURL = "https://bold-field-e8ab.radmehrvf.workers.dev/";
 
-function sendMessageToAI(userMessage) {
+  function sendMessageToAI(userMessage) {
     // Hide welcome and suggestions on first message
     hideWelcome();
-    const suggestions = document.getElementById("chatSuggestions");
-    if (suggestions && chatBody.children.length > 2) {
-      suggestions.style.display = "none";
+    if (chatSuggestions && chatBody.children.length > 2) {
+      chatSuggestions.style.display = "none";
     }
     
     // Show thinking indicator
@@ -394,11 +435,6 @@ function sendMessageToAI(userMessage) {
         addMessage("Let's talk about that! (Chat demo active.)", "bot");
       }, 600);
     });
-  });
-
-  // Navigate to projects
-  exploreBtn?.addEventListener('click', () => {
-    document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
   });
 
   // AI Optimizer Form
@@ -507,34 +543,12 @@ function sendMessageToAI(userMessage) {
     btn.addEventListener("click", () => {
       const targetId = btn.getAttribute("data-target");
       const target = document.getElementById(targetId);
-      const isExpanded = target?.classList.contains("expanded");
-
-      // Close all other collapsible sections
-      document.querySelectorAll(".collapsible-content").forEach((el) => {
-        if (el.id !== targetId) {
-          el.classList.remove("expanded");
-        }
-      });
       
-      document.querySelectorAll(".reveal-btn").forEach((el) => {
-        if (el !== btn) {
-          el.classList.remove("active");
-          const arrow = el.querySelector(".arrow");
-          if (arrow) arrow.textContent = "▶";
-        }
-      });
-
-      // Toggle current section
-      if (!isExpanded && target) {
+      if (target && !target.classList.contains("expanded")) {
         target.classList.add("expanded");
         btn.classList.add("active");
         const arrow = btn.querySelector(".arrow");
         if (arrow) arrow.textContent = "▼";
-        
-        // Scroll to the section after expansion
-        setTimeout(() => {
-          target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 100);
       } else if (target) {
         target.classList.remove("expanded");
         btn.classList.remove("active");
