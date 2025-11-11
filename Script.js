@@ -9,12 +9,14 @@ console.log("Welcome to NetworkRad Portfolio!");
 // SINGLE UNIFIED INITIALIZATION
 // ================================
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("✅ NetworkRad Site Loaded");
+  console.log("NetworkRad Site Loaded");
 
   // Initialize core features
   initHeader();
+  initImprovedNavigation();
   initMainInterface();
   initSupportUnlockEasterEgg();
+  initGameNavigationFix();
   
   // Setup lazy loading for sections and games
   setupIntersectionObserver();
@@ -24,6 +26,18 @@ document.addEventListener("DOMContentLoaded", () => {
 // ================================
 // HEADER & NAVIGATION
 // ================================
+function setMobileNavState(isOpen) {
+  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+  const mainNav = document.getElementById('mainNav');
+
+  if (!mobileMenuToggle || !mainNav) return;
+
+  mobileMenuToggle.classList.toggle('active', isOpen);
+  mainNav.classList.toggle('active', isOpen);
+  mobileMenuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+}
+
 function initHeader() {
   const mainHeader = document.getElementById('mainHeader');
   const mobileMenuToggle = document.getElementById('mobileMenuToggle');
@@ -43,27 +57,36 @@ function initHeader() {
     lastScroll = currentScroll;
   }, { passive: true });
 
-  // Mobile menu toggle
+  // Mobile menu toggle + accessibility helpers
   if (mobileMenuToggle && mainNav) {
+    setMobileNavState(false);
+    
     mobileMenuToggle.addEventListener('click', () => {
-      mobileMenuToggle.classList.toggle('active');
-      mainNav.classList.toggle('active');
-      document.body.style.overflow = mainNav.classList.contains('active') ? 'hidden' : '';
+      const shouldOpen = !mainNav.classList.contains('active');
+      setMobileNavState(shouldOpen);
     });
     
-    // Close menu when clicking links
-    document.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenuToggle.classList.remove('active');
-        mainNav.classList.remove('active');
-        document.body.style.overflow = '';
-      });
+    // Close menu when clicking nav links
+    document.querySelectorAll('a.nav-link').forEach(link => {
+      link.addEventListener('click', () => setMobileNavState(false));
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && mainNav.classList.contains('active')) {
+        setMobileNavState(false);
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768 && mainNav.classList.contains('active')) {
+        setMobileNavState(false);
+      }
     });
   }
 
   // Active link on scroll
   const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-link');
+  const navLinks = document.querySelectorAll('a.nav-link');
 
   window.addEventListener('scroll', () => {
     let current = '';
@@ -86,7 +109,7 @@ function initHeader() {
   }, { passive: true });
 
   // Smooth scroll
-  document.querySelectorAll('.nav-link').forEach(link => {
+  document.querySelectorAll('a.nav-link[href^="#"]').forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const targetId = link.getAttribute('href');
@@ -943,24 +966,32 @@ function initImprovedNavigation() {
   const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
   const mobileMenuToggle = document.getElementById('mobileMenuToggle');
   const mainNav = document.getElementById('mainNav');
+  const closeAllDropdowns = () => {
+    document.querySelectorAll('.nav-dropdown').forEach(dd => {
+      dd.classList.remove('active');
+      const toggle = dd.querySelector('.dropdown-toggle');
+      toggle?.setAttribute('aria-expanded', 'false');
+    });
+  };
   
   // Dropdown functionality
   dropdownToggles.forEach(toggle => {
+    toggle.setAttribute('aria-expanded', 'false');
     toggle.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
       
       const dropdown = toggle.closest('.nav-dropdown');
+      if (!dropdown) return;
       const isActive = dropdown.classList.contains('active');
       
       // Close all other dropdowns
-      document.querySelectorAll('.nav-dropdown').forEach(dd => {
-        dd.classList.remove('active');
-      });
+      closeAllDropdowns();
       
       // Toggle current dropdown
       if (!isActive) {
         dropdown.classList.add('active');
+        toggle.setAttribute('aria-expanded', 'true');
       }
     });
   });
@@ -968,17 +999,11 @@ function initImprovedNavigation() {
   // Close dropdown when clicking submenu link
   document.querySelectorAll('.nav-sublink').forEach(link => {
     link.addEventListener('click', () => {
-      document.querySelectorAll('.nav-dropdown').forEach(dd => {
-        dd.classList.remove('active');
-      });
+      closeAllDropdowns();
       
       // Close mobile menu if open
       if (mainNav && mainNav.classList.contains('active')) {
-        mainNav.classList.remove('active');
-        if (mobileMenuToggle) {
-          mobileMenuToggle.classList.remove('active');
-        }
-        document.body.style.overflow = '';
+        setMobileNavState(false);
       }
     });
   });
@@ -986,21 +1011,17 @@ function initImprovedNavigation() {
   // Close dropdown when clicking outside
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.nav-dropdown')) {
-      document.querySelectorAll('.nav-dropdown').forEach(dd => {
-        dd.classList.remove('active');
-      });
+      closeAllDropdowns();
     }
   });
   
   // Enhanced mobile menu closing
   if (mobileMenuToggle && mainNav) {
     // Close menu when clicking any nav link (except dropdown toggle)
-    document.querySelectorAll('.nav-link:not(.dropdown-toggle)').forEach(link => {
+    document.querySelectorAll('a.nav-link:not(.dropdown-toggle)').forEach(link => {
       link.addEventListener('click', () => {
         if (mainNav.classList.contains('active')) {
-          mainNav.classList.remove('active');
-          mobileMenuToggle.classList.remove('active');
-          document.body.style.overflow = '';
+          setMobileNavState(false);
         }
       });
     });
@@ -1008,18 +1029,4 @@ function initImprovedNavigation() {
 }
 
 // Add to initialization
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("✅ NetworkRad Site Loaded");
-  
-  // Initialize core features
-  initHeader();
-  initImprovedNavigation(); // NEW: Initialize improved navigation
-  initMainInterface();
-  initSupportUnlockEasterEgg();
-  initGameNavigationFix(); // NEW: Fix game section navigation
-  
-  // Setup lazy loading for sections and games
-  setupIntersectionObserver();
-  setupLazyGameLoading();
-});
 
