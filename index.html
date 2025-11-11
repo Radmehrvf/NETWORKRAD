@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>NetworkRad — All That Mathers</title>
   
   <!-- Critical inline CSS for instant rendering -->
@@ -28,6 +28,8 @@
   <!-- Optimized Font Loading -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;">
   
   <meta name="description" content="Radmehr — AI Integration Specialist & Full-Stack Developer" />
@@ -43,7 +45,7 @@
 <header class="site-header" id="mainHeader">
   <div class="header-content">
     <div class="logo-section">
-      <img src="logo.PNG" alt="NetworkRad Logo" class="logo" width="55" height="55" loading="eager" fetchpriority="high" />
+      <img src="logo.PNG" alt="NetworkRad Logo" class="logo" width="55" height="55" loading="eager" fetchpriority="high" decoding="async" />
       <div class="brand-text">
         <span class="brand-name">NetworkRad</span>
         <span class="brand-tagline">AI & Development</span>
@@ -86,11 +88,12 @@
       </button>
     </nav>
 
-    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu" aria-controls="mainNav" aria-expanded="false">
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu" aria-controls="mainNav" aria-expanded="false">
       <span class="menu-bar"></span>
       <span class="menu-bar"></span>
       <span class="menu-bar"></span>
     </button>
+    <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
   </div>
 </header>
 

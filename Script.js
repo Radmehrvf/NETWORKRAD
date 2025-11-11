@@ -5,6 +5,84 @@
 
 console.log("Welcome to NetworkRad Portfolio!");
 
+const MOBILE_NAV_MEDIA = window.matchMedia('(max-width: 768px)');
+const NAV_FOCUSABLE_SELECTOR = 'a[href],button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+let releaseNavFocusTrap = null;
+
+function toggleNavFocusTrap(container, shouldTrap) {
+  if (!container) return;
+  if (!shouldTrap) {
+    if (typeof releaseNavFocusTrap === 'function') {
+      releaseNavFocusTrap();
+    }
+    return;
+  }
+
+  const focusableEls = Array.from(container.querySelectorAll(NAV_FOCUSABLE_SELECTOR))
+    .filter((el) => !el.hasAttribute('disabled') && el.getAttribute('aria-hidden') !== 'true' && el.offsetParent !== null);
+
+  if (!focusableEls.length) return;
+
+  const first = focusableEls[0];
+  const last = focusableEls[focusableEls.length - 1];
+  const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+  function handleKeydown(event) {
+    if (event.key !== 'Tab') return;
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  document.addEventListener('keydown', handleKeydown);
+
+  releaseNavFocusTrap = () => {
+    document.removeEventListener('keydown', handleKeydown);
+    if (previousFocus && typeof previousFocus.focus === 'function') {
+      previousFocus.focus({ preventScroll: true });
+    }
+    releaseNavFocusTrap = null;
+  };
+
+  requestAnimationFrame(() => {
+    first.focus();
+  });
+}
+
+function handleMobileNavMediaChange(event) {
+  const mainNav = document.getElementById('mainNav');
+  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+  const navBackdrop = document.getElementById('navBackdrop');
+
+  if (!mainNav || !mobileMenuToggle) return;
+
+  if (!event.matches) {
+    toggleNavFocusTrap(mainNav, false);
+    mainNav.classList.remove('active');
+    mobileMenuToggle.classList.remove('active');
+    mobileMenuToggle.setAttribute('aria-expanded', 'false');
+    mobileMenuToggle.setAttribute('aria-label', 'Open menu');
+    document.body.style.overflow = '';
+    navBackdrop?.classList.remove('active');
+    navBackdrop?.setAttribute('aria-hidden', 'true');
+    mainNav.removeAttribute('role');
+    mainNav.removeAttribute('aria-modal');
+    mainNav.removeAttribute('aria-hidden');
+  } else {
+    mainNav.setAttribute('aria-hidden', mainNav.classList.contains('active') ? 'false' : 'true');
+  }
+}
+
+if (typeof MOBILE_NAV_MEDIA.addEventListener === 'function') {
+  MOBILE_NAV_MEDIA.addEventListener('change', handleMobileNavMediaChange);
+} else if (typeof MOBILE_NAV_MEDIA.addListener === 'function') {
+  MOBILE_NAV_MEDIA.addListener(handleMobileNavMediaChange);
+}
+
 // ================================
 // SINGLE UNIFIED INITIALIZATION
 // ================================
@@ -29,19 +107,41 @@ document.addEventListener("DOMContentLoaded", () => {
 function setMobileNavState(isOpen) {
   const mobileMenuToggle = document.getElementById('mobileMenuToggle');
   const mainNav = document.getElementById('mainNav');
+  const navBackdrop = document.getElementById('navBackdrop');
 
   if (!mobileMenuToggle || !mainNav) return;
+
+  const isMobileOverlay = MOBILE_NAV_MEDIA.matches;
 
   mobileMenuToggle.classList.toggle('active', isOpen);
   mainNav.classList.toggle('active', isOpen);
   mobileMenuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  document.body.style.overflow = isOpen ? 'hidden' : '';
+  mobileMenuToggle.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+  document.body.style.overflow = isOpen && isMobileOverlay ? 'hidden' : '';
+
+  if (isMobileOverlay) {
+    mainNav.setAttribute('role', 'dialog');
+    mainNav.setAttribute('aria-modal', 'true');
+    mainNav.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  } else {
+    mainNav.removeAttribute('role');
+    mainNav.removeAttribute('aria-modal');
+    mainNav.removeAttribute('aria-hidden');
+  }
+
+  toggleNavFocusTrap(mainNav, isOpen && isMobileOverlay);
+
+  if (navBackdrop) {
+    navBackdrop.classList.toggle('active', isOpen && isMobileOverlay);
+    navBackdrop.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  }
 }
 
 function initHeader() {
   const mainHeader = document.getElementById('mainHeader');
   const mobileMenuToggle = document.getElementById('mobileMenuToggle');
   const mainNav = document.getElementById('mainNav');
+  const navBackdrop = document.getElementById('navBackdrop');
   let lastScroll = 0;
 
   // Scroll effect
@@ -60,6 +160,7 @@ function initHeader() {
   // Mobile menu toggle + accessibility helpers
   if (mobileMenuToggle && mainNav) {
     setMobileNavState(false);
+    navBackdrop?.addEventListener('click', () => setMobileNavState(false));
     
     mobileMenuToggle.addEventListener('click', () => {
       const shouldOpen = !mainNav.classList.contains('active');
@@ -82,6 +183,16 @@ function initHeader() {
         setMobileNavState(false);
       }
     });
+
+    if (MOBILE_NAV_MEDIA.matches) {
+      mainNav.setAttribute('role', 'dialog');
+      mainNav.setAttribute('aria-modal', 'true');
+      mainNav.setAttribute('aria-hidden', 'true');
+    } else {
+      mainNav.removeAttribute('role');
+      mainNav.removeAttribute('aria-modal');
+      mainNav.removeAttribute('aria-hidden');
+    }
   }
 
   // Active link on scroll
