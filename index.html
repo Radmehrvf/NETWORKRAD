@@ -18,7 +18,7 @@
   </style>
   
   <!-- Preload critical assets -->
-  <link rel="preload" href="logo.PNG" as="image" fetchpriority="high">
+  <link rel="preload" href="assets/logo.png" as="image" fetchpriority="high">
   <link rel="preload" href="Style.css" as="style">
   
   <!-- Defer main CSS -->
@@ -44,14 +44,6 @@
 <!-- HEADER -->
 <header class="site-header" id="mainHeader">
   <div class="header-content">
-    <div class="logo-section">
-      <img src="logo.PNG" alt="NetworkRad Logo" class="logo" width="55" height="55" loading="eager" fetchpriority="high" decoding="async" />
-      <div class="brand-text">
-        <span class="brand-name">NetworkRad</span>
-        <span class="brand-tagline">AI & Development</span>
-      </div>
-    </div>
-
     <nav class="main-nav" id="mainNav" aria-label="Primary navigation">
       <div class="nav-links-wrapper">
         <ul class="nav-links">
@@ -79,13 +71,25 @@
         <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
       </div>
-      
-      <button id="chatButton" class="nav-cta">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-        </svg>
-        <span>Let's Chat</span>
-      </button>
+      <div class="nav-actions">
+        <a href="signup.html" class="nav-cta nav-signup">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="10" cy="7" r="3"/>
+            <line x1="19" y1="8" x2="19" y2="14"/>
+            <line x1="22" y1="11" x2="16" y2="11"/>
+          </svg>
+          <span>Create an Account</span>
+          <small class="nav-subtext">or Log In</small>
+        </a>
+        
+        <button id="chatButton" class="nav-cta">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span>Let's Chat</span>
+        </button>
+      </div>
     </nav>
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu" aria-controls="mainNav" aria-expanded="false">
@@ -713,7 +717,7 @@
       <div class="contact-details">
         <div class="contact-row">
           <span class="contact-label">CV / Resume</span>
-          <a href="cv.pdf" target="_blank" class="contact-value contact-link contact-download">
+          <a href="assets/cv.pdf" target="_blank" class="contact-value contact-link contact-download">
             Download PDF
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sign Up / Log In • NetworkRad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Style.css">
+</head>
+<body>
+  <header class="site-header" id="secondaryHeader">
+    <div class="header-content">
+      <nav class="main-nav" id="mainNav" aria-label="Primary navigation">
+        <div class="nav-links-wrapper">
+          <ul class="nav-links">
+            <li><a href="index.html#home" class="nav-link">Home</a></li>
+            <li><a href="index.html#ai-optimizer-section" class="nav-link">AI Solutions</a></li>
+            <li><a href="index.html#projects" class="nav-link">Projects</a></li>
+            <li><a href="index.html#business-growth" class="nav-link">Business</a></li>
+            <li class="nav-dropdown">
+              <button class="nav-link dropdown-toggle" type="button">
+                <span>Games & More</span>
+                <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+                  <path d="M6 9L1 4h10z"/>
+                </svg>
+              </button>
+              <ul class="nav-submenu">
+                <li><a href="index.html#mindspace" class="nav-sublink">Mindspace</a></li>
+                <li><a href="index.html#mindspace-explorer-wrapper" class="nav-sublink">Mindspace Explorer</a></li>
+                <li><a href="index.html#network-builder-wrapper" class="nav-sublink">Network Builder</a></li>
+                <li><a href="index.html#radbot-section" class="nav-sublink">RadBot Quiz</a></li>
+                <li><a href="index.html#timeline" class="nav-sublink">Timeline</a></li>
+              </ul>
+            </li>
+            <li><a href="index.html#universe" class="nav-link">Universe</a></li>
+            <li><a href="index.html#support-hire" class="nav-link">Support/Hire</a></li>
+            <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+          </ul>
+        </div>
+        <div class="nav-actions">
+          <a href="signup.html" class="nav-cta nav-signup" aria-current="page">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="10" cy="7" r="3"/>
+              <line x1="19" y1="8" x2="19" y2="14"/>
+              <line x1="22" y1="11" x2="16" y2="11"/>
+            </svg>
+            <span>Create an Account</span>
+            <small class="nav-subtext">or Log In</small>
+          </a>
+          <button id="chatButton" class="nav-cta">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span>Let's Chat</span>
+          </button>
+        </div>
+      </nav>
+
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu" aria-controls="mainNav" aria-expanded="false">
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+        <span class="menu-bar"></span>
+      </button>
+      <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
+    </div>
+  </header>
+
+  <main class="signup-page">
+    <section class="signup-hero">
+      <p class="eyebrow">Secure Access</p>
+      <h1>Sign Up / Log In</h1>
+      <p>Access your personalized NetworkRad dashboard by choosing one of the options below. Continue with your favorite provider or go the classic email route&mdash;everything stays secure within our encrypted workflow.</p>
+      <div class="signup-actions">
+        <a href="index.html#home" class="btn-secondary-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"/>
+            <line x1="9" y1="12" x2="21" y2="12"/>
+            <path d="M3 5v14"/>
+          </svg>
+          Back to Portfolio
+        </a>
+        <a href="dashboard.html" class="btn-secondary-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 13h2l2 7 4-14 4 7 3-4h3"/>
+          </svg>
+          View Dashboard Preview
+        </a>
+      </div>
+    </section>
+
+    <section id="auth-access" class="section-card auth-section">
+      <div class="auth-header">
+        <div>
+          <p class="eyebrow">Private & Secure</p>
+          <h2>Login With Your Favorite Stack</h2>
+        </div>
+        <p class="auth-description">
+          Access your personalized dashboard by logging in or signing up using one of the following options.
+        </p>
+      </div>
+
+      <div class="auth-grid">
+        <div class="auth-options">
+          <p class="auth-note">Choose a provider to continue</p>
+          <div class="auth-buttons">
+            <button type="button" class="auth-btn github" data-provider="github">
+              <span class="auth-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                  <path d="M12 .5C5.6.5.5 5.6.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.1-1.6-1.1-1.6-.9-.6.1-.6.1-.6 1 .1 1.6 1.1 1.6 1.1.9 1.6 2.5 1.1 3.1.9.1-.7.4-1.1.7-1.3-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.4 1.2-3.3-.1-.3-.5-1.5.1-3 0 0 1-.3 3.4 1.3a11.8 11.8 0 0 1 6.2 0c2.4-1.6 3.4-1.3 3.4-1.3.6 1.5.2 2.7.1 3a5.2 5.2 0 0 1 1.2 3.3c0 4.5-2.7 5.5-5.3 5.8.4.3.8 1 .8 2v3c0 .3.2.7.8.6A10.8 10.8 0 0 0 23.5 12C23.5 5.6 18.4.5 12 .5Z"/>
+                </svg>
+              </span>
+              <span>Continue with GitHub</span>
+            </button>
+
+            <button type="button" class="auth-btn google" data-provider="google">
+              <span class="auth-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                  <path d="M21.6 12.2c0-.7-.1-1.4-.2-2.1H12v3.9h5.4a4.6 4.6 0 0 1-2 3l3.2 2.5c1.9-1.7 3-4.2 3-7.3Z"/>
+                  <path d="M12 22a9.8 9.8 0 0 0 6.9-2.5l-3.2-2.5A6.1 6.1 0 0 1 12 18a6 6 0 0 1-5.7-4.2l-3.3 2.5A10 10 0 0 0 12 22Z"/>
+                  <path d="M6.3 13.8a6 6 0 0 1 0-3.8L3 7.5A10 10 0 0 0 2 12a10 10 0 0 0 .9 4.5Z"/>
+                  <path d="M12 6.1c1.7 0 3.2.6 4.4 1.8l3.3-3.2A10 10 0 0 0 12 2a10 10 0 0 0-8.7 5.5l3.3 2.5A6 6 0 0 1 12 6.1Z"/>
+                </svg>
+              </span>
+              <span>Continue with Google</span>
+            </button>
+
+            <button type="button" class="auth-btn facebook" data-provider="facebook">
+              <span class="auth-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                  <path d="M15.5 3H13c-2.3 0-3.8 1.3-3.8 3.6v2.1H7.1v3.4h2.1V21h3.7v-8.9h2.6L16 8.7h-3.1V6.9c0-.8.2-1.3 1.4-1.3h1.2z"/>
+                </svg>
+              </span>
+              <span>Continue with Facebook</span>
+            </button>
+
+            <button type="button" class="auth-btn email" data-provider="email" aria-controls="emailAuthWrapper" aria-expanded="false">
+              <span class="auth-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                  <path d="M3 5h18a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/>
+                  <path d="M3 7l9 6 9-6"/>
+                </svg>
+              </span>
+              <span>Continue with Email</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="auth-form-wrapper" id="emailAuthWrapper" aria-hidden="true" hidden>
+          <div class="auth-form-header">
+            <div>
+              <p class="eyebrow">Private & Secure</p>
+              <h3>Email Access</h3>
+            </div>
+            <button type="button" class="auth-form-close" aria-label="Hide email form" data-close-email>
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="email-toggle" role="tablist">
+            <button type="button" class="email-toggle-btn active" data-email-view="login" role="tab" aria-selected="true">
+              Log In
+            </button>
+            <button type="button" class="email-toggle-btn" data-email-view="signup" role="tab" aria-selected="false">
+              Create Account
+            </button>
+          </div>
+          <form id="emailLoginForm" class="auth-form" novalidate>
+            <div class="form-group">
+              <label for="emailLoginAddress">Email address</label>
+              <input type="email" id="emailLoginAddress" name="emailLoginAddress" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+              <label for="emailLoginPassword">Password</label>
+              <input type="password" id="emailLoginPassword" name="emailLoginPassword" placeholder="Your password" minlength="6" required>
+            </div>
+            <p class="auth-inline-error" id="emailLoginError" hidden></p>
+            <button type="submit" class="btn-primary auth-submit" id="emailLoginSubmit">Log In</button>
+          </form>
+          <form id="emailSignupForm" class="auth-form is-hidden" novalidate aria-hidden="true">
+            <div class="form-group">
+              <label for="emailSignupName">Name (optional)</label>
+              <input type="text" id="emailSignupName" name="emailSignupName" placeholder="Your display name">
+            </div>
+            <div class="form-group">
+              <label for="emailSignupAddress">Email address</label>
+              <input type="email" id="emailSignupAddress" name="emailSignupAddress" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+              <label for="emailSignupPassword">Password</label>
+              <input type="password" id="emailSignupPassword" name="emailSignupPassword" placeholder="Create a password" minlength="6" required>
+            </div>
+            <div class="form-group">
+              <label for="emailSignupConfirm">Repeat password</label>
+              <input type="password" id="emailSignupConfirm" name="emailSignupConfirm" placeholder="Repeat your password" minlength="6" required>
+            </div>
+            <p class="auth-inline-error" id="emailSignupError" hidden></p>
+            <button type="submit" class="btn-primary auth-submit" id="emailSignupSubmit">Create Account</button>
+          </form>
+          <p class="auth-disclaimer">
+            By continuing you agree to the platform's privacy policy and terms of use.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- CHATBOX - REDESIGNED -->
+  <div id="chatbox" class="chatbox">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="chat-avatar">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+          </svg>
+        </div>
+        <div class="chat-title-wrapper">
+          <h4>NetworkRad AI</h4>
+          <span class="chat-status">Online</span>
+        </div>
+      </div>
+      <button id="closeChat" class="chat-close-btn" aria-label="Close chat">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="chat-body" id="chatBody">
+      <div class="chat-welcome">
+        <div class="welcome-icon">&#128172;</div>
+        <h5>Welcome to NetworkRad!</h5>
+        <p>How can I help you today?</p>
+      </div>
+    </div>
+    
+    <div class="chat-suggestions" id="chatSuggestions">
+      <button class="chat-suggestion" data-msg="Tell me about your AI projects">
+        <span class="suggestion-icon">&#129302;</span>
+        <span>AI Projects</span>
+      </button>
+      <button class="chat-suggestion" data-msg="Can you give me career advice?">
+        <span class="suggestion-icon">&#128640;</span>
+        <span>Career Advice</span>
+      </button>
+      <button class="chat-suggestion" data-msg="How can we collaborate?">
+        <span class="suggestion-icon">&#129309;</span>
+        <span>Collaborate</span>
+      </button>
+      <button class="chat-suggestion" data-msg="What services do you offer?">
+        <span class="suggestion-icon">&#128736;</span>
+        <span>Services</span>
+      </button>
+    </div>
+    
+    <div class="chat-footer">
+      <div class="chat-input-wrapper">
+        <input type="text" id="chatInput" placeholder="Type your message..." autocomplete="off" />
+        <button id="sendBtn" class="chat-send-btn" aria-label="Send message">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING CHAT BUTTON -->
+  <button id="floatingChatBtn" class="floating-chat-btn" title="Chat with us!">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+    <span class="chat-notification">&bull;</span>
+  </button>
+
+  <script src="Script.js" defer></script>
+</body>
+</html>

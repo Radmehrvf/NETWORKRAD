@@ -93,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initHeader();
   initImprovedNavigation();
   initMainInterface();
+  initAuthAccessSection();
   initSupportUnlockEasterEgg();
   initGameNavigationFix();
   
@@ -135,6 +136,7 @@ function setMobileNavState(isOpen) {
     navBackdrop.classList.toggle('active', isOpen && isMobileOverlay);
     navBackdrop.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
   }
+
 }
 
 function initHeader() {
@@ -977,6 +979,245 @@ function initRadBotQuiz() {
     logo.style.filter = "drop-shadow(0 0 15px rgba(0,195,255,0.9)) brightness(1.3)";
     setTimeout(() => logo.style.filter = "none", final ? 2500 : 1200);
   }
+}
+
+// ================================
+// AUTH SECTION INTERACTIONS
+// ================================
+function initAuthAccessSection() {
+  const authSection = document.getElementById('auth-access');
+  if (!authSection) return;
+
+  const backendBaseUrl =
+    window.location.origin.includes('5000') || window.location.hostname === 'localhost'
+      ? ''
+      : 'http://localhost:5000';
+  const buildBackendUrl = (path) => `${backendBaseUrl}${path}`;
+
+  const emailWrapper = document.getElementById('emailAuthWrapper');
+  const emailButton = authSection.querySelector('.auth-btn.email');
+  const closeButton = authSection.querySelector('[data-close-email]');
+  const providerButtons = authSection.querySelectorAll('.auth-btn[data-provider]');
+  const authNote = authSection.querySelector('.auth-note');
+  const emailToggleButtons = authSection.querySelectorAll('[data-email-view]');
+  const loginForm = document.getElementById('emailLoginForm');
+  const signupForm = document.getElementById('emailSignupForm');
+  const loginError = document.getElementById('emailLoginError');
+  const signupError = document.getElementById('emailSignupError');
+  const loginSubmit = document.getElementById('emailLoginSubmit');
+  const signupSubmit = document.getElementById('emailSignupSubmit');
+  const defaultNote = authNote ? authNote.textContent : '';
+  let noteTimeout = null;
+
+  const resetNote = () => {
+    if (!authNote) return;
+    if (noteTimeout) {
+      clearTimeout(noteTimeout);
+      noteTimeout = null;
+    }
+    authNote.textContent = defaultNote;
+  };
+
+  const setNote = (message, duration = 0) => {
+    if (!authNote) return;
+    if (noteTimeout) {
+      clearTimeout(noteTimeout);
+      noteTimeout = null;
+    }
+    authNote.textContent = message;
+    if (duration) {
+      noteTimeout = setTimeout(() => {
+        authNote.textContent = defaultNote;
+        noteTimeout = null;
+      }, duration);
+    }
+  };
+
+  const showEmailView = (view) => {
+    emailToggleButtons.forEach((btn) => {
+      const isActive = btn.getAttribute('data-email-view') === view;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
+    const showLogin = view === 'login';
+    if (loginForm) {
+      loginForm.hidden = !showLogin;
+      loginForm.classList.toggle('is-hidden', !showLogin);
+    }
+    if (signupForm) {
+      signupForm.hidden = showLogin;
+      signupForm.classList.toggle('is-hidden', showLogin);
+    }
+    loginError && (loginError.hidden = true);
+    signupError && (signupError.hidden = true);
+  };
+
+  const openEmailForm = () => {
+    if (!emailWrapper) return;
+    emailWrapper.hidden = false;
+    emailWrapper.setAttribute('aria-hidden', 'false');
+    emailButton?.setAttribute('aria-expanded', 'true');
+    showEmailView('login');
+  };
+
+  const closeEmailForm = () => {
+    if (!emailWrapper) return;
+    emailWrapper.hidden = true;
+    emailWrapper.setAttribute('aria-hidden', 'true');
+    emailButton?.setAttribute('aria-expanded', 'false');
+    loginForm?.reset();
+    signupForm?.reset();
+    resetNote();
+  };
+
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim().toLowerCase());
+
+  const handleRequest = async ({ url, body, submitBtn, errorEl, successMessage }) => {
+    if (!submitBtn || !errorEl) return;
+    try {
+      submitBtn.disabled = true;
+      errorEl.hidden = true;
+      const originalText = submitBtn.textContent;
+      submitBtn.dataset.originalText = originalText;
+      submitBtn.textContent = 'Please wait...';
+      setNote(successMessage || 'Processing your request...');
+
+      const response = await fetch(buildBackendUrl(url), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(body)
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data?.error || 'Something went wrong. Please try again.');
+      }
+
+      window.location.href = buildBackendUrl('/dashboard');
+    } catch (error) {
+      errorEl.textContent = error.message;
+      errorEl.hidden = false;
+    } finally {
+      if (submitBtn.dataset.originalText) {
+        submitBtn.textContent = submitBtn.dataset.originalText;
+        delete submitBtn.dataset.originalText;
+      }
+      submitBtn.disabled = false;
+    }
+  };
+
+  emailToggleButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const view = btn.getAttribute('data-email-view');
+      showEmailView(view);
+    });
+  });
+
+  providerButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const provider = btn.getAttribute('data-provider');
+      if (provider === 'email') {
+        if (emailWrapper && !emailWrapper.hidden) {
+          closeEmailForm();
+        } else {
+          openEmailForm();
+          setNote('Enter your email credentials to continue securely.');
+        }
+        return;
+      }
+
+      if (provider === 'google') {
+        setNote('Redirecting you to Google for secure sign in...');
+        window.location.href = buildBackendUrl('/auth/google');
+        return;
+      }
+
+      if (provider === 'github' || provider === 'facebook') {
+        setNote(`${btn.textContent.trim()} is not available yet. Please use Google or Email.`);
+        return;
+      }
+    });
+  });
+
+  closeButton?.addEventListener('click', () => closeEmailForm());
+
+  loginForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const emailField = document.getElementById('emailLoginAddress');
+    const passwordField = document.getElementById('emailLoginPassword');
+    if (!emailField || !passwordField) return;
+
+    const email = emailField.value.trim();
+    const password = passwordField.value.trim();
+    if (!validateEmail(email)) {
+      loginError.textContent = 'Please enter a valid email address.';
+      loginError.hidden = false;
+      emailField.focus();
+      return;
+    }
+    if (!password) {
+      loginError.textContent = 'Please enter your password.';
+      loginError.hidden = false;
+      passwordField.focus();
+      return;
+    }
+
+    handleRequest({
+      url: '/login',
+      body: { email, password },
+      submitBtn: loginSubmit,
+      errorEl: loginError,
+      successMessage: 'Signing you in...'
+    });
+  });
+
+  signupForm?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const nameField = document.getElementById('emailSignupName');
+    const emailField = document.getElementById('emailSignupAddress');
+    const passwordField = document.getElementById('emailSignupPassword');
+    const confirmField = document.getElementById('emailSignupConfirm');
+    if (!emailField || !passwordField || !confirmField) return;
+
+    const name = nameField?.value?.trim();
+    const email = emailField.value.trim();
+    const password = passwordField.value.trim();
+    const confirmPassword = confirmField.value.trim();
+
+    if (!validateEmail(email)) {
+      signupError.textContent = 'Please enter a valid email address.';
+      signupError.hidden = false;
+      emailField.focus();
+      return;
+    }
+    if (password.length < 6) {
+      signupError.textContent = 'Password must be at least 6 characters.';
+      signupError.hidden = false;
+      passwordField.focus();
+      return;
+    }
+    if (password !== confirmPassword) {
+      signupError.textContent = 'Passwords do not match.';
+      signupError.hidden = false;
+      confirmField.focus();
+      return;
+    }
+
+    handleRequest({
+      url: '/signup',
+      body: { email, password, confirmPassword, name },
+      submitBtn: signupSubmit,
+      errorEl: signupError,
+      successMessage: 'Creating your account...'
+    });
+  });
+
+  // Open email form by default when landing on the page
+  openEmailForm();
 }
 
 // ================================
