@@ -153,17 +153,30 @@ function initHeader() {
   let lastScroll = 0;
 
   // Scroll effect
-  window.addEventListener('scroll', () => {
+  const handleHeaderScroll = () => {
     const currentScroll = window.pageYOffset;
-    
     if (currentScroll > 50) {
       mainHeader?.classList.add('scrolled');
     } else {
       mainHeader?.classList.remove('scrolled');
     }
-    
     lastScroll = currentScroll;
-  }, { passive: true });
+  };
+
+  let headerScrollTicking = false;
+  handleHeaderScroll();
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (headerScrollTicking) return;
+      headerScrollTicking = true;
+      requestAnimationFrame(() => {
+        handleHeaderScroll();
+        headerScrollTicking = false;
+      });
+    },
+    { passive: true }
+  );
 
   // Mobile menu toggle + accessibility helpers
   if (mobileMenuToggle && mainNav) {
@@ -207,25 +220,33 @@ function initHeader() {
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('a.nav-link');
 
-  window.addEventListener('scroll', () => {
+  const updateActiveLink = () => {
     let current = '';
-    
-    sections.forEach(section => {
+    sections.forEach((section) => {
       const sectionTop = section.offsetTop;
-      const sectionHeight = section.clientHeight;
-      
       if (window.pageYOffset >= sectionTop - 200) {
         current = section.getAttribute('id');
       }
     });
-    
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
-      }
+    navLinks.forEach((link) => {
+      link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
     });
-  }, { passive: true });
+  };
+
+  let navScrollTicking = false;
+  updateActiveLink();
+  window.addEventListener(
+    'scroll',
+    () => {
+      if (navScrollTicking) return;
+      navScrollTicking = true;
+      requestAnimationFrame(() => {
+        updateActiveLink();
+        navScrollTicking = false;
+      });
+    },
+    { passive: true }
+  );
 
   // Smooth scroll
   document.querySelectorAll('a.nav-link[href^="#"]').forEach(link => {
