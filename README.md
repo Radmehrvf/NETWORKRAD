@@ -1,137 +1,144 @@
-# 🌐 NetworkRad — All That Matters
+# NetworkRad � All That Matters
 
-**NetworkRad** is a next-generation personal portfolio and AI integration showcase built by **Radmehr Rezaabadi** — an **AI Integration Specialist** and **Full-Stack Developer**.  
-It blends elegant design, interactive elements, and real-world functionality, featuring sections for AI automation, project showcases, and even creative explorations like mini-games and mindspace experiences.
-
----
-
-## 🚀 Live Demo
-
-🔗 **Website:** [https://radmehrvf.github.io/NETWORKRAD/](https://radmehrvf.github.io/NETWORKRAD/)  
-📁 **Source Code:** [GitHub Repository](https://github.com/Radmehrvf/NETWORKRAD)
+**NetworkRad** is a next-generation personal portfolio and AI integration showcase built by **Radmehr Rezaabadi** � an **AI Integration Specialist** and **Full-Stack Developer**. After reorganizing the frontend into the repository root, streamlining navigation, and removing legacy mini-games, the site now highlights RadBot Quiz, AI automation flows, and business-focused storytelling while keeping performance at the center.
 
 ---
 
-## 🧩 Features
+## Live Demo
 
-### 🎨 Modern UI/UX
-- Fully responsive design optimized for desktop and mobile.  
-- Dynamic navigation bar with dropdown menus and smooth scrolling.  
-- Optimized font and asset loading for high performance.
-
-### 🤖 AI-Powered Sections
-- **AI Business Optimizer:** Interactive form that gathers user data to suggest AI-based improvements.  
-- Integrated animations, form validation, and dynamic state toggling for smooth interactivity.
-
-### 💼 Portfolio & Projects
-- Showcases featured projects including AI Chat Assistant, Automation Suite, and Portfolio itself.  
-- Each project includes tech stack tags, GitHub links, and optional live demos.
-
-### 🧠 Mindspace & Games
-- Creative “Mindspace Explorer” and “Network Builder” mini-apps built with JavaScript and Canvas.  
-- Interactive elements that reveal hidden Easter eggs and user-driven experiences.
-
-### 🌌 Universe & Growth
-- Sections for business growth services and universe explorations.  
-- Animated backgrounds and particle-style visual effects.
-
-### 💬 Chat Integration
-- “Let’s Chat” CTA button for real-time interaction via AI assistant integration (Cloudflare Worker backend compatible).
-
-### 🎁 Support Unlock Easter Egg
-- Hidden interactive feature triggered by logo hover — unlocks glowing animations and a secret support message.
+- **Website:** [https://radmehrvf.github.io/NETWORKRAD/](https://radmehrvf.github.io/NETWORKRAD/)
+- **Source Code:** [GitHub Repository](https://github.com/Radmehrvf/NETWORKRAD)
 
 ---
 
-## ⚙️ Tech Stack
+## Features
 
-| Layer | Technology |
-|-------|-------------|
-| **Frontend** | HTML5, CSS3 (custom responsive design), Vanilla JavaScript |
-| **Styling** | CSS Variables, Flexbox, Grid, Animations |
-| **AI & Backend Integration** | Cloudflare Workers, Claude AI (via REST API) |
-| **Hosting** | GitHub Pages |
-| **Assets** | SVG icons, local PNG logo, Google Fonts (Roboto) |
+### Modern UI/UX
+- Fully responsive design optimized for desktop and mobile.
+- Sticky navigation with dropdown menus, smooth scrolling, and section highlights.
+- Optimized font and asset loading for strong Core Web Vitals.
+
+### AI-Powered Sections
+- **AI Business Optimizer & Support CTA:** Collects user context and recommends AI-driven improvements.
+- Integrated animations, validation, and dynamic states for polished interactions.
+
+### Portfolio & Projects
+- Highlights the AI Chat Assistant, Automation Suite, and the NetworkRad platform itself.
+- Each project lists the tech stack, GitHub links, and optional live demos.
+
+### Interactive Experience
+- **RadBot Quiz** remains the flagship mini-game, delivering AI-powered questions, scoring, and auto-focus behavior.
+- Mindspace, Explorer, and Network Builder were retired from the main page to keep the experience focused and fast.
+
+### Universe & Growth
+- Dedicated sections for business services, community links, and growth metrics.
+- Animated backgrounds and subtle particle effects reinforce the futuristic aesthetic.
+
+### Chat Integration
+- "Let's Chat" CTA wired for AI-assistant handoffs (Cloudflare Worker friendly).
+
+### Support Unlock Easter Egg
+- Hovering the logo reveals a secret animation and support shout-out.
 
 ---
 
-## 📂 Project Structure
+## Tech Stack
 
-```
+| Layer              | Technology                                                      |
+|--------------------|------------------------------------------------------------------|
+| **Frontend**       | HTML5, CSS3, Vanilla JavaScript                                  |
+| **Styling**        | CSS Variables, Flexbox, Grid, Motion/transition effects          |
+| **Backend / Auth** | Node.js, Express, Passport (Google + email), session middleware  |
+| **AI & Integrations** | Cloudflare Workers, Claude AI (REST API)                     |
+| **Hosting**        | GitHub Pages (frontend) + self/hosted Node backend               |
+| **Assets**         | SVG icons, PNG logo, Google Fonts (Roboto)                      |
+
+---
+
+## Project Structure
+
+`
 NETWORKRAD/
-├── index.html       # Main HTML file
-├── Style.css        # Full optimized CSS styles
-├── Script.js        # Core interactivity, animations, and AI logic
-├── logo.png         # Project logo
-├── cv.pdf           # Resume (optional)
-└── README.md        # Project documentation
-```
++-- index.html            # Main marketing/portfolio page
++-- signup.html           # Authentication portal
++-- dashboard.html        # Authenticated workspace view
++-- account-settings.html # Profile & account management
++-- Style.css             # Optimized global styles
++-- Script.js             # Core interactivity, animations, AI logic
++-- assets/               # Logo, resume, misc assets
++-- backend/              # Express server, routes, middleware, config
++-- README.md             # Project documentation
+`
+
+Frontend assets now live at the repository root for GitHub Pages deployment, while the ackend/ folder houses the Express server used for authentication and profile APIs.
 
 ---
 
-## 🧠 Key Functional Highlights
+## Key Functional Highlights
 
-- **Lazy Loading:** Improves performance by loading sections dynamically.  
-- **Mobile Menu Toggle:** Smooth animation for responsive navigation.  
-- **Interactive Forms:** AI Optimizer form dynamically expands with smooth transitions.  
-- **Hero Section Animations:** Floating gradient orbs and fading hero content.  
-- **Accessibility Ready:** Reduced motion media queries and semantic HTML.  
-- **Performance Optimized:** Preloading, deferred CSS, async JS, and minimal render blocking.
+- **Lazy Loading:** Defers heavy sections for faster first paint.
+- **Mobile Menu Toggle:** Animated overlay navigation with focus trapping.
+- **Interactive Forms:** AI Optimizer, support CTAs, and contact prompts adapt to user context.
+- **RadBot Quiz:** AI-generated questions with score tracking, auto-scroll, and keyboard handling.
+- **Accessibility Ready:** Reduced-motion media queries, semantic tags, and ARIA helpers.
+- **Performance Optimized:** Preloading, deferred CSS, async JS, and minimal render blocking assets.
 
 ---
 
-## 🧑‍💻 Developer
+## Developer
 
 **Radmehr Rezaabadi**  
 AI Integration Specialist & Full-Stack Developer  
-📧 [radmehrvf@gmail.com](mailto:radmehrvf@gmail.com)  
-🔗 [LinkedIn](https://www.linkedin.com/in/radmehr-rezaabadi-a7396728b/)  
-💻 [GitHub](https://github.com/Radmehrvf)  
-📺 [YouTube](https://www.youtube.com/@NetworkRad)
+- [radmehrvf@gmail.com](mailto:radmehrvf@gmail.com)  
+- [LinkedIn](https://www.linkedin.com/in/radmehr-rezaabadi-a7396728b/)  
+- [GitHub](https://github.com/Radmehrvf)  
+- [YouTube](https://www.youtube.com/@NetworkRad)
 
 ---
 
-## 🛠️ Installation & Setup
+## Installation & Setup
 
-To run locally:
-
-```bash
+`ash
 git clone https://github.com/Radmehrvf/NETWORKRAD.git
 cd NETWORKRAD
-```
+`
 
-Then open **index.html** in your browser or use a simple local server:
+Serve the static frontend (for example, with Python) and run the backend if you need authentication routes:
 
-```bash
-# For Python 3
+`ash
+# Frontend preview
 python -m http.server 8080
-```
+
+# Backend (inside backend/)
+npm install
+npm run dev
+`
+
+Create a .env inside ackend/ containing OAuth credentials, session secret, and BASE_URL pointing to your environment.
 
 ---
 
-## 🔒 Performance & Security
+## Performance & Security
 
-- Uses `fetchpriority` and `media="print"` CSS loading for improved First Contentful Paint (FCP).
-- No external tracking or invasive scripts.
-- Follows best practices for accessibility and SEO.
-
----
-
-## 🧩 Future Enhancements
-
-- AI-powered contact form with Cloudflare Worker integration.  
-- Analytics dashboard for visitor metrics.  
-- Progressive Web App (PWA) version.  
-- More mini-games and interactive experiences under “Mindspace”.
+- Uses etchpriority hints and media="print" CSS loading for better First Contentful Paint.
+- Passport-based auth with secure cookies and configurable session storage.
+- No invasive tracking; follows accessibility and SEO best practices.
 
 ---
 
-## 📜 License
+## Future Enhancements
 
-This project is open source under the **MIT License** — free for personal and commercial use with attribution.
+- AI-powered contact form backed by Cloudflare Workers.
+- Analytics dashboard for visitor metrics.
+- Progressive Web App (PWA) packaging.
+- Optional relaunch of curated mini-games in a dedicated hub.
 
 ---
 
-### ✨ Quote
+## License
 
-> “Intelligence meets imagination — NetworkRad is where AI and creativity merge.”
+Open sourced under the **MIT License** � free for personal and commercial use with attribution.
+
+---
+
+> "Intelligence meets imagination � NetworkRad is where AI and creativity merge."

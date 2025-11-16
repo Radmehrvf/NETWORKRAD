@@ -21,7 +21,8 @@
 /* GLOBAL BASE */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
-body{font-family:'Roboto',system-ui,sans-serif;background:var(--color-bg-dark);color:var(--color-text-light);line-height:1.6;overflow-x:hidden;padding-top:var(--header-height)}
+body{font-family:'Roboto',system-ui,sans-serif;background:var(--color-bg-dark);color:var(--color-text-light);line-height:1.6;overflow-x:hidden;padding-top:var(--header-height);transition:opacity .35s ease}
+body.page-switching{opacity:0}
 
 /* REDUCE MOTION FOR ACCESSIBILITY */
 @media(prefers-reduced-motion:reduce){
@@ -51,6 +52,20 @@ body{font-family:'Roboto',system-ui,sans-serif;background:var(--color-bg-dark);c
 .nav-links>li{flex:0 0 auto}
 .nav-actions{display:flex;align-items:center;gap:.35rem;flex-shrink:0}
 .nav-actions .nav-cta{margin:0}
+.page-switch{max-width:1200px;margin:clamp(1.25rem,3vw,2.5rem) auto 1.6rem;padding:0 2rem;display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:.6rem;position:sticky;top:calc(var(--header-height) + .8rem);z-index:980}
+.page-switch[hidden]{display:none!important}
+.page-switch .email-toggle{margin-bottom:0}
+.page-switch .email-toggle-btn{min-width:140px;text-align:center;padding:.65rem 1.75rem;font-size:1rem}
+#pageSwitchHome{color:#7dd3fc;border:1px solid rgba(0,195,255,.45);background:rgba(0,195,255,.08)}
+#pageSwitchDashboard{color:#facc15;border:1px solid rgba(212,175,55,.5);background:rgba(212,175,55,.08)}
+#pageSwitchHome:hover{background:rgba(0,195,255,.18);color:#e0faff}
+#pageSwitchDashboard:hover{background:rgba(212,175,55,.18);color:#fff0c2}
+#pageSwitchHome.active{background:linear-gradient(135deg,#36c3ff,#8be9ff);color:#04121f;border-color:rgba(0,195,255,.85)}
+#pageSwitchDashboard.active{background:linear-gradient(135deg,#f2c94c,#f7a81b);color:#140a00;border-color:rgba(212,175,55,.95)}
+@media (max-width:900px){
+  .page-switch{justify-content:flex-start;padding:0 1.25rem;margin-top:1rem}
+  .page-switch .email-toggle{width:100%;justify-content:flex-start}
+}
 
 .nav-link{position:relative;padding:.7rem 1.3rem;font-size:.95rem;font-weight:500;text-decoration:none;color:#cbd5e1;background:rgba(0,25,45,.3);border:1px solid rgba(0,195,255,.2);border-radius:10px;letter-spacing:.3px;transition:all .35s ease;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;white-space:normal;text-align:center}
 .nav-link::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,195,255,.15),rgba(0,255,180,.1));opacity:0;transition:opacity .4s ease}

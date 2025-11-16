@@ -8,6 +8,11 @@ console.log("Welcome to NetworkRad Portfolio!");
 const MOBILE_NAV_MEDIA = window.matchMedia('(max-width: 768px)');
 const NAV_FOCUSABLE_SELECTOR = 'a[href],button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 let releaseNavFocusTrap = null;
+const BACKEND_BASE_URL =
+  window.location.origin.includes('5000') || window.location.hostname === 'localhost'
+    ? ''
+    : 'http://localhost:5000';
+const buildBackendUrl = (path = '') => `${BACKEND_BASE_URL}${path}`;
 
 function toggleNavFocusTrap(container, shouldTrap) {
   if (!container) return;
@@ -92,6 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize core features
   initHeader();
   initImprovedNavigation();
+  initPageSwitchToggle();
   initMainInterface();
   initAuthAccessSection();
   initSupportUnlockEasterEgg();
@@ -981,18 +987,90 @@ function initRadBotQuiz() {
   }
 }
 
+function initPageSwitchToggle() {
+  const switchWrapper = document.getElementById('pageSwitch');
+  const homeButton = document.getElementById('pageSwitchHome');
+  const dashboardButton = document.getElementById('pageSwitchDashboard');
+
+  if (!switchWrapper || !homeButton || !dashboardButton) {
+    return;
+  }
+
+  const updateActiveState = () => {
+    const normalizedPath = window.location.pathname.replace(/\/+$/, '') || '/';
+    const isDashboard =
+      normalizedPath === '/dashboard' || normalizedPath === '/dashboard.html';
+
+    dashboardButton.classList.toggle('active', isDashboard);
+    dashboardButton.setAttribute('aria-selected', isDashboard ? 'true' : 'false');
+    homeButton.classList.toggle('active', !isDashboard);
+    homeButton.setAttribute('aria-selected', !isDashboard ? 'true' : 'false');
+  };
+
+  const showSwitch = () => {
+    switchWrapper.hidden = false;
+    switchWrapper.setAttribute('aria-hidden', 'false');
+    updateActiveState();
+  };
+
+  const hideSwitch = () => {
+    switchWrapper.hidden = true;
+    switchWrapper.setAttribute('aria-hidden', 'true');
+    homeButton.classList.remove('active');
+    dashboardButton.classList.remove('active');
+    homeButton.setAttribute('aria-selected', 'false');
+    dashboardButton.setAttribute('aria-selected', 'false');
+  };
+
+  const handleNavigation = (targetPath) => {
+    const normalizedPath = window.location.pathname.replace(/\/+$/, '') || '/';
+    const isDashboardTarget = targetPath === '/dashboard';
+    const alreadyOnTarget =
+      (isDashboardTarget &&
+        (normalizedPath === '/dashboard' || normalizedPath === '/dashboard.html')) ||
+      (!isDashboardTarget && normalizedPath === '/');
+
+    if (alreadyOnTarget) {
+      return;
+    }
+
+    document.body.classList.add('page-switching');
+    setTimeout(() => {
+      window.location.href = buildBackendUrl(targetPath);
+    }, 250);
+  };
+
+  homeButton.addEventListener('click', () => handleNavigation('/'));
+  dashboardButton.addEventListener('click', () => handleNavigation('/dashboard'));
+
+  const verifySession = async () => {
+    try {
+      const response = await fetch(buildBackendUrl('/api/me'), {
+        credentials: 'include',
+        headers: {
+          Accept: 'application/json'
+        }
+      });
+      if (!response.ok) {
+        hideSwitch();
+        return;
+      }
+      showSwitch();
+    } catch (error) {
+      console.warn('Page switch unavailable:', error.message);
+      hideSwitch();
+    }
+  };
+
+  verifySession();
+}
+
 // ================================
 // AUTH SECTION INTERACTIONS
 // ================================
 function initAuthAccessSection() {
   const authSection = document.getElementById('auth-access');
   if (!authSection) return;
-
-  const backendBaseUrl =
-    window.location.origin.includes('5000') || window.location.hostname === 'localhost'
-      ? ''
-      : 'http://localhost:5000';
-  const buildBackendUrl = (path) => `${backendBaseUrl}${path}`;
 
   const emailWrapper = document.getElementById('emailAuthWrapper');
   const emailButton = authSection.querySelector('.auth-btn.email');

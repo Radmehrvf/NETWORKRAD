@@ -37,6 +37,11 @@
         min-height: 100vh;
         display: flex;
         flex-direction: column;
+        transition: opacity 0.35s ease;
+      }
+
+      body.page-switching {
+        opacity: 0;
       }
 
       a {
@@ -96,6 +101,79 @@
         align-items: center;
         gap: 0.75rem;
         flex-wrap: wrap;
+      }
+
+      .page-switch {
+        width: 100%;
+        padding: 0 clamp(1.25rem, 3vw, 3rem);
+        margin: clamp(1.25rem, 3vw, 2.5rem) auto 1.6rem;
+        display: flex;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        position: sticky;
+        top: 90px;
+        z-index: 8;
+      }
+
+      .page-switch[hidden] {
+        display: none !important;
+      }
+
+      .email-toggle {
+        display: inline-flex;
+        gap: 0.4rem;
+        background: rgba(0, 195, 255, 0.08);
+        padding: 0.25rem;
+        border-radius: 999px;
+        border: 1px solid rgba(0, 195, 255, 0.3);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      }
+
+      .email-toggle-btn {
+        border: none;
+        background: transparent;
+        padding: 0.65rem 1.75rem;
+        border-radius: 999px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease;
+        min-width: 140px;
+        font-size: 1rem;
+      }
+
+      #pageSwitchHome {
+        color: #7dd3fc;
+        border: 1px solid rgba(0, 195, 255, 0.45);
+        background: rgba(0, 195, 255, 0.08);
+      }
+
+      #pageSwitchDashboard {
+        color: #facc15;
+        border: 1px solid rgba(212, 175, 55, 0.5);
+        background: rgba(212, 175, 55, 0.08);
+      }
+
+      #pageSwitchHome:hover {
+        background: rgba(0, 195, 255, 0.18);
+        color: #e0faff;
+      }
+
+      #pageSwitchDashboard:hover {
+        background: rgba(212, 175, 55, 0.18);
+        color: #fff0c2;
+      }
+
+      #pageSwitchHome.active {
+        background: linear-gradient(135deg, #36c3ff, #8be9ff);
+        color: #04121f;
+        border-color: rgba(0, 195, 255, 0.85);
+      }
+
+      #pageSwitchDashboard.active {
+        background: linear-gradient(135deg, #f2c94c, #f7a81b);
+        color: #140a00;
+        border-color: rgba(212, 175, 55, 0.95);
       }
 
       .nav-link {
@@ -322,20 +400,85 @@
         margin: 0 0.5rem;
       }
 
+      @media (max-width: 900px) {
+        .dash-header {
+          padding: 1rem clamp(1rem, 4vw, 2rem);
+          gap: 1rem;
+        }
+
+        .brand-details h1 {
+          font-size: 1.35rem;
+        }
+
+        .dash-nav {
+          gap: 0.5rem;
+          flex-wrap: wrap;
+        }
+
+        .dash-nav .nav-link {
+          padding: 0.55rem 1.1rem;
+          font-size: 0.95rem;
+        }
+
+        .logo-mark {
+          width: 44px;
+          height: 44px;
+        }
+      }
+
       @media (max-width: 700px) {
         .dash-header {
           flex-direction: column;
           align-items: flex-start;
+          padding: 0.65rem 0.9rem;
+          gap: 0.7rem;
         }
 
         .dash-nav {
           width: 100%;
+          justify-content: space-between;
+          gap: 0.3rem;
+          row-gap: 0.35rem;
+        }
+
+        .page-switch {
           justify-content: flex-start;
+          padding: 0 1.25rem;
         }
 
         .profile-identity {
           flex-direction: column;
           align-items: flex-start;
+        }
+
+        .brand {
+          flex-direction: column;
+          gap: 0.4rem;
+        }
+
+        .brand-details h1 {
+          font-size: 1.1rem;
+          margin: 0;
+        }
+
+        .brand-details .eyebrow {
+          font-size: 0.65rem;
+        }
+
+        .dash-nav .nav-link {
+          padding: 0.35rem 0.75rem;
+          font-size: 0.82rem;
+        }
+
+        .logo-mark {
+          width: 38px;
+          height: 38px;
+          font-size: 1rem;
+        }
+
+        .profile-identity img {
+          width: 60px;
+          height: 60px;
         }
       }
     </style>
@@ -357,6 +500,29 @@
         <button type="button" id="logoutBtn" class="nav-link logout">Logout</button>
       </nav>
     </header>
+
+    <div class="page-switch" id="pageSwitch" hidden aria-hidden="true">
+      <div class="email-toggle" role="tablist" aria-label="Page navigation">
+        <button
+          type="button"
+          class="email-toggle-btn"
+          id="pageSwitchHome"
+          role="tab"
+          aria-selected="false"
+        >
+          Home
+        </button>
+        <button
+          type="button"
+          class="email-toggle-btn"
+          id="pageSwitchDashboard"
+          role="tab"
+          aria-selected="false"
+        >
+          Dashboard
+        </button>
+      </div>
+    </div>
 
     <main class="dashboard-shell">
       <section class="panel profile-card" id="profile">
@@ -492,6 +658,7 @@
       <a href="#terms">Terms of Service</a>
     </footer>
 
+    <script src="Script.js" defer></script>
     <script>
       (function () {
         const backendBase =

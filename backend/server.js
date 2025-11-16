@@ -60,7 +60,7 @@ const { googleScopes } = configurePassport(
   { ensureProfileRecord }
 );
 
-const staticDir = path.resolve(__dirname, '../frontend');
+const staticDir = path.resolve(__dirname, '..');
 app.use('/uploads', express.static(uploadsDir));
 app.use(express.static(staticDir));
 

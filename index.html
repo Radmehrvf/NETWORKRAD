@@ -59,9 +59,6 @@
             </svg>
           </button>
           <ul class="nav-submenu">
-            <li><a href="#mindspace" class="nav-sublink">Mindspace</a></li>
-            <li><a href="#mindspace-explorer-wrapper" class="nav-sublink">Mindspace Explorer</a></li>
-            <li><a href="#network-builder-wrapper" class="nav-sublink">Network Builder</a></li>
             <li><a href="#radbot-section" class="nav-sublink">RadBot Quiz</a></li>
             <li><a href="#timeline" class="nav-sublink">Timeline</a></li>
           </ul>
@@ -100,6 +97,29 @@
     <div class="nav-backdrop" id="navBackdrop" aria-hidden="true"></div>
   </div>
 </header>
+
+<div class="page-switch" id="pageSwitch" hidden aria-hidden="true">
+  <div class="email-toggle" role="tablist" aria-label="Page navigation">
+    <button
+      type="button"
+      class="email-toggle-btn"
+      id="pageSwitchHome"
+      role="tab"
+      aria-selected="false"
+    >
+      Home
+    </button>
+    <button
+      type="button"
+      class="email-toggle-btn"
+      id="pageSwitchDashboard"
+      role="tab"
+      aria-selected="false"
+    >
+      Dashboard
+    </button>
+  </div>
+</div>
 
 <!-- HERO SECTION -->
 <section class="hero-section" id="intro">
@@ -434,43 +454,6 @@
   </div>
 </section>
 
-<!-- MINDSPACE SECTION -->
-<section id="mindspace" class="section-card creative-card cosmic-mindspace lazy-section">
-  <h2>✨ Mindspace ✨</h2>
-  <p>Short notes, ideas, and thoughts. Discuss them with the chat.</p>
-  <div class="mindspace-list">
-    <article class="mind-card">
-      <h4>Idea: Personal AI Resume Coach</h4>
-      <p>Short description of this idea…</p>
-      <button class="discuss-btn" data-discuss="Tell me about this 'Personal AI Resume Coach' idea.">Discuss this idea</button>
-    </article>
-    <article class="mind-card">
-      <h4>Note: My workflow</h4>
-      <p>Notes about tools I use and how I work.</p>
-      <button class="discuss-btn" data-discuss="Explain Radmehr's workflow notes.">Discuss this note</button>
-    </article>
-  </div>
-</section>
-
-<!-- MINDSPACE EXPLORER (Lazy Loaded Game) -->
-<section id="mindspace-explorer-wrapper" class="lazy-section">
-  <div class="collapsible-header">
-    <button class="reveal-btn" data-target="mindspace-explorer-section">
-      <span class="arrow">▶</span>
-      <span class="title">Play Mindspace Explorer</span>
-      <span class="loading-indicator" style="display: none;">⏳</span>
-    </button>
-  </div>
-  <section id="mindspace-explorer-section" class="collapsible-content">
-    <h2>Mindspace Explorer</h2>
-    <p>Explore the interactive galaxy of ideas — click on stars to reveal thoughts.</p>
-    <div id="mindspace-explorer">
-      <canvas id="mindspaceCanvas" width="600" height="400" style="display:none;"></canvas>
-    </div>
-    <div id="mindspace-details"></div>
-  </section>
-</section>
-
 <!-- TIMELINE SECTION -->
 <section id="timeline" class="section-card lazy-section">
   <h2>Timeline & Goals</h2>
@@ -598,24 +581,6 @@
     </div>
   </div>
 </section>
-
-<!-- NETWORK BUILDER (Lazy Loaded Game) -->
-<section id="network-builder-wrapper" class="lazy-section">
-  <div class="collapsible-header">
-    <button class="reveal-btn" data-target="network-builder-section">
-      <span class="arrow">▶</span>
-      <span class="title">Play Network Builder</span>
-      <span class="loading-indicator" style="display: none;">⏳</span>
-    </button>
-  </div>
-  <section id="network-builder-section" class="collapsible-content">
-    <h2>Network Builder</h2>
-    <p>Connect the glowing nodes to build your own network.</p>
-    <div id="network-builder">
-      <canvas id="networkCanvas" width="600" height="400" style="display:none;"></canvas>
-    </div>
-    <div id="network-message"></div>
-  </section>
 </section>
 
 <!-- RADBOT QUIZ (Lazy Loaded Game) -->
@@ -838,3 +803,5 @@ window.addEventListener('load', () => {
 
 </body>
 </html>
+
+
