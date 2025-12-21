@@ -1,13 +1,13 @@
 const express = require('express');
+const { randomUUID } = require('crypto');
 
 const createAuthRoutes = (deps) => {
   const {
     passport,
+    bcrypt,
     googleScopes,
+    localUsers,
     normalizeEmail,
-    findUserByEmail,
-    createUser,
-    verifyPassword,
     ensureProfileRecord,
     buildSessionUser,
     sendAuthSuccess,
@@ -16,9 +16,8 @@ const createAuthRoutes = (deps) => {
 
   const router = express.Router();
 
-  // Signup route
   router.post('/signup', async (req, res, next) => {
-    const { email, password, confirmPassword, name } = req.body || {};
+    const { email, password, confirmPassword, name, username } = req.body || {};
 
     if (!email || !password || !confirmPassword) {
       return sendAuthError(req, res, 400, 'Email and password are required.');
@@ -33,30 +32,40 @@ const createAuthRoutes = (deps) => {
     }
 
     const normalizedEmail = normalizeEmail(email);
+    if (localUsers.has(normalizedEmail)) {
+      return sendAuthError(req, res, 409, 'An account with this email already exists.');
+    }
 
     try {
-      // Check if user already exists
-      const existingUser = await findUserByEmail(normalizedEmail);
-      if (existingUser) {
-        return sendAuthError(req, res, 409, 'An account with this email already exists.');
-      }
+      const passwordHash = await bcrypt.hash(password, 12);
+      const userRecord = {
+        id: randomUUID(),
+        email: normalizedEmail,
+        fullName: name?.trim() || '',
+        name: name?.trim() || '',
+        username: username?.trim() || normalizedEmail.split('@')[0],
+        passwordHash,
+        provider: 'password',
+        createdAt: new Date().toISOString(),
+        emailVerified: false,
+        phone: '',
+        address: '',
+        dob: '',
+        bio: '',
+        profilePhoto: null
+      };
 
-      // Create new user
-      const newUser = await createUser(normalizedEmail, password, name);
-      
-      // Create profile and session
-      const profile = await ensureProfileRecord(newUser);
+      localUsers.set(normalizedEmail, userRecord);
+      const profile = ensureProfileRecord(userRecord);
       req.session.user = buildSessionUser(profile);
       req.session.tokens = null;
 
       return sendAuthSuccess(req, res, 201);
     } catch (error) {
-      console.error('Signup error:', error);
       return next(error);
     }
   });
 
-  // Login route
   router.post('/login', async (req, res, next) => {
     const { email, password } = req.body || {};
 
@@ -65,28 +74,27 @@ const createAuthRoutes = (deps) => {
     }
 
     const normalizedEmail = normalizeEmail(email);
+    const userRecord = localUsers.get(normalizedEmail);
+
+    if (!userRecord) {
+      return sendAuthError(req, res, 401, 'Invalid credentials.');
+    }
 
     try {
-      // Verify user credentials
-      const user = await verifyPassword(normalizedEmail, password);
-      
-      if (!user) {
+      const passwordMatches = await bcrypt.compare(password, userRecord.passwordHash);
+      if (!passwordMatches) {
         return sendAuthError(req, res, 401, 'Invalid credentials.');
       }
 
-      // Create profile and session
-      const profile = await ensureProfileRecord(user);
+      const profile = ensureProfileRecord(userRecord);
       req.session.user = buildSessionUser(profile);
       req.session.tokens = null;
-
       return sendAuthSuccess(req, res);
     } catch (error) {
-      console.error('Login error:', error);
       return next(error);
     }
   });
 
-  // Google OAuth routes
   router.get(
     '/auth/google',
     passport.authenticate('google', {
@@ -101,22 +109,15 @@ const createAuthRoutes = (deps) => {
     passport.authenticate('google', {
       failureRedirect: '/auth/error?message=Authentication%20failed'
     }),
-    async (req, res) => {
-      try {
-        const profileRecord = await ensureProfileRecord({
-          ...req.user.profile,
-          provider: 'google',
-          emailVerified: true
-        });
-        
-        req.session.user = buildSessionUser(profileRecord);
-        req.session.tokens = req.user.tokens;
-        
-        return sendAuthSuccess(req, res);
-      } catch (error) {
-        console.error('Google callback error:', error);
-        return res.redirect('/auth/error?message=Failed%20to%20create%20profile');
-      }
+    (req, res) => {
+      const profileRecord = ensureProfileRecord({
+        ...req.user.profile,
+        provider: 'google',
+        emailVerified: true
+      });
+      req.session.user = buildSessionUser(profileRecord);
+      req.session.tokens = req.user.tokens;
+      return sendAuthSuccess(req, res);
     }
   );
 

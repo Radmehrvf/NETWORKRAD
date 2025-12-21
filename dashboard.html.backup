@@ -664,8 +664,10 @@
     <script src="Script.js" defer></script>
     <script>
       (function () {
-
-const backendBase = '';
+        const backendBase =
+          window.location.origin.includes('5000') || window.location.origin.includes('localhost')
+            ? ''
+            : 'http://localhost:5000';
 
         const setUserData = (profile) => {
           document.querySelectorAll('[data-user-name]').forEach((el) => {

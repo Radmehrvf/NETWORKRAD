@@ -7,22 +7,14 @@ const dotenv = require('dotenv');
 const createSession = require('./config/sessionConfig');
 const configurePassport = require('./config/passportConfig');
 const { upload, uploadsDir, removeStoredPhoto } = require('./config/upload');
-
 const {
+  localUsers,
+  profileStore,
   normalizeEmail,
-  buildSessionUser,
-  findUserByEmail,
-  findUserByGoogleId,
-  findUserById,
-  createUser,
-  createOrUpdateGoogleUser,
-  verifyPassword,
-  updateUserProfile,
-  deleteUser,
   ensureProfileRecord,
+  buildSessionUser,
   getProfileForUser
 } = require('./models/userStore');
-
 const { wantsJSON, sendAuthSuccess, sendAuthError } = require('./utils/responses');
 const { ensureAuthenticated, ensureApiAuthenticated } = require('./middleware/authMiddleware');
 const createAuthRoutes = require('./routes/authRoutes');
@@ -65,7 +57,7 @@ const { googleScopes } = configurePassport(
     clientSecret: GOOGLE_CLIENT_SECRET,
     callbackURL: redirectUri
   },
-  { createOrUpdateGoogleUser }
+  { ensureProfileRecord }
 );
 
 const staticDir = path.resolve(__dirname, '..');
@@ -74,11 +66,10 @@ app.use(express.static(staticDir));
 
 const authRoutes = createAuthRoutes({
   passport,
+  bcrypt,
   googleScopes,
+  localUsers,
   normalizeEmail,
-  findUserByEmail,
-  createUser,
-  verifyPassword,
   ensureProfileRecord,
   buildSessionUser,
   sendAuthSuccess,
@@ -88,9 +79,8 @@ const authRoutes = createAuthRoutes({
 const userRoutes = createUserRoutes({
   ensureAuthenticated,
   ensureApiAuthenticated,
-  findUserById,
-  updateUserProfile,
-  deleteUser,
+  localUsers,
+  profileStore,
   getProfileForUser,
   ensureProfileRecord,
   buildSessionUser,

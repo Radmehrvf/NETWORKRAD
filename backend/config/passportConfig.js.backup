@@ -2,7 +2,7 @@ const { Strategy: GoogleStrategy } = require('passport-google-oauth20');
 
 const configurePassport = (passport, options, helpers) => {
   const { clientID, clientSecret, callbackURL } = options;
-  const { createOrUpdateGoogleUser } = helpers;
+  const { ensureProfileRecord } = helpers;
 
   passport.use(
     new GoogleStrategy(
@@ -12,20 +12,25 @@ const configurePassport = (passport, options, helpers) => {
         callbackURL,
         passReqToCallback: false
       },
-      async (accessToken, refreshToken, profile, done) => {
+      (accessToken, refreshToken, profile, done) => {
         try {
-          // Create or update user in database
-          const user = await createOrUpdateGoogleUser(profile);
-          
+          const record = ensureProfileRecord({
+            id: profile.id,
+            email: profile.emails?.[0]?.value,
+            name: profile.displayName,
+            picture: profile.photos?.[0]?.value,
+            provider: 'google',
+            emailVerified: true
+          });
+
           return done(null, {
-            profile: user,
+            profile: record,
             tokens: {
               accessToken,
               refreshToken
             }
           });
         } catch (error) {
-          console.error('Google strategy error:', error);
           return done(error);
         }
       }
