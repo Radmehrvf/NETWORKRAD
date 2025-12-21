@@ -709,7 +709,7 @@ function initMainInterface() {
     document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
   });
 
-  // Collapsible sections - IMPROVED
+       // Collapsible sections - IMPROVED
   document.querySelectorAll(".reveal-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       const targetId = btn.getAttribute("data-target");
@@ -729,10 +729,6 @@ function initMainInterface() {
     });
   });
 }
-        btn.classList.add("active");
-        const arrow = btn.querySelector(".arrow");
-        if (arrow) arrow.textContent = "▼";
-        
 
 // ================================
 // NETWORK BUILDER GAME
