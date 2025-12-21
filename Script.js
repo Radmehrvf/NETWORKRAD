@@ -8,10 +8,7 @@ console.log("Welcome to NetworkRad Portfolio!");
 const MOBILE_NAV_MEDIA = window.matchMedia('(max-width: 768px)');
 const NAV_FOCUSABLE_SELECTOR = 'a[href],button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 let releaseNavFocusTrap = null;
-const BACKEND_BASE_URL =
-  window.location.origin.includes('5000') || window.location.hostname === 'localhost'
-    ? ''
-    : 'http://localhost:5000';
+const BACKEND_BASE_URL = "";
 const buildBackendUrl = (path = '') => `${BACKEND_BASE_URL}${path}`;
 
 function toggleNavFocusTrap(container, shouldTrap) {
