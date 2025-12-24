@@ -3,7 +3,7 @@
 // All duplicates removed, proper lazy loading
 // ================================
 
-console.log("Welcome to NetworkRad Portfolio!");
+console.log("Welcome to RadiLinks Portfolio!");
 
 const MOBILE_NAV_MEDIA = window.matchMedia('(max-width: 768px)');
 const NAV_FOCUSABLE_SELECTOR = 'a[href],button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
@@ -89,7 +89,7 @@ if (typeof MOBILE_NAV_MEDIA.addEventListener === 'function') {
 // SINGLE UNIFIED INITIALIZATION
 // ================================
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("NetworkRad Site Loaded");
+  console.log("RadiLinks Site Loaded");
 
   // Initialize core features
   initHeader();
@@ -932,7 +932,7 @@ function initRadBotQuiz() {
     { question: "What does HTML stand for?", options: ["HyperText Markup Language", "HighText Machine Language", "Hyper Transfer Markup Logic", "Home Tool Markup Language"], correct: "HyperText Markup Language" },
     { question: "Which of these is a programming language used for web development?", options: ["Python", "C++", "JavaScript", "Rust"], correct: "JavaScript" },
     { question: "What is the purpose of a CSS file?", options: ["Store data", "Style web pages", "Manage databases", "Secure passwords"], correct: "Style web pages" },
-    { question: "Which one represents the luxury aesthetic of NetworkRad?", options: ["Neon Blue & Silver", "Bright Red & Yellow", "Black & Green Matrix", "Brown & Beige"], correct: "Neon Blue & Silver" }
+    { question: "Which one represents the luxury aesthetic of RadiLinks web?", options: ["Neon Blue & Silver", "Bright Red & Yellow", "Black & Green Matrix", "Brown & Beige"], correct: "Neon Blue & Silver" }
   ];
 
   let index = 0, score = 0, active = false;
