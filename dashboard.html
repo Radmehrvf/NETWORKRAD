@@ -87,6 +87,16 @@
         flex: 1 1 260px;
       }
 
+      .brand-logo {
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        border: 1px solid var(--gold-soft);
+        background: rgba(0, 0, 0, 0.35);
+        object-fit: contain;
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.35);
+      }
+
       .logo-mark {
         width: 48px;
         height: 48px;
@@ -441,6 +451,11 @@
           width: 44px;
           height: 44px;
         }
+
+        .brand-logo {
+          width: 44px;
+          height: 44px;
+        }
       }
 
       @media (max-width: 700px) {
@@ -493,6 +508,11 @@
           font-size: 1rem;
         }
 
+        .brand-logo {
+          width: 38px;
+          height: 38px;
+        }
+
         .profile-identity img {
           width: 60px;
           height: 60px;
@@ -503,7 +523,8 @@
   <body>
     <header class="dash-header">
       <div class="brand">
-        <div class="logo-mark">NR</div>
+        <img src="assets/logo.png" alt="RadiLinks logo" class="brand-logo" width="48" height="48" loading="eager" decoding="async">
+        <div class="logo-mark">RL</div>
         <div class="brand-details">
           <p class="eyebrow">Authenticated session</p>
           <h1><span data-user-name>Loading...</span>, welcome back.</h1>

@@ -73,6 +73,27 @@
         backdrop-filter: blur(12px);
       }
 
+      .brand-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-weight: 600;
+      }
+
+      .brand-logo {
+        width: 32px;
+        height: 32px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.35);
+        object-fit: contain;
+      }
+
+      .brand-name {
+        font-weight: 700;
+        letter-spacing: 0.08em;
+      }
+
       .settings-shell {
         width: min(1100px, 100%);
         margin: 0 auto;
@@ -212,8 +233,9 @@
   </head>
   <body>
     <header>
-      <a href="/dashboard" style="display: inline-flex; align-items: center; gap: 0.5rem">
-        <span style="font-weight: 700; letter-spacing: 0.08em">NR</span>
+      <a href="/dashboard" class="brand-link">
+        <img src="assets/logo.png" alt="RadiLinks logo" class="brand-logo" width="32" height="32" loading="eager" decoding="async">
+        <span class="brand-name">RL</span>
         <span style="color: var(--text-muted)">Back to Dashboard</span>
       </a>
     </header>

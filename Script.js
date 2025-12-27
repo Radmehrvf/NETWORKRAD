@@ -1,5 +1,5 @@
 // ================================
-// NETWORKRAD OPTIMIZED SCRIPT
+// RADILINKS OPTIMIZED SCRIPT
 // All duplicates removed, proper lazy loading
 // ================================
 

@@ -1,12 +1,12 @@
-# NetworkRad — All That Matters
+# RadiLinks — All That Matters
 
-**NetworkRad** is a next-generation personal portfolio and AI integration showcase built by **Radmehr Rezaabadi** — an **AI Integration Specialist** and **Full-Stack Developer**. After reorganizing the frontend into the repository root, streamlining navigation, and removing legacy mini-games, the site now highlights RadBot Quiz, AI automation flows, and business-focused storytelling while keeping performance at the center.
+**RadiLinks** is a next-generation personal portfolio and AI integration showcase built by **Radmehr Rezaabadi** — an **AI Integration Specialist** and **Full-Stack Developer**. After reorganizing the frontend into the repository root, streamlining navigation, and removing legacy mini-games, the site now highlights RadBot Quiz, AI automation flows, and business-focused storytelling while keeping performance at the center.
 
 ---
 
 ## Live Demo
 
-- **Website:** [https://radmehrvf.github.io/NETWORKRAD/](https://radmehrvf.github.io/NETWORKRAD/)
+- **Website:** [https://www.radilinks.com](https://www.radilinks.com)
 - **Source Code:** [GitHub Repository](https://github.com/Radmehrvf/NETWORKRAD)
 
 ---
@@ -23,7 +23,7 @@
 - Integrated animations, validation, and dynamic states for polished interactions.
 
 ### Portfolio & Projects
-- Highlights the AI Chat Assistant, Automation Suite, and the NetworkRad platform itself.
+- Highlights the AI Chat Assistant, Automation Suite, and the RadiLinks platform itself.
 - Each project lists the tech stack, GitHub links, and optional live demos.
 
 ### Interactive Experience
@@ -141,4 +141,4 @@ Open sourced under the **MIT License** — free for personal and commercial use wi
 
 ---
 
-> "Intelligence meets imagination — NetworkRad is where AI and creativity merge."
+> "Intelligence meets imagination — RadiLinks is where AI and creativity merge."
