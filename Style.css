@@ -35,16 +35,16 @@ body.page-switching{opacity:0}
 .site-header{position:fixed;top:0;left:0;right:0;z-index:9999;padding:1rem 2rem;background:rgba(7,44,99,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,195,255,.15);box-shadow:0 4px 30px rgba(0,0,0,.3);transition:all var(--transition-normal);will-change:transform}
 .site-header.scrolled{padding:.7rem 2rem;background:rgba(10,22,40,.95);border-bottom-color:rgba(0,195,255,.25);box-shadow:0 8px 40px rgba(0,0,0,.5)}
 
-.header-content{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:2rem;flex-wrap:wrap;position:relative}
+.header-content{max-width:1400px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:1.4rem;flex-wrap:wrap;position:relative}
 
-.logo-section{display:flex;align-items:center;gap:1rem;flex-shrink:0}
+.logo-section{display:flex;align-items:center;gap:.6rem;flex-shrink:0}
 .logo{width:55px;height:auto;transition:all .4s cubic-bezier(.4,0,.2,1);filter:drop-shadow(0 0 8px rgba(0,195,255,.4))}
 .logo:hover{transform:scale(1.1) rotate(5deg);filter:drop-shadow(0 0 15px rgba(0,195,255,.7))}
 .site-header.scrolled .logo{width:45px}
 
-.brand-text{display:flex;flex-direction:column;line-height:1.2}
-.brand-name{font-size:1.3rem;font-weight:700;color:var(--color-primary);text-shadow:0 0 10px rgba(0,195,255,.3);letter-spacing:.5px}
-.brand-tagline{font-size:.75rem;color:var(--color-text-muted);font-weight:400;letter-spacing:.3px}
+.brand-text{display:flex;flex-direction:column;line-height:1.1}
+.brand-name{font-size:1.2rem;font-weight:700;color:var(--color-primary);text-shadow:0 0 10px rgba(0,195,255,.3);letter-spacing:.5px}
+.brand-tagline{font-size:.7rem;color:var(--color-text-muted);font-weight:400;letter-spacing:.3px}
 
 .main-nav{display:flex;align-items:center;gap:.5rem;flex:1 1 auto;justify-content:flex-end;flex-wrap:wrap;min-width:0}
 .nav-links-wrapper{flex:1 1 520px;min-width:260px;max-width:100%;scrollbar-width:thin}
@@ -92,7 +92,7 @@ body.page-switching{opacity:0}
 .nav-backdrop.active{opacity:1;visibility:visible;pointer-events:auto}
 
 @media(max-width:1200px){
-  .header-content{gap:1.25rem}
+  .header-content{gap:1rem}
   .main-nav{justify-content:flex-start}
   .nav-links-wrapper{flex:1 1 100%}
   .nav-links{justify-content:flex-start}
