@@ -31,7 +31,7 @@ const createUserRoutes = require('./routes/userRoutes');
 dotenv.config({ path: path.join(__dirname, '.env') });
 
 const {
-  PORT = 5000,
+  PORT = 5001,
   BASE_URL,
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
