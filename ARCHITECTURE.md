@@ -50,7 +50,7 @@ User journey:
 ├── Script.js
 ├── Style.css
 ├── assets/
-│   ├── logo.png
+│   ├── logonew.png
 │   └── favicon/...
 ├── backend/
 │   ├── server.js
