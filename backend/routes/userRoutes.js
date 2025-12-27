@@ -29,11 +29,11 @@ const createUserRoutes = (deps) => {
     return res.sendFile(path.join(staticDir, 'account-settings.html'));
   });
 
-  router.get('/api/me', ensureAuthenticated, (req, res) => {
+  router.get('/api/me', ensureApiAuthenticated, (req, res) => {
     return res.json({ user: req.session.user });
   });
 
-  router.get('/api/profile', ensureAuthenticated, async (req, res) => {
+  router.get('/api/profile', ensureApiAuthenticated, async (req, res) => {
     try {
       const profile = await getProfileForUser(req.session.user);
       return res.json({ profile });
@@ -45,7 +45,7 @@ const createUserRoutes = (deps) => {
 
   router.post(
     '/update-profile',
-    ensureAuthenticated,
+    ensureApiAuthenticated,
     upload.single('profilePhoto'),
     async (req, res, next) => {
       try {

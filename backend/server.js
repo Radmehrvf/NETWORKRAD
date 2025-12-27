@@ -37,7 +37,11 @@ const {
   GOOGLE_CLIENT_SECRET,
   GOOGLE_REDIRECT_URI,
   SESSION_SECRET,
-  NODE_ENV = 'development'
+  NODE_ENV = 'development',
+  SESSION_SAMESITE,
+  SESSION_DOMAIN,
+  SESSION_SECURE,
+  CORS_ORIGIN
 } = process.env;
 
 ['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'SESSION_SECRET'].forEach((key) => {
@@ -50,11 +54,59 @@ const resolvedBaseUrl = BASE_URL || `http://localhost:${PORT}`;
 const redirectUri =
   GOOGLE_REDIRECT_URI || `${resolvedBaseUrl.replace(/\/$/, '')}/auth/google/callback`;
 
+const resolveBoolean = (value) => {
+  if (typeof value !== 'string') return undefined;
+  const normalized = value.trim().toLowerCase();
+  if (normalized === 'true') return true;
+  if (normalized === 'false') return false;
+  return undefined;
+};
+
 const app = express();
+if (NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use(createSession({ secret: SESSION_SECRET, nodeEnv: NODE_ENV }));
+const allowedOrigins = (CORS_ORIGIN || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+if (allowedOrigins.length) {
+  app.use((req, res, next) => {
+    const origin = req.headers.origin;
+    if (origin && allowedOrigins.includes(origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+      res.setHeader('Vary', 'Origin');
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Content-Type, Accept, X-Requested-With'
+      );
+      res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+      );
+      if (req.method === 'OPTIONS') {
+        return res.sendStatus(204);
+      }
+    }
+    return next();
+  });
+}
+
+app.use(
+  createSession({
+    secret: SESSION_SECRET,
+    nodeEnv: NODE_ENV,
+    sameSite: SESSION_SAMESITE,
+    secure: resolveBoolean(SESSION_SECURE),
+    cookieDomain: SESSION_DOMAIN
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
 

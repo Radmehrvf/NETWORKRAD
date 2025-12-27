@@ -8,6 +8,12 @@
       name="viewport"
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
+    <meta name="backend-base-url" content="">
+    <link rel="icon" href="assets/favicon/favicon.ico" sizes="any">
+    <link rel="icon" type="image/png" href="assets/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="assets/favicon/favicon-16x16.png" sizes="16x16">
+    <link rel="apple-touch-icon" href="assets/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="assets/favicon/site.webmanifest">
     <title>Account Settings — RadiLinks</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -290,7 +296,14 @@
         const verifiedInput = document.getElementById('emailVerified');
         const profilePhotoInput = document.getElementById('profilePhoto');
            
-      const backendBase = '';
+      const resolveBackendBase = () => {
+        const metaBase = document.querySelector('meta[name="backend-base-url"]')?.getAttribute('content');
+        const globalBase = window.RADILINKS_BACKEND_BASE;
+        const candidate = (metaBase || globalBase || '').trim();
+        return candidate ? candidate.replace(/\/+$/, '') : '';
+      };
+
+      const backendBase = resolveBackendBase();
 
         const formatDate = (value) => {
           if (!value) return '—';

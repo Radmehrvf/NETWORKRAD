@@ -8,7 +8,13 @@ console.log("Welcome to RadiLinks Portfolio!");
 const MOBILE_NAV_MEDIA = window.matchMedia('(max-width: 768px)');
 const NAV_FOCUSABLE_SELECTOR = 'a[href],button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
 let releaseNavFocusTrap = null;
-const BACKEND_BASE_URL = "";
+const getBackendBaseUrl = () => {
+  const metaBase = document.querySelector('meta[name="backend-base-url"]')?.getAttribute('content');
+  const globalBase = window.RADILINKS_BACKEND_BASE;
+  const candidate = (metaBase || globalBase || '').trim();
+  return candidate ? candidate.replace(/\/+$/, '') : '';
+};
+const BACKEND_BASE_URL = getBackendBaseUrl();
 const buildBackendUrl = (path = '') => `${BACKEND_BASE_URL}${path}`;
 
 function toggleNavFocusTrap(container, shouldTrap) {
@@ -1066,6 +1072,11 @@ function initPageSwitchToggle() {
         }
       });
       if (!response.ok) {
+        hideSwitch();
+        return;
+      }
+      const data = await response.json().catch(() => null);
+      if (!data?.user) {
         hideSwitch();
         return;
       }
