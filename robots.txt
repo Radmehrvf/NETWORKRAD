@@ -1,0 +1,4 @@
+# Allow all crawlers and explicitly permit favicon assets
+User-agent: *
+Allow: /assets/favicon/
+Disallow:
