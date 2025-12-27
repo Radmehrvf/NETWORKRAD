@@ -15,6 +15,11 @@ const createAuthRoutes = (deps) => {
   } = deps;
 
   const router = express.Router();
+  const persistSession = (req) =>
+    new Promise((resolve, reject) => {
+      if (!req.session) return resolve();
+      req.session.save((err) => (err ? reject(err) : resolve()));
+    });
 
   // Signup route
   router.post('/signup', async (req, res, next) => {
@@ -49,6 +54,7 @@ const createAuthRoutes = (deps) => {
       req.session.user = buildSessionUser(profile);
       req.session.tokens = null;
 
+      await persistSession(req);
       return sendAuthSuccess(req, res, 201);
     } catch (error) {
       console.error('Signup error:', error);
@@ -79,6 +85,7 @@ const createAuthRoutes = (deps) => {
       req.session.user = buildSessionUser(profile);
       req.session.tokens = null;
 
+      await persistSession(req);
       return sendAuthSuccess(req, res);
     } catch (error) {
       console.error('Login error:', error);
@@ -111,7 +118,8 @@ const createAuthRoutes = (deps) => {
         
         req.session.user = buildSessionUser(profileRecord);
         req.session.tokens = req.user.tokens;
-        
+
+        await persistSession(req);
         return sendAuthSuccess(req, res);
       } catch (error) {
         console.error('Google callback error:', error);

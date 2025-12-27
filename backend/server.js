@@ -62,6 +62,25 @@ const resolveBoolean = (value) => {
   return undefined;
 };
 
+const deriveCookieDomainFromHost = (hostname) => {
+  if (!hostname || hostname === 'localhost') return undefined;
+  if (/^\d{1,3}(\.\d{1,3}){3}$/.test(hostname)) return undefined;
+  const parts = hostname.split('.').filter(Boolean);
+  if (parts.length < 2) return undefined;
+  const rootDomain = parts.slice(-2).join('.');
+  return `.${rootDomain}`;
+};
+
+const resolveCookieDomain = (baseUrl) => {
+  if (!baseUrl) return undefined;
+  try {
+    const { hostname } = new URL(baseUrl);
+    return deriveCookieDomainFromHost(hostname);
+  } catch (_error) {
+    return undefined;
+  }
+};
+
 const app = express();
 if (NODE_ENV === 'production') {
   app.set('trust proxy', 1);
@@ -104,9 +123,18 @@ app.use(
     nodeEnv: NODE_ENV,
     sameSite: SESSION_SAMESITE,
     secure: resolveBoolean(SESSION_SECURE),
-    cookieDomain: SESSION_DOMAIN
+    cookieDomain: SESSION_DOMAIN || resolveCookieDomain(resolvedBaseUrl)
   })
 );
+app.use((req, _res, next) => {
+  if (req.session && !req.session.cookie.domain) {
+    const derivedDomain = deriveCookieDomainFromHost(req.hostname);
+    if (derivedDomain) {
+      req.session.cookie.domain = derivedDomain;
+    }
+  }
+  return next();
+});
 app.use(passport.initialize());
 app.use(passport.session());
 
