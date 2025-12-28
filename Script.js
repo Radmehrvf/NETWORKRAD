@@ -16,6 +16,29 @@ const getBackendBaseUrl = () => {
 };
 const BACKEND_BASE_URL = getBackendBaseUrl();
 const buildBackendUrl = (path = '') => `${BACKEND_BASE_URL}${path}`;
+let sessionUserCache = null;
+let sessionFetchInFlight = null;
+
+// Reusable session fetcher so multiple features (CTA, page switch) share the same call
+async function fetchSessionUser() {
+  if (sessionUserCache) return sessionUserCache;
+  if (sessionFetchInFlight) return sessionFetchInFlight;
+  sessionFetchInFlight = fetch(buildBackendUrl('/api/me'), {
+    credentials: 'include',
+    headers: { Accept: 'application/json' }
+  })
+    .then(async (res) => {
+      if (!res.ok) return null;
+      const data = await res.json().catch(() => null);
+      sessionUserCache = data?.user || null;
+      return sessionUserCache;
+    })
+    .catch(() => null)
+    .finally(() => {
+      sessionFetchInFlight = null;
+    });
+  return sessionFetchInFlight;
+}
 
 function toggleNavFocusTrap(container, shouldTrap) {
   if (!container) return;
@@ -91,6 +114,51 @@ if (typeof MOBILE_NAV_MEDIA.addEventListener === 'function') {
   MOBILE_NAV_MEDIA.addListener(handleMobileNavMediaChange);
 }
 
+const isOnDashboardPage = () => {
+  const normalizedPath = window.location.pathname.replace(/\/+$/, '') || '/';
+  return normalizedPath === '/dashboard' || normalizedPath === '/dashboard.html';
+};
+
+// Swap the nav CTA between signup, dashboard, and home depending on session and page
+function updateNavAuthCta(sessionUser) {
+  const cta = document.querySelector('.nav-cta.nav-signup');
+  if (!cta) return;
+
+  const label = cta.querySelector('span');
+  const subtext = cta.querySelector('.nav-subtext');
+  const onDashboard = isOnDashboardPage();
+  const signedIn = !!sessionUser;
+
+  if (signedIn) {
+    const target = onDashboard ? '/' : '/dashboard';
+    if (label) label.textContent = onDashboard ? 'Home' : 'Dashboard';
+    if (subtext) subtext.textContent = onDashboard ? 'Back to portfolio' : 'Go to your workspace';
+    cta.href = buildBackendUrl(target);
+    cta.dataset.authState = 'signed-in';
+    cta.onclick = (event) => {
+      event.preventDefault();
+      document.body.classList.add('page-switching');
+      setTimeout(() => {
+        window.location.href = buildBackendUrl(target);
+      }, 150);
+    };
+  } else {
+    if (label) label.textContent = 'Create an Account';
+    if (subtext) subtext.textContent = 'or Log In';
+    cta.href = buildBackendUrl('/signup.html');
+    cta.dataset.authState = 'signed-out';
+    cta.onclick = null;
+  }
+}
+
+function initAuthAwareNavCta() {
+  // Default state before session check resolves
+  updateNavAuthCta(null);
+  fetchSessionUser()
+    .then((user) => updateNavAuthCta(user))
+    .catch(() => updateNavAuthCta(null));
+}
+
 // ================================
 // SINGLE UNIFIED INITIALIZATION
 // ================================
@@ -100,6 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize core features
   initHeader();
   initImprovedNavigation();
+  initAuthAwareNavCta();
   initPageSwitchToggle();
   initMainInterface();
   initAuthAccessSection();
@@ -1065,24 +1134,16 @@ function initPageSwitchToggle() {
 
   const verifySession = async () => {
     try {
-      const response = await fetch(buildBackendUrl('/api/me'), {
-        credentials: 'include',
-        headers: {
-          Accept: 'application/json'
-        }
-      });
-      if (!response.ok) {
-        hideSwitch();
-        return;
-      }
-      const data = await response.json().catch(() => null);
-      if (!data?.user) {
+      const user = await fetchSessionUser();
+      updateNavAuthCta(user);
+      if (!user) {
         hideSwitch();
         return;
       }
       showSwitch();
     } catch (error) {
       console.warn('Page switch unavailable:', error.message);
+      updateNavAuthCta(null);
       hideSwitch();
     }
   };
