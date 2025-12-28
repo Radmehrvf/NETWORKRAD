@@ -1,4 +1,4 @@
-// ================================
+﻿// ================================
 // RADILINKS OPTIMIZED SCRIPT
 // All duplicates removed, proper lazy loading
 // ================================
@@ -346,7 +346,7 @@ function initHeader() {
 // ================================
 function setupIntersectionObserver() {
   if (!('IntersectionObserver' in window)) {
-    console.warn('⚠️ Intersection Observer not supported');
+    console.warn('âš ï¸ Intersection Observer not supported');
     return;
   }
 
@@ -394,7 +394,7 @@ function initBusinessCounters() {
   if (counters.length === 0) return;
 
   countersInitialized = true;
-  console.log('📊 Animating business counters');
+  console.log('ðŸ“Š Animating business counters');
 
   counters.forEach(counter => {
     const target = +counter.getAttribute('data-target');
@@ -451,7 +451,7 @@ function setupLazyGameLoading() {
   if (networkRevealBtn) {
     networkRevealBtn.addEventListener('click', () => {
       if (!networkBuilderLoaded) {
-        console.log("🎮 Loading Network Builder...");
+        console.log("ðŸŽ® Loading Network Builder...");
         
         const loadingIndicator = networkRevealBtn.querySelector('.loading-indicator');
         if (loadingIndicator) loadingIndicator.style.display = 'inline';
@@ -470,7 +470,7 @@ function setupLazyGameLoading() {
   if (mindspaceRevealBtn) {
     mindspaceRevealBtn.addEventListener('click', () => {
       if (!mindspaceLoaded) {
-        console.log("🌌 Loading Mindspace Explorer...");
+        console.log("ðŸŒŒ Loading Mindspace Explorer...");
         
         const loadingIndicator = mindspaceRevealBtn.querySelector('.loading-indicator');
         if (loadingIndicator) loadingIndicator.style.display = 'inline';
@@ -489,7 +489,7 @@ function setupLazyGameLoading() {
   if (radbotBtn) {
     radbotBtn.addEventListener('click', () => {
       if (!radbotLoaded) {
-        console.log("🤖 Loading RadBot Quiz...");
+        console.log("ðŸ¤– Loading RadBot Quiz...");
         initRadBotQuiz();
         radbotLoaded = true;
       }
@@ -661,13 +661,13 @@ function initMainInterface() {
       .then((res) => res.json())
       .then((data) => {
         removeThinking();
-        const aiReply = data.reply || "🤖 (No response from AI)";
+        const aiReply = data.reply || "ðŸ¤– (No response from AI)";
         addMessage(aiReply, "bot");
       })
       .catch((err) => {
         removeThinking();
         console.error("AI connection error:", err);
-        addMessage("⚠️ AI connection failed. Please try again later.", "bot");
+        addMessage("âš ï¸ AI connection failed. Please try again later.", "bot");
       });
   }
 
@@ -713,7 +713,7 @@ function initMainInterface() {
     };
     
     console.log('Business Analysis Request:', formData);
-    alert('✅ Thank you! We\'ll analyze your workflow and get back to you within 24 hours.');
+    alert('âœ… Thank you! We\'ll analyze your workflow and get back to you within 24 hours.');
     
     businessForm.reset();
     aiFormSection?.classList.remove('visible');
@@ -771,7 +771,7 @@ function initMainInterface() {
     };
     
     console.log('Project Inquiry:', formData);
-    alert('✅ Thank you for your inquiry! I\'ll review your project details and get back to you within 24 hours.');
+    alert('âœ… Thank you for your inquiry! I\'ll review your project details and get back to you within 24 hours.');
     
     hireForm.reset();
     hireSection?.classList.remove('visible');
@@ -794,12 +794,12 @@ function initMainInterface() {
         target.classList.add("expanded");
         btn.classList.add("active");
         const arrow = btn.querySelector(".arrow");
-        if (arrow) arrow.textContent = "▼";
+        if (arrow) arrow.textContent = "â–¼";
       } else if (target) {
         target.classList.remove("expanded");
         btn.classList.remove("active");
         const arrow = btn.querySelector(".arrow");
-        if (arrow) arrow.textContent = "▶";
+        if (arrow) arrow.textContent = "â–¶";
       }
     });
   });
@@ -871,7 +871,7 @@ function initNetworkBuilder() {
   function checkCompleteNetwork() {
     const activeCount = nodes.filter(n => n.active).length;
     if (activeCount === MAX_NODES && connections.length >= MAX_NODES - 1) {
-      messageBox.textContent = "You've built a 7-node network — welcome to the Network!";
+      messageBox.textContent = "You've built a 7-node network â€” welcome to the Network!";
       messageBox.style.color = "#00e0ff";
     }
   }
@@ -1002,80 +1002,173 @@ function initRadBotQuiz() {
   const logo = document.querySelector('.logo');
   if (!btn || !quiz) return;
 
-  const quizData = [
-    { question: "Which technology powers the core of artificial intelligence?", options: ["Blockchain", "Machine Learning", "Quantum Physics", "3D Printing"], correct: "Machine Learning" },
-    { question: "What does HTML stand for?", options: ["HyperText Markup Language", "HighText Machine Language", "Hyper Transfer Markup Logic", "Home Tool Markup Language"], correct: "HyperText Markup Language" },
-    { question: "Which of these is a programming language used for web development?", options: ["Python", "C++", "JavaScript", "Rust"], correct: "JavaScript" },
-    { question: "What is the purpose of a CSS file?", options: ["Store data", "Style web pages", "Manage databases", "Secure passwords"], correct: "Style web pages" },
-    { question: "Which one represents the luxury aesthetic of RadiLinks web?", options: ["Neon Blue & Silver", "Bright Red & Yellow", "Black & Green Matrix", "Brown & Beige"], correct: "Neon Blue & Silver" }
-  ];
+  // Category-based RadQuiz bank
+  const quizCategories = {
+    technology: [
+      { question: 'Which language runs in a web browser?', options: ['Python', 'Java', 'C++', 'JavaScript'], correct: 'D' },
+      { question: 'What does CPU stand for?', options: ['Central Processing Unit', 'Control Process Unit', 'Compute Power Unit', 'Central Performance Utility'], correct: 'A' },
+      { question: 'Who created the React library?', options: ['Google', 'Facebook', 'Microsoft', 'Amazon'], correct: 'B' },
+      { question: 'Binary search on a sorted array has time complexity…', options: ['O(n)', 'O(log n)', 'O(n log n)', 'O(1)'], correct: 'B' },
+      { question: 'Which of these is a NoSQL database?', options: ['PostgreSQL', 'MySQL', 'MongoDB', 'SQLite'], correct: 'C' },
+      { question: 'HTML is primarily used to…', options: ['Style pages', 'Structure content', 'Manage servers', 'Secure passwords'], correct: 'B' }
+    ],
+    cars: [
+      { question: 'What does ABS stand for?', options: ['Automatic Braking System', 'Anti-lock Braking System', 'Advanced Brake Safety', 'Auto Balance System'], correct: 'B' },
+      { question: 'Who makes the Mustang?', options: ['Ford', 'Chevrolet', 'Dodge', 'Toyota'], correct: 'A' },
+      { question: 'A hybrid typically uses…', options: ['Diesel only', 'Electric only', 'Gasoline + Electric', 'Hydrogen only'], correct: 'C' },
+      { question: 'RPM measures…', options: ['Road Position Meter', 'Rotations Per Minute', 'Relative Power Module', 'Radial Pressure Metric'], correct: 'B' },
+      { question: 'Lamborghini is from…', options: ['Germany', 'Italy', 'France', 'USA'], correct: 'B' },
+      { question: 'A turbocharger is for…', options: ['Cooling brakes', 'Increasing air intake for power', 'Saving fuel only', 'Reducing tire wear'], correct: 'B' }
+    ],
+    general: [
+      { question: 'Capital of France?', options: ['Berlin', 'Madrid', 'Paris', 'Rome'], correct: 'C' },
+      { question: 'The Red Planet is…', options: ['Venus', 'Mars', 'Jupiter', 'Mercury'], correct: 'B' },
+      { question: 'Who wrote "1984"?', options: ['George Orwell', 'Mark Twain', 'J.K. Rowling', 'Ernest Hemingway'], correct: 'A' },
+      { question: 'How many continents?', options: ['5', '6', '7', '8'], correct: 'C' },
+      { question: 'H2O is…', options: ['Salt', 'Water', 'Hydrogen', 'Oxygen'], correct: 'B' },
+      { question: 'Largest ocean?', options: ['Atlantic', 'Pacific', 'Indian', 'Arctic'], correct: 'B' }
+    ],
+    english: [
+      { question: 'Correct spelling:', options: ['Recieve', 'Receive', 'Recive', 'Receeve'], correct: 'B' },
+      { question: 'Synonym for "happy":', options: ['Morose', 'Elated', 'Irate', 'Weary'], correct: 'B' },
+      { question: 'Identify the adverb: "She sang beautifully."', options: ['She', 'Sang', 'Beautifully', 'None'], correct: 'C' },
+      { question: 'Passive voice:', options: ['The chef cooked the meal.', 'The meal was cooked by the chef.', 'The chef will cook the meal.', 'The chef is cooking the meal.'], correct: 'B' },
+      { question: 'Correct past tense: "They ___ to the concert."', options: ['go', 'goes', 'went', 'gone'], correct: 'C' },
+      { question: 'Which is a conjunction?', options: ['Quickly', 'Because', 'Joyful', 'Sing'], correct: 'B' }
+    ]
+  };
 
-  let index = 0, score = 0, active = false;
+  const categoryAliases = {
+    '1': 'technology',
+    tech: 'technology',
+    technology: 'technology',
+    '2': 'cars',
+    car: 'cars',
+    cars: 'cars',
+    '3': 'general',
+    general: 'general',
+    knowledge: 'general',
+    '4': 'english',
+    eng: 'english',
+    english: 'english'
+  };
 
-  btn.addEventListener('click', () => {
-    active = !active;
-    quiz.style.display = active ? 'block' : 'none';
-    if (active) { index = 0; score = 0; showQ(); } else fElem.textContent = "";
-  });
+  let index = 0;
+  let score = 0;
+  let active = false;
+  let currentCategory = null;
+  let currentQuestions = [];
 
-  function showQ() {
-    const q = quizData[index];
-    qElem.textContent = q.question;
+  const pickQuestions = (key, count = 5) => {
+    const pool = [...(quizCategories[key] || [])];
+    const picked = [];
+    while (picked.length < count && pool.length) {
+      const idx = Math.floor(Math.random() * pool.length);
+      picked.push(pool.splice(idx, 1)[0]);
+    }
+    return picked;
+  };
+
+  const requestCategory = () => {
+    // Ask the player what they are good at; validate until a known choice is made
+    while (true) {
+      const input = prompt(
+        'What are you good at?\n1) Technology\n2) Cars\n3) General Knowledge\n4) English Language\nType a number or name:'
+      );
+      if (input === null) {
+        alert('Choose a category to start RadQuiz.');
+        return null;
+      }
+      const normalized = input.trim().toLowerCase();
+      const key = categoryAliases[normalized];
+      if (key && quizCategories[key]) {
+        return key;
+      }
+      alert('Invalid choice. Enter 1-4 or the category name (Tech, Cars, General, English).');
+    }
+  };
+
+  const showQ = () => {
+    const q = currentQuestions[index];
+    if (!q) return;
+    qElem.textContent = `${currentCategory ? currentCategory.toUpperCase() : ''} Q${index + 1}: ${q.question}`;
     oElem.innerHTML = "";
     fElem.textContent = "";
-    q.options.forEach(opt => {
+    const labels = ['A', 'B', 'C', 'D'];
+    q.options.forEach((opt, idx) => {
       const b = document.createElement('button');
-      b.textContent = opt;
+      b.textContent = `${labels[idx]}) ${opt}`;
       b.classList.add('quiz-option-btn');
-      b.onclick = () => selectA(opt);
+      b.onclick = () => selectA(labels[idx]);
       oElem.appendChild(b);
     });
-  }
+  };
 
-  function selectA(selected) {
-    const correct = quizData[index].correct;
+  const selectA = (selected) => {
+    const correct = currentQuestions[index].correct;
     const right = selected === correct;
-    fElem.classList.add('show');
+    fElem.classList.add("show");
     if (right) {
       score++;
-      fElem.textContent = "✅ Correct!";
+      fElem.textContent = "Correct!";
       fElem.style.color = "#00ffb3";
       powerUpLogo();
     } else {
-      fElem.textContent = "❌ Not quite. Try the next one!";
+      fElem.textContent = `Not quite. Correct answer: ${correct}.`;
       fElem.style.color = "#ff6b6b";
     }
     setTimeout(() => {
-      fElem.classList.remove('show');
+      fElem.classList.remove("show");
       index++;
-      if (index < quizData.length) showQ();
+      if (index < currentQuestions.length) showQ();
       else endQuiz();
     }, 1500);
-  }
+  };
 
-  function endQuiz() {
+  const endQuiz = () => {
     oElem.innerHTML = "";
-    qElem.textContent = "Quiz Complete!";
-    const total = quizData.length;
-    const scorePercent = (score / total) * 100;
-    if (scorePercent >= 70) {
-      fElem.textContent = "🎉 You outsmarted RadBot! Stellar performance!";
-      fElem.style.color = "#00ffb3";
-      powerUpLogo(true);
-    } else {
-      fElem.textContent = "💡 Not bad! Try again to reach perfection!";
-      fElem.style.color = "#00c3ff";
-    }
-  }
+    const total = currentQuestions.length;
+    const incorrect = total - score;
+    qElem.textContent = `Quiz Complete - ${currentCategory ? currentCategory.toUpperCase() : ''}`;
+    fElem.textContent = `Score: ${score}/${total} | Correct: ${score} | Incorrect: ${incorrect}`;
+    fElem.style.color = "#00c3ff";
+    powerUpLogo(true);
+    active = false;
+  };
 
-  function powerUpLogo(final = false) {
+  const powerUpLogo = (final = false) => {
     if (!logo) return;
     logo.style.transition = "all 0.6s ease";
     logo.style.filter = "drop-shadow(0 0 15px rgba(0,195,255,0.9)) brightness(1.3)";
     setTimeout(() => logo.style.filter = "none", final ? 2500 : 1200);
-  }
+  };
+
+  btn.addEventListener('click', () => {
+    if (active) {
+      active = false;
+      quiz.style.display = 'none';
+      fElem.textContent = "";
+      return;
+    }
+
+    const selectedCategory = requestCategory();
+    if (!selectedCategory) return;
+
+    currentCategory = selectedCategory;
+    currentQuestions = pickQuestions(selectedCategory, 5);
+    if (!currentQuestions.length) {
+      alert('No questions available for this category right now.');
+      return;
+    }
+    index = 0;
+    score = 0;
+    active = true;
+    quiz.style.display = 'block';
+    showQ();
+  });
 }
 
+function initPageSwitchToggle() {
 function initPageSwitchToggle() {
   const switchWrapper = document.getElementById('pageSwitch');
   const homeButton = document.getElementById('pageSwitchHome');
@@ -1404,7 +1497,7 @@ function initSupportUnlockEasterEgg() {
       unlocked = true;
       logo.classList.add('logo-unlocked');
       logo.style.animation = 'logoGlowMagic 2.5s ease-in-out infinite alternate';
-      console.log('🍀 Easter egg unlocked!');
+      console.log('ðŸ€ Easter egg unlocked!');
     }
   });
 }
@@ -1545,4 +1638,10 @@ function initImprovedNavigation() {
 }
 
 // Add to initialization
+
+
+
+
+
+
 
