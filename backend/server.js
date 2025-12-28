@@ -1,7 +1,9 @@
 const path = require('path');
 const express = require('express');
+const session = require('express-session');
+const connectRedis = require('connect-redis');
+const { createClient } = require('redis');
 const passport = require('passport');
-const bcrypt = require('bcrypt');
 const dotenv = require('dotenv');
 
 const createSession = require('./config/sessionConfig');
@@ -41,14 +43,25 @@ const {
   SESSION_SAMESITE,
   SESSION_DOMAIN,
   SESSION_SECURE,
+  REDIS_URL,
+  REDIS_HOST,
+  REDIS_PORT,
   CORS_ORIGIN
 } = process.env;
 
-['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'SESSION_SECRET'].forEach((key) => {
+['GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET'].forEach((key) => {
   if (!process.env[key]) {
     throw new Error(`Missing required environment variable ${key}`);
   }
 });
+
+const resolvedSessionSecret =
+  typeof SESSION_SECRET === 'string' ? SESSION_SECRET.trim() : '';
+
+if (!resolvedSessionSecret || resolvedSessionSecret.length < 32) {
+  console.error('SESSION_SECRET is missing or too weak');
+  process.exit(1);
+}
 
 const resolvedBaseUrl = BASE_URL || `http://localhost:${PORT}`;
 const redirectUri =
@@ -86,8 +99,34 @@ if (NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const RedisStore =
+  connectRedis?.default ||
+  (typeof connectRedis === 'function' ? connectRedis(session) : connectRedis);
+
+const resolvedRedisPort = Number(REDIS_PORT) || 6379;
+const redisClient = createClient(
+  REDIS_URL
+    ? { url: REDIS_URL }
+    : {
+        socket: {
+          host: REDIS_HOST || '127.0.0.1',
+          port: resolvedRedisPort
+        }
+      }
+);
+
+redisClient.on('error', (err) => {
+  console.error('Redis client error:', err);
+});
+
+redisClient.connect().catch((err) => {
+  console.error('Redis connection failed:', err);
+});
+
+const redisStore = new RedisStore({ client: redisClient });
+
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 const allowedOrigins = (CORS_ORIGIN || '')
   .split(',')
@@ -119,7 +158,8 @@ if (allowedOrigins.length) {
 
 app.use(
   createSession({
-    secret: SESSION_SECRET,
+    store: redisStore,
+    secret: resolvedSessionSecret,
     nodeEnv: NODE_ENV,
     sameSite: SESSION_SAMESITE,
     secure: resolveBoolean(SESSION_SECURE),
@@ -185,18 +225,11 @@ const userRoutes = createUserRoutes({
 app.use(authRoutes);
 app.use(userRoutes);
 
-app.use((err, req, res, _next) => {
-  console.error('OAuth error:', err);
-
-  if (req.headers.accept?.includes('application/json')) {
-    return res.status(500).json({ error: 'Authentication error', details: err.message });
+app.use((req, res, next) => {
+  if (wantsJSON(req)) {
+    return res.status(404).json({ error: 'Page not found' });
   }
-
-  return res
-    .status(500)
-    .send(
-      `<h1>Something went wrong</h1><p>${err.message}</p><a href="/">Return to login</a>`
-    );
+  return next();
 });
 
 app.use((req, res) => {
@@ -204,6 +237,20 @@ app.use((req, res) => {
     return res.redirect('/dashboard');
   }
   return res.sendFile(path.join(staticDir, 'index.html'));
+});
+
+app.use((err, req, res, _next) => {
+  console.error('Unhandled error:', err);
+
+  if (wantsJSON(req)) {
+    return res.status(500).json({ error: 'Something went wrong!' });
+  }
+
+  return res
+    .status(500)
+    .send(
+      '<h1>Something went wrong!</h1><p>Please try again later.</p><a href="/">Return to login</a>'
+    );
 });
 
 app.listen(PORT, () => {

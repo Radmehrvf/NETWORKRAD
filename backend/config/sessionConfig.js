@@ -8,7 +8,7 @@ const normalizeSameSite = (value, fallback) => {
   return fallback;
 };
 
-const createSession = ({ secret, nodeEnv, sameSite, secure, cookieDomain } = {}) => {
+const createSession = ({ secret, nodeEnv, sameSite, secure, cookieDomain, store } = {}) => {
   const isProduction = nodeEnv === 'production';
   const resolvedSameSite = normalizeSameSite(sameSite, 'lax');
   let resolvedSecure = typeof secure === 'boolean' ? secure : isProduction;
@@ -34,7 +34,8 @@ const createSession = ({ secret, nodeEnv, sameSite, secure, cookieDomain } = {})
     resave: false,
     saveUninitialized: false,
     proxy: isProduction,
-    cookie
+    cookie,
+    store
   });
 };
 
