@@ -994,11 +994,11 @@ function initMindspaceExplorer() {
 // RADBOT QUIZ GAME
 // ================================
 function initRadBotQuiz() {
-  const btn = document.getElementById('radbot-btn');
-  const quiz = document.getElementById('radbot-quiz');
-  const qElem = document.getElementById('radbot-question');
-  const oElem = document.getElementById('radbot-options');
-  const fElem = document.getElementById('radbot-feedback');
+  const btn = document.getElementById('"'"'radbot-btn'"'"');
+  const quiz = document.getElementById('"'"'radbot-quiz'"'"');
+  const qElem = document.getElementById('"'"'radbot-question'"'"');
+  const oElem = document.getElementById('"'"'radbot-options'"'"');
+  const fElem = document.getElementById('"'"'radbot-feedback'"'"');
   const logo = document.querySelector('.logo');
   if (!btn || !quiz) return;
 
@@ -1107,18 +1107,18 @@ function initRadBotQuiz() {
   const selectA = (selected) => {
     const correct = currentQuestions[index].correct;
     const right = selected === correct;
-    fElem.classList.add("show");
+    fElem.classList.add('show');
     if (right) {
       score++;
-      fElem.textContent = "Correct!";
+      fElem.textContent = "✅ Correct!";
       fElem.style.color = "#00ffb3";
       powerUpLogo();
     } else {
-      fElem.textContent = `Not quite. Correct answer: ${correct}.`;
+      fElem.textContent = `❌ Not quite. Correct answer: ${correct}.`;
       fElem.style.color = "#ff6b6b";
     }
     setTimeout(() => {
-      fElem.classList.remove("show");
+      fElem.classList.remove('show');
       index++;
       if (index < currentQuestions.length) showQ();
       else endQuiz();
@@ -1638,10 +1638,5 @@ function initImprovedNavigation() {
 }
 
 // Add to initialization
-
-
-
-
-
 
 
