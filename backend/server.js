@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 const session = require('express-session');
-const connectRedis = require('connect-redis');
+const { RedisStore } = require('connect-redis');
 const { createClient } = require('redis');
 const passport = require('passport');
 const dotenv = require('dotenv');
@@ -99,7 +99,6 @@ if (NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
 
-const RedisStore = connectRedis(session);
 
 const resolvedRedisPort = Number(REDIS_PORT) || 6379;
 const redisClient = createClient(
