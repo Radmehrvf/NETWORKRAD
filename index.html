@@ -630,16 +630,31 @@
 </section>
 
 <!-- RADBOT QUIZ (Lazy Loaded Game) -->
-<section id="radbot-section" class="section-card creative-card lazy-section">
-  <h2>RadBot Quiz Game</h2>
-  <p>Test your knowledge with the interactive quiz!</p>
-  <div class="button-wrapper">
-    <button id="radbot-btn" class="btn-primary">Play RadBot Quiz</button>
+<section id="radbot-section" class="section-card creative-card lazy-section quiz-section-card" aria-label="RadBot Quiz Game">
+  <h2>Choose Your Challenge</h2>
+  <p>Pick a category to start the RadBot Quiz.</p>
+  <div class="category-grid" role="group" aria-label="Quiz categories">
+    <button class="category-btn" data-category="technology" aria-label="Technology quiz">
+      <span class="btn-icon" aria-hidden="true">💻</span>
+      <span class="btn-text">Technology</span>
+    </button>
+    <button class="category-btn" data-category="cars" aria-label="Cars quiz">
+      <span class="btn-icon" aria-hidden="true">🚗</span>
+      <span class="btn-text">Cars</span>
+    </button>
+    <button class="category-btn" data-category="general" aria-label="General Knowledge quiz">
+      <span class="btn-icon" aria-hidden="true">🌍</span>
+      <span class="btn-text">General Knowledge</span>
+    </button>
+    <button class="category-btn" data-category="english" aria-label="English Language quiz">
+      <span class="btn-icon" aria-hidden="true">📚</span>
+      <span class="btn-text">English Language</span>
+    </button>
   </div>
-  <div id="radbot-quiz" style="display: none;">
-    <div id="radbot-question" class="quiz-question"></div>
-    <div id="radbot-options" class="quiz-options"></div>
-    <div id="radbot-feedback" class="quiz-feedback"></div>
+  <div id="radbot-quiz" class="quiz-panel" hidden>
+    <div id="radbot-question" class="quiz-question" aria-live="polite"></div>
+    <div id="radbot-options" class="quiz-options" role="group" aria-label="Quiz answers"></div>
+    <div id="radbot-feedback" class="quiz-feedback" aria-live="polite"></div>
   </div>
 </section>
 

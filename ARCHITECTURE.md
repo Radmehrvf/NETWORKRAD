@@ -32,6 +32,7 @@ Why this architecture:
 - Static HTML is fast and simple to deploy.
 - Nginx serves static assets efficiently and reverse-proxies dynamic requests to Node.
 - Session cookies allow a classic login experience without storing tokens in the browser.
+- Sessions are persisted in Redis for shared state across instances.
 
 User journey:
 1) Visit landing page `index.html`
@@ -100,10 +101,13 @@ ASCII diagram:
    |-- proxies /login, /signup, /auth/*, /dashboard, /api/* to:
    v
 [Node.js / Express @ :5001]
+   |-- session store
+   |     v
+   |   [Redis @ :6379]
    |
    |-- MySQL queries
-   v
-[MySQL @ :3306]
+         v
+       [MySQL @ :3306]
 ```
 
 Mermaid diagram:
@@ -113,6 +117,7 @@ flowchart LR
   N -->|static files| S[Static files: HTML/CSS/JS/assets]
   N -->|proxy auth/api| A[Node.js:5001]
   A -->|SQL| D[(MySQL:3306)]
+  A -->|sessions| R[(Redis:6379)]
 ```
 
 Why Nginx:
@@ -131,6 +136,7 @@ User clicks "Log In"
   -> Nginx (443) proxies to Node (5001)
   -> authRoutes.js verifies credentials via MySQL
   -> req.session.user set, session saved
+  -> Session persisted in Redis
   -> Set-Cookie: networkrad.sid=...
   -> 302 to /dashboard
   -> Browser requests /dashboard (cookie included)
@@ -146,10 +152,12 @@ sequenceDiagram
   participant N as Nginx
   participant A as Node/Express
   participant DB as MySQL
+  participant R as Redis
   U->>N: POST /login
   N->>A: proxy /login
   A->>DB: SELECT user by email
   DB-->>A: user record
+  A->>R: SET session
   A-->>U: Set-Cookie networkrad.sid; redirect /dashboard
   U->>N: GET /dashboard (cookie)
   N->>A: proxy /dashboard
@@ -284,7 +292,9 @@ curl -i -X POST https://radilinks.com/login \
 Responsibilities:
 - Loads `.env` and config.
 - Sets `trust proxy` in production.
-- Initializes sessions, Passport, and routes.
+- Initializes Redis-backed sessions, Passport, and routes.
+- Sets request body size limits for JSON and URL-encoded payloads.
+- Registers centralized 404/500 error handling.
 - Serves static files.
 
 Snippet:
@@ -293,8 +303,16 @@ if (NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
 
-app.use(createSession({ secret: SESSION_SECRET, nodeEnv: NODE_ENV, sameSite: SESSION_SAMESITE,
-  secure: resolveBoolean(SESSION_SECURE), cookieDomain: SESSION_DOMAIN || resolveCookieDomain(resolvedBaseUrl) }));
+app.use(
+  createSession({
+    store: redisStore,
+    secret: SESSION_SECRET,
+    nodeEnv: NODE_ENV,
+    sameSite: SESSION_SAMESITE,
+    secure: resolveBoolean(SESSION_SECURE),
+    cookieDomain: SESSION_DOMAIN || resolveCookieDomain(resolvedBaseUrl)
+  })
+);
 ```
 
 ### config/sessionConfig.js
@@ -307,6 +325,7 @@ const cookie = {
   maxAge: 1000 * 60 * 60 * 24
 };
 ```
+Note: a Redis store is injected from `server.js` for shared session storage.
 
 Why it matters:
 - `Secure` ensures cookies are HTTPS-only.
@@ -338,6 +357,9 @@ SESSION_SECRET=...long secret...
 SESSION_DOMAIN=.radilinks.com
 SESSION_SAMESITE=lax
 SESSION_SECURE=true
+REDIS_URL=redis://127.0.0.1:6379
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
 GOOGLE_CLIENT_ID=...
 GOOGLE_CLIENT_SECRET=...
 GOOGLE_REDIRECT_URI=https://radilinks.com/auth/google/callback
@@ -347,6 +369,7 @@ DB_PASSWORD=...
 DB_NAME=radlinks_db
 DB_PORT=3306
 ```
+Use `REDIS_URL` when available; otherwise set `REDIS_HOST` and `REDIS_PORT`.
 
 ### .env.example
 Template for documenting required variables.
@@ -360,7 +383,7 @@ Important config for PM2:
   instances: 1
 }
 ```
-Note: MemoryStore is not safe for multi-instance cluster mode without a shared store.
+Note: Redis-backed sessions support multi-instance deployments.
 
 ### .gitignore
 Excludes `.env` and `node_modules` to protect secrets and avoid committing dependencies.
@@ -389,9 +412,10 @@ How it works:
 1) User logs in.
 2) Backend sets `req.session.user`.
 3) `express-session` creates a session ID.
-4) Cookie sent to browser: `networkrad.sid=...`
-5) Browser sends cookie on subsequent requests.
-6) Backend resolves session and populates `req.session.user`.
+4) Session data is stored in Redis.
+5) Cookie sent to browser: `networkrad.sid=...`
+6) Browser sends cookie on subsequent requests.
+7) Backend resolves session via Redis and populates `req.session.user`.
 
 Cookie details:
 ```
@@ -403,12 +427,14 @@ HttpOnly: true
 SameSite: Lax
 ```
 
-Why MemoryStore is limited:
-- Sessions are stored in process memory.
-- If the server restarts, sessions are lost.
-- If you run multiple instances, sessions do not share state.
+Why Redis store:
+- Sessions survive process restarts.
+- Multiple Node instances share the same session state.
+- Built-in TTL/eviction keeps the store bounded.
 
 ## Development Workflow
+
+Local backend dev uses `npm run dev` (nodemon) for auto-restart.
 
 Frontend changes:
 ```bash
@@ -440,6 +466,7 @@ pm2 restart networkrad-backend --update-env
 - Pull latest code from Git.
 - Install dependencies if needed (`npm install`).
 - Update `.env` manually on VPS (never commit secrets).
+- Ensure Redis is running and reachable.
 - Restart backend via PM2.
 - Reload Nginx if config changed.
 
@@ -459,19 +486,20 @@ Dashboard 401 errors:
 
 Current safeguards:
 - HTTPS enforced via Nginx and Lets Encrypt.
-- Session cookies use `Secure` and `HttpOnly`.
+- Session cookies use `Secure`, `HttpOnly`, and `SameSite`.
 - Passwords hashed via bcrypt.
 - SQL queries are parameterized.
+- JSON and URL-encoded body size limits are capped at 10MB.
+- Centralized 404/500 handling prevents accidental stack leaks.
 
 ## Performance Considerations
 
 - Static files served by Nginx (fast).
-- Single Node instance with MemoryStore (simple, not horizontally scalable).
-- MySQL connection pooling enabled.
+- Redis-backed sessions allow multiple Node instances to share state.
+- MySQL connection pooling enabled (mysql2).
 
 ## Future Enhancements
 
-- Use Redis for session storage.
 - Add rate limiting on `/login`.
 - Add email verification and password reset flow.
 - Add structured logging (Winston or Pino).

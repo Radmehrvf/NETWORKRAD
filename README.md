@@ -48,7 +48,9 @@
 |--------------------|------------------------------------------------------------------|
 | **Frontend**       | HTML5, CSS3, Vanilla JavaScript                                  |
 | **Styling**        | CSS Variables, Flexbox, Grid, Motion/transition effects          |
-| **Backend / Auth** | Node.js, Express, Passport (Google + email), session middleware  |
+| **Backend / Auth** | Node.js, Express, Passport (Google + email), Redis-backed sessions |
+| **Database**       | MySQL (mysql2 pool) |
+| **Session Store**  | Redis |
 | **AI & Integrations** | Cloudflare Workers, Claude AI (REST API)                     |
 | **Hosting**        | GitHub Pages (frontend) + self/hosted Node backend               |
 | **Assets**         | SVG icons, PNG logo, Google Fonts (Roboto)                      |
@@ -70,7 +72,7 @@ NETWORKRAD/
 +-- README.md             # Project documentation
 `
 
-Frontend assets now live at the repository root for GitHub Pages deployment, while the ackend/ folder houses the Express server used for authentication and profile APIs.
+Frontend assets now live at the repository root for GitHub Pages deployment, while the backend/ folder houses the Express server used for authentication and profile APIs.
 
 ---
 
@@ -98,33 +100,37 @@ AI Integration Specialist & Full-Stack Developer
 
 ## Installation & Setup
 
-`ash
+```bash
 git clone https://github.com/Radmehrvf/NETWORKRAD.git
 cd NETWORKRAD
-`
+```
 
 Serve the static frontend (for example, with Python) and run the backend if you need authentication routes:
 
-`ash
+```bash
 # Frontend preview
 python -m http.server 8080
 
 # Backend (inside backend/)
+cd backend
 npm install
 npm run dev
-`
+```
 
-Create a .env inside ackend/ containing OAuth credentials, session secret, and BASE_URL pointing to your environment.
+`npm run dev` uses nodemon to automatically restart the server during development.
 
----
+Create a `backend/.env` from `backend/.env.example` with your OAuth credentials, a strong `SESSION_SECRET` (32+ chars), database settings, and Redis settings (`REDIS_URL` or `REDIS_HOST` + `REDIS_PORT`).
+
+Redis must be installed and running on the server (default `127.0.0.1:6379`).
 
 ## Performance & Security
 
-- Uses etchpriority hints and media="print" CSS loading for better First Contentful Paint.
-- Passport-based auth with secure cookies and configurable session storage.
+- Uses fetchpriority hints and media="print" CSS loading for better First Contentful Paint.
+- Redis-backed sessions with secure cookie flags (`httpOnly`, `sameSite`, `secure`).
+- MySQL connection pooling via mysql2 for improved throughput.
+- Request body size limits set to 10MB for JSON and URL-encoded payloads.
+- Centralized 404/500 error handling for safer responses.
 - No invasive tracking; follows accessibility and SEO best practices.
-
----
 
 ## Future Enhancements
 

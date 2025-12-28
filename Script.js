@@ -484,17 +484,22 @@ function setupLazyGameLoading() {
     });
   }
 
-  // RadBot Quiz - Load ONLY on button click
-  const radbotBtn = document.getElementById('radbot-btn');
-  if (radbotBtn) {
-    radbotBtn.addEventListener('click', () => {
+  // RadBot Quiz - Load ONLY on category selection
+  const radbotGrid = document.querySelector('#radbot-section .category-grid');
+  if (radbotGrid) {
+    const handleRadbotGridClick = (event) => {
+      const button = event.target.closest('.category-btn');
+      if (!button) return;
       if (!radbotLoaded) {
-        console.log("ðŸ¤– Loading RadBot Quiz...");
-        initRadBotQuiz();
+        console.log("dY- Loading RadBot Quiz...");
+        initRadBotQuiz(button.dataset.category);
         radbotLoaded = true;
+        radbotGrid.removeEventListener('click', handleRadbotGridClick);
       }
-    }, { once: true });
+    };
+    radbotGrid.addEventListener('click', handleRadbotGridClick);
   }
+
 }
 
 // ================================
@@ -993,14 +998,14 @@ function initMindspaceExplorer() {
 // ================================
 // RADBOT QUIZ GAME
 // ================================
-function initRadBotQuiz() {
-  const btn = document.getElementById('radbot-btn');
+function initRadBotQuiz(initialCategory) {
   const quiz = document.getElementById('radbot-quiz');
   const qElem = document.getElementById('radbot-question');
   const oElem = document.getElementById('radbot-options');
   const fElem = document.getElementById('radbot-feedback');
+  const grid = document.querySelector('#radbot-section .category-grid');
   const logo = document.querySelector('.logo');
-  if (!btn || !quiz) return;
+  if (!quiz || !qElem || !oElem || !fElem || !grid) return;
 
   // Lightweight result graph UI (self-contained styles)
   const resultWrapper = document.createElement('div');
@@ -1093,24 +1098,15 @@ function initRadBotQuiz() {
     ]
   };
 
-  const categoryAliases = {
-    '1': 'technology',
-    tech: 'technology',
-    technology: 'technology',
-    '2': 'cars',
-    car: 'cars',
-    cars: 'cars',
-    '3': 'general',
-    general: 'general',
-    knowledge: 'general',
-    '4': 'english',
-    eng: 'english',
-    english: 'english'
+  const categoryLabels = {
+    technology: 'Technology',
+    cars: 'Cars',
+    general: 'General Knowledge',
+    english: 'English Language'
   };
 
   let index = 0;
   let score = 0;
-  let active = false;
   let currentCategory = null;
   let currentQuestions = [];
 
@@ -1124,34 +1120,22 @@ function initRadBotQuiz() {
     return picked;
   };
 
-  const requestCategory = () => {
-    // Ask the player what they are good at; validate until a known choice is made
-    while (true) {
-      const input = prompt(
-        'What are you good at?\n1) Technology\n2) Cars\n3) General Knowledge\n4) English Language\nType a number or name:'
-      );
-      if (input === null) {
-        alert('Choose a category to start RadQuiz.');
-        return null;
-      }
-      const normalized = input.trim().toLowerCase();
-      const key = categoryAliases[normalized];
-      if (key && quizCategories[key]) {
-        return key;
-      }
-      alert('Invalid choice. Enter 1-4 or the category name (Tech, Cars, General, English).');
-    }
+  const clearFeedback = () => {
+    fElem.textContent = '';
+    fElem.classList.remove('show');
   };
 
   const showQ = () => {
     const q = currentQuestions[index];
     if (!q) return;
-    qElem.textContent = `${currentCategory ? currentCategory.toUpperCase() : ''} Q${index + 1}: ${q.question}`;
-    oElem.innerHTML = "";
-    fElem.textContent = "";
+    const label = categoryLabels[currentCategory] || currentCategory || '';
+    qElem.textContent = `${label ? `${label} ` : ''}Q${index + 1}: ${q.question}`;
+    oElem.innerHTML = '';
+    clearFeedback();
     const labels = ['A', 'B', 'C', 'D'];
     q.options.forEach((opt, idx) => {
       const b = document.createElement('button');
+      b.type = 'button';
       b.textContent = `${labels[idx]}) ${opt}`;
       b.classList.add('quiz-option-btn');
       b.onclick = () => selectA(labels[idx]);
@@ -1160,20 +1144,22 @@ function initRadBotQuiz() {
   };
 
   const selectA = (selected) => {
-    const correct = currentQuestions[index].correct;
+    const current = currentQuestions[index];
+    if (!current) return;
+    const correct = current.correct;
     const right = selected === correct;
-    fElem.classList.add("show");
+    fElem.classList.add('show');
     if (right) {
       score++;
-      fElem.textContent = "Correct!";
-      fElem.style.color = "#00ffb3";
+      fElem.textContent = 'Correct!';
+      fElem.style.color = '#00ffb3';
       powerUpLogo();
     } else {
       fElem.textContent = `Not quite. Correct answer: ${correct}.`;
-      fElem.style.color = "#ff6b6b";
+      fElem.style.color = '#ff6b6b';
     }
     setTimeout(() => {
-      fElem.classList.remove("show");
+      fElem.classList.remove('show');
       index++;
       if (index < currentQuestions.length) showQ();
       else endQuiz();
@@ -1181,55 +1167,75 @@ function initRadBotQuiz() {
   };
 
   const endQuiz = () => {
-    oElem.innerHTML = "";
+    oElem.innerHTML = '';
     const total = currentQuestions.length;
     const incorrect = total - score;
     const percent = Math.round((score / total) * 100);
     const scoreOutOfTen = Math.round((score / total) * 10);
-    qElem.textContent = `Quiz Complete - ${currentCategory ? currentCategory.toUpperCase() : ''}`;
+    const label = categoryLabels[currentCategory] || currentCategory || '';
+    qElem.textContent = `Quiz Complete - ${label}`;
     fElem.textContent = `Score: ${score}/${total} (${percent}% | ${scoreOutOfTen}/10) | Correct: ${score} | Incorrect: ${incorrect}`;
-    fElem.style.color = "#00c3ff";
-    fElem.classList.add("show");
+    fElem.style.color = '#00c3ff';
+    fElem.classList.add('show');
     renderResultGraph(percent, scoreOutOfTen, score, total);
     powerUpLogo(true);
-    active = false;
   };
 
   const powerUpLogo = (final = false) => {
     if (!logo) return;
-    logo.style.transition = "all 0.6s ease";
-    logo.style.filter = "drop-shadow(0 0 15px rgba(0,195,255,0.9)) brightness(1.3)";
-    setTimeout(() => logo.style.filter = "none", final ? 2500 : 1200);
+    logo.style.transition = 'all 0.6s ease';
+    logo.style.filter = 'drop-shadow(0 0 15px rgba(0,195,255,0.9)) brightness(1.3)';
+    setTimeout(() => (logo.style.filter = 'none'), final ? 2500 : 1200);
   };
 
-  btn.addEventListener('click', () => {
-    if (active) {
-      active = false;
-      quiz.style.display = 'none';
-      fElem.textContent = "";
-      fElem.classList.remove("show");
-      resetResultGraph();
-      return;
-    }
+  const updateActiveButton = (activeButton) => {
+    grid.querySelectorAll('.category-btn').forEach((btn) => {
+      const isActive = btn === activeButton;
+      btn.classList.toggle('is-active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  };
 
-    const selectedCategory = requestCategory();
-    if (!selectedCategory) return;
+  const startQuiz = (categoryKey) => {
+    const resolvedKey = typeof categoryKey === 'string' ? categoryKey.toLowerCase() : '';
+    if (!quizCategories[resolvedKey]) return;
 
-    currentCategory = selectedCategory;
-    currentQuestions = pickQuestions(selectedCategory, 5);
+    currentCategory = resolvedKey;
+    currentQuestions = pickQuestions(resolvedKey, 5);
+
     if (!currentQuestions.length) {
-      alert('No questions available for this category right now.');
+      qElem.textContent = 'No questions available for this category right now.';
+      oElem.innerHTML = '';
+      clearFeedback();
+      resetResultGraph();
+      quiz.hidden = false;
       return;
     }
+
     index = 0;
     score = 0;
-    active = true;
-    quiz.style.display = 'block';
-    fElem.textContent = "";
-    fElem.classList.remove("show");
+    quiz.hidden = false;
+    clearFeedback();
     resetResultGraph();
     showQ();
+  };
+
+  grid.addEventListener('click', (event) => {
+    const button = event.target.closest('.category-btn');
+    if (!button) return;
+    const category = button.dataset.category;
+    if (!category) return;
+    updateActiveButton(button);
+    startQuiz(category);
   });
+
+  if (initialCategory) {
+    const initialButton = grid.querySelector(`.category-btn[data-category="${initialCategory}"]`);
+    if (initialButton) {
+      updateActiveButton(initialButton);
+    }
+    startQuiz(initialCategory);
+  }
 }
 
 function initPageSwitchToggle() {
@@ -1608,24 +1614,22 @@ function initGameNavigationFix() {
     });
   });
   
-  // Also handle RadBot - make sure it shows the quiz when clicked
+  // Also handle RadBot - bring the category grid into focus
   const radbotLinks = document.querySelectorAll('a[href="#radbot-section"]');
   radbotLinks.forEach(link => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
       const section = document.getElementById('radbot-section');
-      const btn = document.getElementById('radbot-btn');
+      const firstCategory = section ? section.querySelector('.category-btn') : null;
       
-      if (section && btn) {
+      if (section) {
         section.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        
-        // Auto-click the button to start the quiz
-        setTimeout(() => {
-          const quiz = document.getElementById('radbot-quiz');
-          if (quiz && quiz.style.display === 'none') {
-            btn.click();
-          }
-        }, 600);
+
+        if (firstCategory) {
+          setTimeout(() => {
+            firstCategory.focus({ preventScroll: true });
+          }, 600);
+        }
       }
     });
   });
