@@ -714,6 +714,8 @@ function initMainInterface() {
       teamSize: document.getElementById('teamSize')?.value,
       bottlenecks: document.getElementById('bottlenecks')?.value,
       goals: document.getElementById('goals')?.value,
+      email: document.getElementById('email')?.value,
+      phone: document.getElementById('phone')?.value,
       consent: document.getElementById('consentCheckbox')?.checked
     };
     
