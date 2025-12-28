@@ -766,21 +766,39 @@ function initMainInterface() {
     });
   });
 
-  hireForm?.addEventListener('submit', (e) => {
+  hireForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
-    const formData = {
-      name: document.getElementById('clientName')?.value,
-      email: document.getElementById('clientEmail')?.value,
-      description: document.getElementById('projectDescription')?.value
-    };
-    
-    console.log('Project Inquiry:', formData);
-    alert('âœ… Thank you for your inquiry! I\'ll review your project details and get back to you within 24 hours.');
-    
-    hireForm.reset();
-    hireSection?.classList.remove('visible');
-    document.getElementById('support-hire')?.scrollIntoView({ behavior: 'smooth' });
+
+    const name = e.target.querySelector('input[placeholder*="John"]').value;
+    const email = e.target.querySelector('input[placeholder*="john@example"]').value;
+    const description = e.target.querySelector('textarea[placeholder*="Tell me about"]').value;
+
+    const button = e.target.querySelector('button[type="submit"]');
+    const originalText = button.textContent;
+    button.textContent = 'Sending...';
+    button.disabled = true;
+
+    try {
+      const response = await fetch('/send-inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, description })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert('Thank you! Your inquiry has been sent successfully.');
+        e.target.reset();
+      } else {
+        alert('Failed to send inquiry. Please try again.');
+      }
+    } catch (error) {
+      alert('Error sending inquiry. Please try again.');
+    } finally {
+      button.textContent = originalText;
+      button.disabled = false;
+    }
   });
 
   // Grow Business Button
