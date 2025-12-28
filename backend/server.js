@@ -99,9 +99,7 @@ if (NODE_ENV === 'production') {
   app.set('trust proxy', 1);
 }
 
-const RedisStore =
-  connectRedis?.default ||
-  (typeof connectRedis === 'function' ? connectRedis(session) : connectRedis);
+const RedisStore = connectRedis(session);
 
 const resolvedRedisPort = Number(REDIS_PORT) || 6379;
 const redisClient = createClient(
