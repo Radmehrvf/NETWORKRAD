@@ -994,13 +994,68 @@ function initMindspaceExplorer() {
 // RADBOT QUIZ GAME
 // ================================
 function initRadBotQuiz() {
-  const btn = document.getElementById('"'"'radbot-btn'"'"');
-  const quiz = document.getElementById('"'"'radbot-quiz'"'"');
-  const qElem = document.getElementById('"'"'radbot-question'"'"');
-  const oElem = document.getElementById('"'"'radbot-options'"'"');
-  const fElem = document.getElementById('"'"'radbot-feedback'"'"');
+  const btn = document.getElementById('radbot-btn');
+  const quiz = document.getElementById('radbot-quiz');
+  const qElem = document.getElementById('radbot-question');
+  const oElem = document.getElementById('radbot-options');
+  const fElem = document.getElementById('radbot-feedback');
   const logo = document.querySelector('.logo');
   if (!btn || !quiz) return;
+
+  // Lightweight result graph UI (self-contained styles)
+  const resultWrapper = document.createElement('div');
+  resultWrapper.style.display = 'none';
+  resultWrapper.style.marginTop = '1.5rem';
+  resultWrapper.style.padding = '1rem';
+  resultWrapper.style.background = 'linear-gradient(135deg, rgba(0,195,255,0.08), rgba(0,195,255,0.02))';
+  resultWrapper.style.border = '1px solid rgba(0,195,255,0.35)';
+  resultWrapper.style.borderRadius = '12px';
+  resultWrapper.style.boxShadow = '0 0 18px rgba(0,195,255,0.25)';
+  resultWrapper.style.transition = 'all 0.6s ease';
+
+  const resultLabel = document.createElement('div');
+  resultLabel.style.color = '#cceaff';
+  resultLabel.style.fontWeight = '700';
+  resultLabel.style.marginBottom = '0.75rem';
+  resultLabel.style.letterSpacing = '0.3px';
+  resultWrapper.appendChild(resultLabel);
+
+  const resultBar = document.createElement('div');
+  resultBar.style.width = '100%';
+  resultBar.style.height = '14px';
+  resultBar.style.background = 'rgba(0,195,255,0.12)';
+  resultBar.style.border = '1px solid rgba(0,195,255,0.35)';
+  resultBar.style.borderRadius = '999px';
+  resultBar.style.overflow = 'hidden';
+  resultBar.setAttribute('role', 'progressbar');
+  resultBar.setAttribute('aria-valuemin', '0');
+  resultBar.setAttribute('aria-valuemax', '100');
+
+  const resultFill = document.createElement('div');
+  resultFill.style.height = '100%';
+  resultFill.style.width = '0%';
+  resultFill.style.background = 'linear-gradient(90deg, #00c3ff, #00ffb3)';
+  resultFill.style.boxShadow = '0 0 12px rgba(0,255,179,0.6)';
+  resultFill.style.transition = 'width 0.8s ease, filter 0.6s ease';
+  resultBar.appendChild(resultFill);
+
+  resultWrapper.appendChild(resultBar);
+  quiz.appendChild(resultWrapper);
+
+  const resetResultGraph = () => {
+    resultWrapper.style.display = 'none';
+    resultFill.style.width = '0%';
+    resultBar.setAttribute('aria-valuenow', '0');
+    resultLabel.textContent = '';
+  };
+
+  const renderResultGraph = (percent, scoreOutOfTen, correct, total) => {
+    resultWrapper.style.display = 'block';
+    const clamped = Math.min(100, Math.max(0, percent));
+    resultFill.style.width = `${clamped}%`;
+    resultBar.setAttribute('aria-valuenow', clamped.toString());
+    resultLabel.textContent = `${clamped}% (${scoreOutOfTen}/10) - ${correct}/${total} correct`;
+  };
 
   // Category-based RadQuiz bank
   const quizCategories = {
@@ -1008,24 +1063,24 @@ function initRadBotQuiz() {
       { question: 'Which language runs in a web browser?', options: ['Python', 'Java', 'C++', 'JavaScript'], correct: 'D' },
       { question: 'What does CPU stand for?', options: ['Central Processing Unit', 'Control Process Unit', 'Compute Power Unit', 'Central Performance Utility'], correct: 'A' },
       { question: 'Who created the React library?', options: ['Google', 'Facebook', 'Microsoft', 'Amazon'], correct: 'B' },
-      { question: 'Binary search on a sorted array has time complexity…', options: ['O(n)', 'O(log n)', 'O(n log n)', 'O(1)'], correct: 'B' },
+      { question: 'Binary search on a sorted array has time complexity...', options: ['O(n)', 'O(log n)', 'O(n log n)', 'O(1)'], correct: 'B' },
       { question: 'Which of these is a NoSQL database?', options: ['PostgreSQL', 'MySQL', 'MongoDB', 'SQLite'], correct: 'C' },
-      { question: 'HTML is primarily used to…', options: ['Style pages', 'Structure content', 'Manage servers', 'Secure passwords'], correct: 'B' }
+      { question: 'HTML is primarily used to structure content on the web.', options: ['Style pages', 'Structure content', 'Manage servers', 'Secure passwords'], correct: 'B' }
     ],
     cars: [
       { question: 'What does ABS stand for?', options: ['Automatic Braking System', 'Anti-lock Braking System', 'Advanced Brake Safety', 'Auto Balance System'], correct: 'B' },
       { question: 'Who makes the Mustang?', options: ['Ford', 'Chevrolet', 'Dodge', 'Toyota'], correct: 'A' },
-      { question: 'A hybrid typically uses…', options: ['Diesel only', 'Electric only', 'Gasoline + Electric', 'Hydrogen only'], correct: 'C' },
-      { question: 'RPM measures…', options: ['Road Position Meter', 'Rotations Per Minute', 'Relative Power Module', 'Radial Pressure Metric'], correct: 'B' },
-      { question: 'Lamborghini is from…', options: ['Germany', 'Italy', 'France', 'USA'], correct: 'B' },
-      { question: 'A turbocharger is for…', options: ['Cooling brakes', 'Increasing air intake for power', 'Saving fuel only', 'Reducing tire wear'], correct: 'B' }
+      { question: 'A hybrid typically uses...', options: ['Diesel only', 'Electric only', 'Gasoline + Electric', 'Hydrogen only'], correct: 'C' },
+      { question: 'RPM measures...', options: ['Road Position Meter', 'Rotations Per Minute', 'Relative Power Module', 'Radial Pressure Metric'], correct: 'B' },
+      { question: 'Lamborghini is from...', options: ['Germany', 'Italy', 'France', 'USA'], correct: 'B' },
+      { question: 'A turbocharger is for...', options: ['Cooling brakes', 'Increasing air intake for power', 'Saving fuel only', 'Reducing tire wear'], correct: 'B' }
     ],
     general: [
       { question: 'Capital of France?', options: ['Berlin', 'Madrid', 'Paris', 'Rome'], correct: 'C' },
-      { question: 'The Red Planet is…', options: ['Venus', 'Mars', 'Jupiter', 'Mercury'], correct: 'B' },
+      { question: 'The Red Planet is...', options: ['Venus', 'Mars', 'Jupiter', 'Mercury'], correct: 'B' },
       { question: 'Who wrote "1984"?', options: ['George Orwell', 'Mark Twain', 'J.K. Rowling', 'Ernest Hemingway'], correct: 'A' },
       { question: 'How many continents?', options: ['5', '6', '7', '8'], correct: 'C' },
-      { question: 'H2O is…', options: ['Salt', 'Water', 'Hydrogen', 'Oxygen'], correct: 'B' },
+      { question: 'H2O is the chemical formula for what?', options: ['Salt', 'Water', 'Hydrogen', 'Oxygen'], correct: 'B' },
       { question: 'Largest ocean?', options: ['Atlantic', 'Pacific', 'Indian', 'Arctic'], correct: 'B' }
     ],
     english: [
@@ -1107,18 +1162,18 @@ function initRadBotQuiz() {
   const selectA = (selected) => {
     const correct = currentQuestions[index].correct;
     const right = selected === correct;
-    fElem.classList.add('show');
+    fElem.classList.add("show");
     if (right) {
       score++;
-      fElem.textContent = "✅ Correct!";
+      fElem.textContent = "Correct!";
       fElem.style.color = "#00ffb3";
       powerUpLogo();
     } else {
-      fElem.textContent = `❌ Not quite. Correct answer: ${correct}.`;
+      fElem.textContent = `Not quite. Correct answer: ${correct}.`;
       fElem.style.color = "#ff6b6b";
     }
     setTimeout(() => {
-      fElem.classList.remove('show');
+      fElem.classList.remove("show");
       index++;
       if (index < currentQuestions.length) showQ();
       else endQuiz();
@@ -1129,9 +1184,13 @@ function initRadBotQuiz() {
     oElem.innerHTML = "";
     const total = currentQuestions.length;
     const incorrect = total - score;
+    const percent = Math.round((score / total) * 100);
+    const scoreOutOfTen = Math.round((score / total) * 10);
     qElem.textContent = `Quiz Complete - ${currentCategory ? currentCategory.toUpperCase() : ''}`;
-    fElem.textContent = `Score: ${score}/${total} | Correct: ${score} | Incorrect: ${incorrect}`;
+    fElem.textContent = `Score: ${score}/${total} (${percent}% | ${scoreOutOfTen}/10) | Correct: ${score} | Incorrect: ${incorrect}`;
     fElem.style.color = "#00c3ff";
+    fElem.classList.add("show");
+    renderResultGraph(percent, scoreOutOfTen, score, total);
     powerUpLogo(true);
     active = false;
   };
@@ -1148,6 +1207,8 @@ function initRadBotQuiz() {
       active = false;
       quiz.style.display = 'none';
       fElem.textContent = "";
+      fElem.classList.remove("show");
+      resetResultGraph();
       return;
     }
 
@@ -1164,11 +1225,13 @@ function initRadBotQuiz() {
     score = 0;
     active = true;
     quiz.style.display = 'block';
+    fElem.textContent = "";
+    fElem.classList.remove("show");
+    resetResultGraph();
     showQ();
   });
 }
 
-function initPageSwitchToggle() {
 function initPageSwitchToggle() {
   const switchWrapper = document.getElementById('pageSwitch');
   const homeButton = document.getElementById('pageSwitchHome');
@@ -1638,5 +1701,7 @@ function initImprovedNavigation() {
 }
 
 // Add to initialization
+
+
 
 
