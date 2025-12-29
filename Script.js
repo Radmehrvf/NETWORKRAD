@@ -1378,10 +1378,50 @@ function initPageSwitchToggle() {
   const switchWrapper = document.getElementById('pageSwitch');
   const homeButton = document.getElementById('pageSwitchHome');
   const dashboardButton = document.getElementById('pageSwitchDashboard');
+  const isDashboardPage = document.body.classList.contains('dashboard-page');
 
   if (!switchWrapper || !homeButton || !dashboardButton) {
     return;
   }
+
+  let scrollDebounce = null;
+  let autoCollapseTimer = null;
+  let lastScrollY = window.scrollY;
+
+  const clearAutoCollapse = () => {
+    if (!autoCollapseTimer) return;
+    clearTimeout(autoCollapseTimer);
+    autoCollapseTimer = null;
+  };
+
+  const collapseSwitch = () => {
+    switchWrapper.classList.remove('page-switch--expanded');
+    clearAutoCollapse();
+  };
+
+  const expandSwitch = (autoCollapse = false) => {
+    switchWrapper.classList.add('page-switch--expanded');
+    if (!autoCollapse) return;
+    clearAutoCollapse();
+    autoCollapseTimer = setTimeout(() => {
+      collapseSwitch();
+    }, 3000);
+  };
+
+  const updateCollapsedState = () => {
+    if (!isDashboardPage || switchWrapper.hidden) return;
+    const scrolled = window.scrollY > 150;
+    if (scrolled) {
+      switchWrapper.classList.add('page-switch--collapsed');
+      if (switchWrapper.classList.contains('page-switch--expanded') && window.scrollY !== lastScrollY) {
+        collapseSwitch();
+      }
+    } else {
+      switchWrapper.classList.remove('page-switch--collapsed');
+      collapseSwitch();
+    }
+    lastScrollY = window.scrollY;
+  };
 
   const updateActiveState = () => {
     const normalizedPath = window.location.pathname.replace(/\/+$/, '') || '/';
@@ -1398,6 +1438,7 @@ function initPageSwitchToggle() {
     switchWrapper.hidden = false;
     switchWrapper.setAttribute('aria-hidden', 'false');
     updateActiveState();
+    updateCollapsedState();
   };
 
   const hideSwitch = () => {
@@ -1407,6 +1448,8 @@ function initPageSwitchToggle() {
     dashboardButton.classList.remove('active');
     homeButton.setAttribute('aria-selected', 'false');
     dashboardButton.setAttribute('aria-selected', 'false');
+    switchWrapper.classList.remove('page-switch--collapsed', 'page-switch--expanded');
+    clearAutoCollapse();
   };
 
   const handleNavigation = (targetPath) => {
@@ -1429,6 +1472,44 @@ function initPageSwitchToggle() {
 
   homeButton.addEventListener('click', () => handleNavigation('/'));
   dashboardButton.addEventListener('click', () => handleNavigation('/dashboard'));
+
+  if (isDashboardPage) {
+    switchWrapper.addEventListener('mouseenter', () => {
+      if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
+      expandSwitch();
+    });
+
+    switchWrapper.addEventListener('mouseleave', () => {
+      if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
+      collapseSwitch();
+    });
+
+    switchWrapper.addEventListener('click', (event) => {
+      if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
+      if (!switchWrapper.classList.contains('page-switch--expanded')) {
+        event.preventDefault();
+        event.stopPropagation();
+        expandSwitch(true);
+        return;
+      }
+      expandSwitch(true);
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
+      if (!switchWrapper.classList.contains('page-switch--expanded')) return;
+      if (switchWrapper.contains(event.target)) return;
+      collapseSwitch();
+    });
+
+    window.addEventListener('scroll', () => {
+      if (scrollDebounce) return;
+      scrollDebounce = setTimeout(() => {
+        scrollDebounce = null;
+        updateCollapsedState();
+      }, 100);
+    });
+  }
 
   const verifySession = async () => {
     try {
