@@ -302,15 +302,15 @@ body.page-switching{opacity:0}
 
 #universe{position:relative}
 #universe>p{color:#d7e7ff}
-#universe .universe-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.6rem;margin-top:1.75rem}
-#universe .universe-item{--platform-color:#94a3b8;--platform-accent:linear-gradient(90deg,#64748b,#94a3b8);--platform-border:rgba(148,163,184,.35);--platform-glow:rgba(148,163,184,.35);position:relative;overflow:hidden;border-radius:18px;padding:1.8rem 1.6rem;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(8,12,22,.9));border:1px solid var(--platform-border);box-shadow:0 12px 28px rgba(0,0,0,.45);backdrop-filter:blur(12px);display:flex;flex-direction:column;gap:.6rem;text-align:left;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+#universe .universe-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,280px));gap:1.6rem;margin-top:1.75rem;justify-content:center;justify-items:stretch}
+#universe .universe-item{--platform-color:#94a3b8;--platform-accent:linear-gradient(90deg,#64748b,#94a3b8);--platform-border:rgba(148,163,184,.35);--platform-glow:rgba(148,163,184,.35);position:relative;overflow:hidden;border-radius:18px;padding:1.8rem 1.6rem;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(8,12,22,.9));border:1px solid var(--platform-border);box-shadow:0 12px 28px rgba(0,0,0,.45);backdrop-filter:blur(12px);display:flex;flex-direction:column;gap:.6rem;text-align:center;align-items:center;min-height:180px;width:100%;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
 #universe .universe-item::before{content:"";position:absolute;top:0;left:0;width:100%;height:4px;background:var(--platform-accent);z-index:0}
 #universe .universe-item::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 0,var(--platform-glow),transparent 60%);opacity:.65;z-index:0}
 #universe .universe-item>*{position:relative;z-index:1}
 #universe .universe-item:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 16px 36px rgba(0,0,0,.55),0 0 24px var(--platform-glow);border-color:var(--platform-color)}
-#universe .universe-item h3{display:inline-flex;align-items:center;gap:.5rem;color:var(--platform-color);font-size:1.15rem;font-weight:700;margin-bottom:.4rem;text-shadow:0 0 12px var(--platform-glow)}
+#universe .universe-item h3{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;color:var(--platform-color);font-size:1.15rem;font-weight:700;margin-bottom:.4rem;text-shadow:0 0 12px var(--platform-glow)}
 #universe .universe-item h3::before{font-size:1.2rem}
-#universe .universe-item p{margin:0;color:#e2ecff}
+#universe .universe-item p{margin:0;color:#e2ecff;text-align:center;width:100%}
 #universe .universe-item a{display:inline-flex;align-items:center;justify-content:center;margin-top:.6rem;padding:.6rem 1.3rem;border-radius:999px;border:1px solid var(--platform-color);color:#f8fbff;text-decoration:none;font-weight:600;background:rgba(0,0,0,.2);transition:transform .2s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease}
 #universe .universe-item a:hover{transform:translateY(-2px);background:var(--platform-accent);border-color:transparent;box-shadow:0 0 18px var(--platform-glow)}
 
@@ -322,6 +322,8 @@ body.page-switching{opacity:0}
 #universe .universe-item.platform-linkedin h3::before{content:"💼"}
 #universe .universe-item.platform-youtube{--platform-color:#ff0000;--platform-accent:#ff0000;--platform-border:rgba(255,0,0,.45);--platform-glow:rgba(255,0,0,.45)}
 #universe .universe-item.platform-youtube h3::before{content:"▶️"}
+#universe .universe-item.platform-x{--platform-color:#f8fafc;--platform-accent:linear-gradient(90deg,#f8fafc,#94a3b8);--platform-border:rgba(248,250,252,.35);--platform-glow:rgba(248,250,252,.35)}
+#universe .universe-item.platform-x h3::before{content:"X"}
 #universe .universe-item.platform-github{--platform-color:#6e5494;--platform-accent:linear-gradient(90deg,#6e5494,#333333);--platform-border:rgba(110,84,148,.45);--platform-glow:rgba(110,84,148,.45)}
 #universe .universe-item.platform-github h3::before{content:"🐙"}
 
