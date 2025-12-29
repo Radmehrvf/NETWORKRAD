@@ -1378,8 +1378,6 @@ function initPageSwitchToggle() {
   const switchWrapper = document.getElementById('pageSwitch');
   const homeButton = document.getElementById('pageSwitchHome');
   const dashboardButton = document.getElementById('pageSwitchDashboard');
-  const isDashboardPage = document.body.classList.contains('dashboard-page');
-
   if (!switchWrapper || !homeButton || !dashboardButton) {
     return;
   }
@@ -1412,7 +1410,7 @@ function initPageSwitchToggle() {
   };
 
   const updateCollapsedState = () => {
-    if (!isDashboardPage || switchWrapper.hidden) return;
+    if (switchWrapper.hidden) return;
     const scrolled = window.scrollY > collapseThreshold;
     if (scrolled) {
       switchWrapper.classList.add('page-switch--collapsed');
@@ -1475,52 +1473,50 @@ function initPageSwitchToggle() {
   homeButton.addEventListener('click', () => handleNavigation('/'));
   dashboardButton.addEventListener('click', () => handleNavigation('/dashboard'));
 
-  if (isDashboardPage) {
-    switchWrapper.addEventListener('mouseenter', () => {
-      isHovering = true;
-      if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
-      expandSwitch();
-    });
+  switchWrapper.addEventListener('mouseenter', () => {
+    isHovering = true;
+    if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
+    expandSwitch();
+  });
 
-    switchWrapper.addEventListener('mouseleave', () => {
-      isHovering = false;
-      if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
-      collapseSwitch();
-    });
+  switchWrapper.addEventListener('mouseleave', () => {
+    isHovering = false;
+    if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
+    collapseSwitch();
+  });
 
-    switchWrapper.addEventListener('click', (event) => {
-      if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
-      if (!switchWrapper.classList.contains('page-switch--expanded')) {
-        event.preventDefault();
-        event.stopPropagation();
-        expandSwitch(true);
-        return;
-      }
+  switchWrapper.addEventListener('click', (event) => {
+    if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
+    if (!switchWrapper.classList.contains('page-switch--expanded')) {
+      event.preventDefault();
+      event.stopPropagation();
       expandSwitch(true);
-    });
+      return;
+    }
+    expandSwitch(true);
+  });
 
-    switchWrapper.addEventListener('touchstart', () => {
-      if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
-      if (!switchWrapper.classList.contains('page-switch--expanded')) {
-        expandSwitch(true);
-      }
-    }, { passive: true });
+  switchWrapper.addEventListener('touchstart', () => {
+    if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
+    if (!switchWrapper.classList.contains('page-switch--expanded')) {
+      expandSwitch(true);
+    }
+  }, { passive: true });
 
-    document.addEventListener('click', (event) => {
-      if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
-      if (!switchWrapper.classList.contains('page-switch--expanded')) return;
-      if (switchWrapper.contains(event.target)) return;
-      collapseSwitch();
-    });
+  document.addEventListener('click', (event) => {
+    if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
+    if (!switchWrapper.classList.contains('page-switch--expanded')) return;
+    if (switchWrapper.contains(event.target)) return;
+    collapseSwitch();
+  });
 
-    window.addEventListener('scroll', () => {
-      if (scrollDebounce) return;
-      scrollDebounce = setTimeout(() => {
-        scrollDebounce = null;
-        updateCollapsedState();
-      }, 100);
-    });
-  }
+  window.addEventListener('scroll', () => {
+    if (scrollDebounce) return;
+    scrollDebounce = setTimeout(() => {
+      scrollDebounce = null;
+      updateCollapsedState();
+    }, 100);
+  });
 
   const verifySession = async () => {
     try {
