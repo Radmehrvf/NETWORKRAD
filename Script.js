@@ -511,7 +511,7 @@ function initMainInterface() {
   const chatButton = document.getElementById('chatButton');
   const floatingChatBtn = document.getElementById('floatingChatBtn');
   const closeChat = document.getElementById('closeChat');
-  const heroChatBtn = document.querySelector('.hero-section .hero-btn.primary'); // More specific selector
+  const heroMessageBtn = document.getElementById('heroMessageBtn');
   const sendBtn = document.getElementById('sendBtn');
   const chatInput = document.getElementById('chatInput');
   const chatBody = document.getElementById('chatBody');
@@ -520,7 +520,7 @@ function initMainInterface() {
   
   // Debug logging
   console.log('Chatbox:', chatbox);
-  console.log('Hero Chat Button:', heroChatBtn);
+  console.log('Hero Message Button:', heroMessageBtn);
   
   // Function to toggle chatbox
   function toggleChat(e) {
@@ -542,15 +542,8 @@ function initMainInterface() {
     floatingChatBtn.addEventListener('click', toggleChat);
   }
   
-  // Hero section chat button
-  if (heroChatBtn) {
-    console.log('Adding click listener to hero button');
-    heroChatBtn.addEventListener('click', (e) => {
-      console.log('Hero button clicked!');
-      toggleChat(e);
-    });
-  } else {
-    console.error('Hero chat button NOT found!');
+  if (!heroMessageBtn) {
+    console.error('Hero message button NOT found!');
   }
   
   // Close chat button
@@ -558,12 +551,12 @@ function initMainInterface() {
     closeChat.addEventListener('click', toggleChat);
   }
   
-  // Explore button (scroll to projects)
+  // Explore button (scroll to contact)
   if (exploreBtn) {
     exploreBtn.addEventListener('click', () => {
-      const projectsSection = document.getElementById('projects');
-      if (projectsSection) {
-        projectsSection.scrollIntoView({ behavior: 'smooth' });
+      const contactSection = document.getElementById('contact');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
       }
     });
   }
@@ -760,20 +753,96 @@ function initMainInterface() {
   const hireSection = document.getElementById('hireSection');
   const hireForm = document.getElementById('hireForm');
 
+  const getHeaderHeight = () => {
+    const header = document.querySelector('header');
+    if (header) return header.offsetHeight;
+    const rootStyles = getComputedStyle(document.documentElement);
+    const cssValue = parseFloat(rootStyles.getPropertyValue('--header-height'));
+    return Number.isFinite(cssValue) ? cssValue : 72;
+  };
+
+  const calculateScrollOffset = () => {
+    const viewportWidth = window.visualViewport?.width || window.innerWidth;
+    const viewportHeight = window.visualViewport?.height || window.innerHeight;
+    const headerHeight = getHeaderHeight();
+    let viewportOffset;
+
+    if (viewportWidth < 768) {
+      viewportOffset = viewportHeight < 700 ? 80 : 95;
+    } else if (viewportWidth < 1024) {
+      viewportOffset = viewportHeight < 800 ? 105 : 115;
+    } else {
+      viewportOffset = viewportHeight < 800 ? 120 : 140;
+    }
+
+    return headerHeight + viewportOffset;
+  };
+
+  const scrollToSection = (element, offset) => {
+    if (!element) return;
+    const dynamicOffset = typeof offset === 'number' ? offset : calculateScrollOffset();
+    const top = element.getBoundingClientRect().top + window.scrollY - dynamicOffset;
+    window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
+  };
+
+  const ensureHireHintOverlay = () => {
+    if (!hireSection) return null;
+    const descriptionField = hireSection.querySelector('#projectDescription');
+    const group = descriptionField?.closest('.form-group');
+    if (!group) return null;
+    group.classList.add('hint-target');
+    let overlay = group.querySelector('.hire-hint-overlay');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'hire-hint-overlay';
+      overlay.textContent = 'Send your message here';
+      group.appendChild(overlay);
+    }
+    return overlay;
+  };
+
+  const triggerHireHint = () => {
+    if (!hireSection) return;
+    const overlay = ensureHireHintOverlay();
+    hireSection.classList.remove('hint-active');
+    void hireSection.offsetWidth;
+    hireSection.classList.add('hint-active');
+    if (overlay) {
+      overlay.classList.remove('is-active');
+      void overlay.offsetWidth;
+      overlay.classList.add('is-active');
+    }
+    setTimeout(() => {
+      hireSection.classList.remove('hint-active');
+      overlay?.classList.remove('is-active');
+    }, 1600);
+  };
+
+  const openHireSection = (withHint = false) => {
+    hireSection?.classList.add('visible');
+    supportSection?.classList.remove('visible');
+    setTimeout(() => {
+      scrollToSection(hireSection);
+      if (withHint) {
+        setTimeout(() => {
+          triggerHireHint();
+        }, 150);
+      }
+    }, 520);
+  };
+
   supportBtn?.addEventListener('click', () => {
     supportSection?.classList.add('visible');
     hireSection?.classList.remove('visible');
     setTimeout(() => {
-      supportSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 100);
+      scrollToSection(supportSection || document.getElementById('support-hire'));
+    }, 520);
   });
 
-  hireBtn?.addEventListener('click', () => {
-    hireSection?.classList.add('visible');
-    supportSection?.classList.remove('visible');
-    setTimeout(() => {
-      hireSection?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 100);
+  hireBtn?.addEventListener('click', () => openHireSection());
+  heroMessageBtn?.addEventListener('click', (e) => {
+    if (e) e.preventDefault();
+    openHireSection(true);
   });
 
   document.querySelectorAll('.close-section').forEach(btn => {
@@ -781,7 +850,7 @@ function initMainInterface() {
       const target = e.target.closest('button').getAttribute('data-target');
       const section = document.getElementById(target);
       section?.classList.remove('visible');
-      document.getElementById('support-hire')?.scrollIntoView({ behavior: 'smooth' });
+      scrollToSection(document.getElementById('support-hire'));
     });
   });
 
@@ -790,7 +859,7 @@ function initMainInterface() {
       const target = e.target.getAttribute('data-close');
       const section = document.getElementById(target);
       section?.classList.remove('visible');
-      document.getElementById('support-hire')?.scrollIntoView({ behavior: 'smooth' });
+      scrollToSection(document.getElementById('support-hire'));
     });
   });
 
