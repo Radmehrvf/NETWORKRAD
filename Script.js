@@ -836,7 +836,7 @@ function initMainInterface() {
     setTimeout(() => {
       hireSection.classList.remove('hint-active');
       overlay?.classList.remove('is-active');
-    }, 1600);
+    }, 3600);
   };
 
   const openHireSection = (withHint = false) => {
