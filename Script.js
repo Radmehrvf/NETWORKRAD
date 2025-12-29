@@ -785,6 +785,27 @@ function initMainInterface() {
     window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
   };
 
+  const scrollToSectionStable = (element) => {
+    if (!element) return;
+    const doScroll = () => scrollToSection(element);
+    doScroll();
+    const fallbackTimer = setTimeout(doScroll, 180);
+
+    if (!window.ResizeObserver) return;
+    let settled = false;
+    const observer = new ResizeObserver(() => {
+      if (settled) return;
+      settled = true;
+      requestAnimationFrame(() => {
+        doScroll();
+        observer.disconnect();
+        clearTimeout(fallbackTimer);
+      });
+    });
+    observer.observe(element);
+    setTimeout(() => observer.disconnect(), 800);
+  };
+
   const ensureHireHintOverlay = () => {
     if (!hireSection) return null;
     const descriptionField = hireSection.querySelector('#projectDescription');
@@ -822,7 +843,7 @@ function initMainInterface() {
     hireSection?.classList.add('visible');
     supportSection?.classList.remove('visible');
     setTimeout(() => {
-      scrollToSection(hireSection);
+      scrollToSectionStable(hireSection);
       if (withHint) {
         setTimeout(() => {
           triggerHireHint();
