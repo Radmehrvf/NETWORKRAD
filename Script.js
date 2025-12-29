@@ -706,27 +706,53 @@ function initMainInterface() {
     document.getElementById('ai-optimizer-section')?.scrollIntoView({ behavior: 'smooth' });
   });
 
-  businessForm?.addEventListener('submit', (event) => {
+  businessForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
-    
-    const formData = {
-      industry: document.getElementById('industry')?.value,
-      teamSize: document.getElementById('teamSize')?.value,
-      bottlenecks: document.getElementById('bottlenecks')?.value,
-      goals: document.getElementById('goals')?.value,
-      email: document.getElementById('email')?.value,
-      phone: document.getElementById('phone')?.value,
-      consent: document.getElementById('consentCheckbox')?.checked
-    };
-    
-    console.log('Business Analysis Request:', formData);
-    alert('âœ… Thank you! We\'ll analyze your workflow and get back to you within 24 hours.');
-    
-    businessForm.reset();
-    aiFormSection?.classList.remove('visible');
-    document.getElementById('ai-optimizer-section')?.scrollIntoView({ behavior: 'smooth' });
-  });
 
+    const submitBtn = businessForm.querySelector('.btn-submit');
+    const submitText = submitBtn?.querySelector('span');
+    const originalText = submitText?.textContent || 'Analyze My Workflow';
+
+    const formData = new FormData(businessForm);
+    const rawEntries = {};
+    formData.forEach((value, key) => {
+      rawEntries[key] = typeof value === 'string' ? value.trim() : value;
+    });
+
+    const payload = {
+      ...rawEntries,
+      challenges: rawEntries.bottlenecks || rawEntries.challenges || '',
+      tools: rawEntries.tools || rawEntries.currentTools || '',
+      teamSize: rawEntries.teamSize || rawEntries['team-size'] || '',
+      goal: rawEntries.goals || rawEntries.goal || '',
+      email: rawEntries.email || '',
+      phone: rawEntries.phone || '',
+      consent: document.getElementById('consentCheckbox')?.checked ?? false
+    };
+
+    try {
+      if (submitText) submitText.textContent = 'Sending...';
+      if (submitBtn) submitBtn.disabled = true;
+
+      const response = await fetch('/send-inquiry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (response.ok) {
+        alert('Thank you! Your workflow analysis request has been sent successfully.');
+        businessForm.reset();
+      } else {
+        alert('Failed to send request. Please try again.');
+      }
+    } catch (error) {
+      alert('Failed to send request. Please try again.');
+    } finally {
+      if (submitText) submitText.textContent = originalText;
+      if (submitBtn) submitBtn.disabled = false;
+    }
+  });
   // Support & Hire Sections
   const supportBtn = document.getElementById('supportBtn');
   const hireBtn = document.getElementById('hireBtn');
