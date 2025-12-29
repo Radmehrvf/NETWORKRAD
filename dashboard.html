@@ -162,6 +162,65 @@
         display: none !important;
       }
 
+      body.dashboard-page #pageSwitch {
+        transition: transform 0.3s ease, width 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+        will-change: transform;
+      }
+
+      body.dashboard-page #pageSwitch.page-switch--collapsed {
+        position: fixed;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%) translateX(-70%);
+        width: 48px;
+        min-height: 48px;
+        padding: 0.35rem;
+        margin: 0;
+        background: rgba(5, 5, 5, 0.86);
+        border: 1px solid rgba(212, 175, 55, 0.45);
+        border-left: none;
+        border-radius: 0 16px 16px 0;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        z-index: 1005;
+        justify-content: flex-start;
+      }
+
+      body.dashboard-page #pageSwitch.page-switch--collapsed::before {
+        content: "SW";
+        display: block;
+        margin: 0 auto;
+        color: #facc15;
+        font-weight: 700;
+        font-size: 0.7rem;
+        letter-spacing: 0.12em;
+      }
+
+      body.dashboard-page #pageSwitch.page-switch--collapsed .email-toggle {
+        transform: translateX(-120%);
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.3s ease, opacity 0.2s ease;
+      }
+
+      body.dashboard-page #pageSwitch.page-switch--collapsed.page-switch--expanded,
+      body.dashboard-page #pageSwitch.page-switch--collapsed:hover {
+        transform: translateY(-50%) translateX(0);
+        width: max-content;
+        padding: 0.35rem 0.6rem;
+      }
+
+      body.dashboard-page #pageSwitch.page-switch--collapsed.page-switch--expanded::before,
+      body.dashboard-page #pageSwitch.page-switch--collapsed:hover::before {
+        opacity: 0;
+      }
+
+      body.dashboard-page #pageSwitch.page-switch--collapsed.page-switch--expanded .email-toggle,
+      body.dashboard-page #pageSwitch.page-switch--collapsed:hover .email-toggle {
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
       .email-toggle {
         display: inline-flex;
         gap: 0.4rem;
@@ -561,6 +620,17 @@
         .profile-identity img {
           width: 60px;
           height: 60px;
+        }
+
+        body.dashboard-page #pageSwitch.page-switch--collapsed {
+          width: 35px;
+          transform: translateY(-50%) translateX(-80%);
+          min-height: 44px;
+        }
+
+        body.dashboard-page #pageSwitch.page-switch--collapsed::before {
+          font-size: 0.6rem;
+          letter-spacing: 0.1em;
         }
       }
     </style>

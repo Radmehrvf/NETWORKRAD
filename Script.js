@@ -1384,9 +1384,10 @@ function initPageSwitchToggle() {
     return;
   }
 
+  const collapseThreshold = 150;
   let scrollDebounce = null;
   let autoCollapseTimer = null;
-  let lastScrollY = window.scrollY;
+  let isHovering = false;
 
   const clearAutoCollapse = () => {
     if (!autoCollapseTimer) return;
@@ -1404,23 +1405,24 @@ function initPageSwitchToggle() {
     if (!autoCollapse) return;
     clearAutoCollapse();
     autoCollapseTimer = setTimeout(() => {
-      collapseSwitch();
+      if (!isHovering) {
+        collapseSwitch();
+      }
     }, 3000);
   };
 
   const updateCollapsedState = () => {
     if (!isDashboardPage || switchWrapper.hidden) return;
-    const scrolled = window.scrollY > 150;
+    const scrolled = window.scrollY > collapseThreshold;
     if (scrolled) {
       switchWrapper.classList.add('page-switch--collapsed');
-      if (switchWrapper.classList.contains('page-switch--expanded') && window.scrollY !== lastScrollY) {
+      if (switchWrapper.classList.contains('page-switch--expanded')) {
         collapseSwitch();
       }
     } else {
       switchWrapper.classList.remove('page-switch--collapsed');
       collapseSwitch();
     }
-    lastScrollY = window.scrollY;
   };
 
   const updateActiveState = () => {
@@ -1475,11 +1477,13 @@ function initPageSwitchToggle() {
 
   if (isDashboardPage) {
     switchWrapper.addEventListener('mouseenter', () => {
+      isHovering = true;
       if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
       expandSwitch();
     });
 
     switchWrapper.addEventListener('mouseleave', () => {
+      isHovering = false;
       if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
       collapseSwitch();
     });
@@ -1494,6 +1498,13 @@ function initPageSwitchToggle() {
       }
       expandSwitch(true);
     });
+
+    switchWrapper.addEventListener('touchstart', () => {
+      if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
+      if (!switchWrapper.classList.contains('page-switch--expanded')) {
+        expandSwitch(true);
+      }
+    }, { passive: true });
 
     document.addEventListener('click', (event) => {
       if (!switchWrapper.classList.contains('page-switch--collapsed')) return;
