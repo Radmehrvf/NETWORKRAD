@@ -301,9 +301,10 @@ body.page-switching{opacity:0}
 .universe-item a:hover{transform:scale(1.08);background:linear-gradient(135deg,#00e0ff,#0077b6);box-shadow:0 0 15px rgba(0,255,255,.6)}
 
 #universe{position:relative}
-#universe>p{color:#d7e7ff}
+#universe h2{color:#ff4d4d;text-shadow:0 0 16px rgba(255,77,77,.45)}
+#universe>p{color:#ffb3b3}
 #universe .universe-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,280px));gap:1.6rem;margin-top:1.75rem;justify-content:center;justify-items:stretch}
-#universe .universe-item{--platform-color:#94a3b8;--platform-accent:linear-gradient(90deg,#64748b,#94a3b8);--platform-border:rgba(148,163,184,.35);--platform-glow:rgba(148,163,184,.35);position:relative;overflow:hidden;border-radius:18px;padding:1.8rem 1.6rem;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(8,12,22,.9));border:1px solid var(--platform-border);box-shadow:0 12px 28px rgba(0,0,0,.45);backdrop-filter:blur(12px);display:flex;flex-direction:column;gap:.6rem;text-align:center;align-items:center;min-height:180px;width:100%;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+#universe .universe-item{--platform-color:#94a3b8;--platform-accent:linear-gradient(90deg,#64748b,#94a3b8);--platform-border:rgba(148,163,184,.35);--platform-glow:rgba(148,163,184,.35);position:relative;overflow:hidden;border-radius:18px;padding:1.8rem 1.6rem;background:linear-gradient(135deg,rgba(255,90,90,.08),rgba(8,12,22,.92));border:1px solid var(--platform-border);box-shadow:0 12px 28px rgba(0,0,0,.45);backdrop-filter:blur(12px);display:flex;flex-direction:column;gap:.6rem;text-align:center;align-items:center;min-height:180px;width:100%;transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
 #universe .universe-item::before{content:"";position:absolute;top:0;left:0;width:100%;height:4px;background:var(--platform-accent);z-index:0}
 #universe .universe-item::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 0,var(--platform-glow),transparent 60%);opacity:.65;z-index:0}
 #universe .universe-item>*{position:relative;z-index:1}
